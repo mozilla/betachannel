@@ -1,0 +1,121 @@
+#!/usr/bin/env node
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+var path = require('path');
+var util = require('util');
+
+var cachify = require('connect-cachify');
+var clientSessions = require('client-sessions');
+var express = require('express');
+var i18n = require('i18n-abide');
+var nunjucks = require('nunjucks');
+var optimist = require('optimist');
+
+var assets = require('../lib/assets');
+var confsys = require('../lib/config');
+var routes = require('../routes');
+var healthCheck = require('../lib/health_check');
+
+var app = express();
+
+var argv = optimist
+  .usage('Usage: $0 {OPTIONS}')
+  .wrap(80)
+  .option('config-files', {
+    desc: "Use this list of config files for configuration",
+    default: process.env.CONFIG_FILES ||
+      path.join(__dirname, '../config/default.js')
+  })
+  .option('help', {
+    alias: "?",
+    desc: "Display this message",
+    boolean: true
+  })
+  .argv;
+
+confsys.init(argv);
+
+confsys.withConfig(function(config) {
+  var cachifyRoot = path.join(__dirname, "..", "..", "www");
+  app.use(cachify.setup(
+    assets.cachifyList, {
+      prefix: config.cachifyPrefix,
+      production: (config.env === 'production' ? true : false),
+      root: cachifyRoot
+    }));
+
+  nunjucks.configure('views', path.join(__dirname, '..', 'views'), {
+    express: app,
+    watch: false
+  });
+
+  app.use(express.json());
+  app.use(express.urlencoded());
+  app.use(express.methodOverride());
+
+  app.use(express.logger({
+    format: config.expressLogFormat
+  }));
+
+  var sessionConf = config.clientSessions;
+
+  // BetaFox must be deployed behind SSL.
+  // Tell client-sessions everything will be alright
+  app.use(function(req, res, next) {
+    req.connection.proxySecure = true;
+    next();
+  });
+
+  app.use(clientSessions({
+    cookieName: sessionConf.cookieName,
+    secret: sessionConf.secret,
+    duration: sessionConf.duration,
+    cookie: {
+      secure: (config.env === 'production' ? true : false),
+      httpOnly: true,
+      maxAge: sessionConf.duration
+    }
+  }));
+
+  app.use(express.csrf());
+  app.use(function(req, resp, next) {
+    resp.locals({csrf_token: req.session._csrf});
+    next();
+  });
+
+  app.use(i18n.abide({
+    supported_languages: config.supportedLanguages,
+    default_lang: config.defaultLang,
+    debug_lang: config.debugLang,
+    translation_directory: path.join(__dirname, config.translationDirectory),
+    disable_locale_check: config.disableLocaleCheck
+  }));
+
+  routes.init(app);
+
+  app.use(function(req, res, next) {
+    res.on('header', function() {
+      // this makes sure caches properly consider language headers
+      res.setHeader('Vary', 'Accept-Encoding,Accept-Language');
+    });
+    next();
+  });
+
+  app.use(express.static(path.join(__dirname, '..', '..', 'www')));
+
+  var port = process.env.PORT || 8000;
+  app.listen(port, '0.0.0.0');
+  var lstnUrl = util.format('http://%s:%s', config.issuer, port);
+
+  //statsd.increment('server.started');
+
+  process.nextTick(function() {
+    // 1) Line is used by test/lib/start_stop.js
+    // 2) Dev/Ops feedback
+    console.log('BetaFox... Listening on ' + lstnUrl);
+    healthCheck(config);
+  });
+});
