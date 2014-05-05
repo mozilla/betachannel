@@ -13,6 +13,7 @@ var express = require('express');
 var i18n = require('i18n-abide');
 var nunjucks = require('nunjucks');
 var optimist = require('optimist');
+var persona = require("express-persona");
 
 var assets = require('../lib/assets');
 var confsys = require('../lib/config');
@@ -47,7 +48,7 @@ confsys.withConfig(function(config) {
       root: cachifyRoot
     }));
 
-  nunjucks.configure('views', path.join(__dirname, '..', 'views'), {
+  nunjucks.configure(path.join(__dirname, '..', 'views'), {
     express: app,
     watch: false
   });
@@ -82,7 +83,9 @@ confsys.withConfig(function(config) {
 
   app.use(express.csrf());
   app.use(function(req, resp, next) {
-    resp.locals({csrf_token: req.session._csrf});
+    resp.locals({
+      csrf_token: req.session._csrf
+    });
     next();
   });
 
@@ -93,6 +96,10 @@ confsys.withConfig(function(config) {
     translation_directory: path.join(__dirname, config.translationDirectory),
     disable_locale_check: config.disableLocaleCheck
   }));
+
+  persona(app, {
+    audience: config.publicUrl // TODO use config
+  });
 
   routes.init(app);
 
@@ -108,14 +115,13 @@ confsys.withConfig(function(config) {
 
   var port = process.env.PORT || 8000;
   app.listen(port, '0.0.0.0');
-  var lstnUrl = util.format('http://%s:%s', config.issuer, port);
 
   //statsd.increment('server.started');
 
   process.nextTick(function() {
     // 1) Line is used by test/lib/start_stop.js
     // 2) Dev/Ops feedback
-    console.log('BetaFox... Listening on ' + lstnUrl);
+    console.log('BetaFox... Listening on ' + config.publicUrl);
     healthCheck(config);
   });
 });

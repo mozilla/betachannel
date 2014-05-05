@@ -1,7 +1,7 @@
 // Environment
 env = 'development';
 
-issuer = 'localhost';
+publicUrl = 'http://localhost:8000';
 
 buildDir = '/tmp/betafox-builds';
 varPath = '/tmp/betafox/var';
