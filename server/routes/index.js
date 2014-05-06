@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+var appPage = require('./app.js');
 var dashboard = require('./dashboard.js');
-var project = require('./project.js');
-var newProject = require('./new_project.js');
+var newApp = require('./new_app.js');
 var reqContext = require('../lib/request_context');
 
 exports.init = function(app) {
@@ -18,6 +18,6 @@ exports.init = function(app) {
 
   app.get('/dashboard', dashboard);
 
-  app.get('/app/:appId', project);
-  app.post('/apps', newProject);
+  app.get('/app/:appId', appPage);
+  app.post('/apps', newApp);
 }

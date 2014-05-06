@@ -7,10 +7,9 @@ var reqContext = require('../lib/request_context');
 
 module.exports = checkAuth(
   reqContext(function(req, res, ctx) {
-    console.log('ctx', ctx);
-    // Find project or 404
-    var appId = req.param.projectId;
+    // Find App or 404
+    var appId = req.param.appId;
     // Load versions
-    // Redirect to project page
-    res.render('project.html', ctx);
+    // Redirect to App's page
+    res.render('app.html', ctx);
   }));

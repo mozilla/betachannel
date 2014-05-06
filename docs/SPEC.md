@@ -19,13 +19,13 @@ d2g services two main audiences
 A developer signs into d2g with Persona.
 
 A developer uploads their privileged app (zip file) which
-creates or updates a project. The service signs the privileged app.
+creates or updates an App. The service signs the privileged app zip file.
 
 A developer shares the install link to the latest version of their app
 with their beta testers via their email client or other communication
 medium.
 
-A developer can see their list of projects and navigate to a specific project.
+A developer can see their list of Apps and navigate to a specific App.
 
 ### Beta Tester Use Cases
 
