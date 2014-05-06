@@ -9,7 +9,13 @@ module.exports = checkAuth(
   reqContext(function(req, res, ctx) {
     // Find App or 404
     var appId = req.param.appId;
+    ctx.app = {
+      id: appId,
+      name: 'Foobar 5000',
+      version: '1.0',
+      installUrl: '/app/v/latest/install/foo'
+    };
     // Load versions
     // Redirect to App's page
-    res.render('app.html', ctx);
+    res.render('app_details.html', ctx);
   }));

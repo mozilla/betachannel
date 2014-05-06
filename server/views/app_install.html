@@ -1,0 +1,14 @@
+{% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %} {% block content %}
+<h2>Install {{app.name}}</h2>
+
+<!-- TODO: mozApps installPackage -->
+<img src="{{app.icon_url}}" />
+<div class="app-name">{{app.name}}</div>
+<div class="app-version">{{app.version}}</div>
+<input type="submit" id="app-install-btn" name="app-install-btn" value="Install" />
+
+<h3>Versions</h3>
+<ol>
+  <li></li>
+</ol>
+{% endblock %}
