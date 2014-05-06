@@ -55,6 +55,7 @@ confsys.withConfig(function(config) {
 
   app.use(express.json());
   app.use(express.urlencoded());
+  app.use(express.multipart());
   app.use(express.methodOverride());
 
   app.use(express.logger({

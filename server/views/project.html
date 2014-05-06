@@ -1,0 +1,12 @@
+{% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %} {% block content %}
+<h2>{{app.name}}</h2>
+<h3>Install Link</h3>
+<div class="install-link">
+  <a href="{{app.installUrl}}">Install Current Version</a>  <a href="" class="share">Share</a>
+</div>
+<h3>Versions</h3>
+<ol>
+  <li></li>
+</ol>
+<h3>Upload New Version</h3>
+{% include "includes/_upload_app_form.html" %} {% endblock %}

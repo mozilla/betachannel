@@ -5,6 +5,7 @@ module.exports = function(cb) {
     ctx.isAuthenticated = !! req.session.email;
     ctx.email = req.session.email;
     ctx.csrf = req.csrfToken();
+    console.log('Doing ctx.csrf', ctx.csrf);
 
     cb(req, res, ctx);
   };

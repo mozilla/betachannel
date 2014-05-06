@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html class="is-standalone">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
-  </head>
-  <body>
-    <div id="wrap">
-      <div class="nav">
-        <h1>BetaFox</h1>
-        <div class="tagline">Give Beta Testers access to your Apps</div>
-        <div class="auth">
-            <a class="login" href="">Log in</a>
-            <div class="greeting">Hello, <span>{% if isAuthenticated %}{{email}}{% endif %}</span></div>
-          
-            <a class="logout" href="">Sign Out</a>
 
-          <input type="hidden" id="csrf_token" value="{{ csrf }}" />
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}</title>
+  <!-- TODO use list of sources from server/lib/assets.js
+         and config.env to link to either source or concat / minified CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
 
+<body>
+  <div id="wrap">
+    <div class="nav">
+      <h1>BetaFox</h1>
+      <div class="tagline">Give Beta Testers access to your Apps</div>
+      <div class="auth">
+        <a class="login persona" href="">Log in</a>
+        <div class="greeting persona">Hello, <span>{% if isAuthenticated %}{{email}}{% endif %}</span>
         </div>
+
+        <a class="logout persona" href="">Sign Out</a>
+
+        <input type="hidden" id="csrf_token" value="{{ csrf }}" />
+
       </div>
-      <div id="container">{% block content %}{% endblock %}</div>
     </div>
-    <script src="https://login.persona.org/include.js"></script>
-    <script src="/js/main.js"></script>
-  </body>
+    <div id="container">{% block content %}{% endblock %}</div>
+  </div>
+  <script src="https://login.persona.org/include.js"></script>
+  <!-- TODO use list of sources from server/lib/assets.js
+         and config.env to link to either source or concat / minified JS -->
+  <script src="/js/lib/jquery-2.1.1.js"></script>
+  <script src="/js/persona.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+
 </html>

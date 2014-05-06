@@ -1,6 +1,1 @@
-{% extends "layout.html" %}
-{% block title %}BetaFox - Give Beta Testers access to your Apps{% endblock %}
-
-{% block content %}
-  {% if not isAuthenticated %}<a class="login">Log in</a>{% endif %}
-{% endblock %}
+{% extends "layout.html" %} {% block title %}BetaFox - Give Beta Testers access to your Apps{% endblock %} {% block content %} {% if not isAuthenticated %}<a class="login persona" href="">Log in</a>{% endif %} {% endblock %}
