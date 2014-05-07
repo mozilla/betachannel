@@ -22,3 +22,7 @@ Beta testers can install the app from the link.
     npm start
 
 The webapp is available at http://localhost:8000
+
+## Get Involved
+
+https://wiki.mozilla.org/Mobile/Projects/BetaFox
