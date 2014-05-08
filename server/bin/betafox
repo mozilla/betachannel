@@ -102,7 +102,7 @@ confsys.withConfig(function(config) {
     audience: config.publicUrl // TODO use config
   });
 
-  routes.init(app);
+  routes.init(config, app);
 
   app.use(function(req, res, next) {
     res.on('header', function() {

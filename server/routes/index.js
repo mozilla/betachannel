@@ -8,13 +8,18 @@ var dashboard = require('./dashboard.js');
 var newApp = require('./new_app.js');
 var reqContext = require('../lib/request_context');
 
-exports.init = function(app) {
+exports.init = function(config, app) {
   app.get('/', reqContext(function(req, res, ctx) {
     if (ctx.isAuthenticated) {
       res.redirect('/dashboard');
     } else {
       res.render('home.html', ctx);
     }
+  }));
+
+  app.get('/help', reqContext(function(req, res, ctx) {
+    ctx.publicHostname = config.publicUrl.split('://')[1];
+    res.render('help.html', ctx);
   }));
 
   app.get('/dashboard', dashboard);

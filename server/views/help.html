@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}BetaFox - Give Beta Testers access to your Apps{% endblock %}
+{% block content %}
+<h2>How to test Apps through BetaFox</h2>
+<p>Getting and testing FirefoxOS apps from a developer happens in X steps.</p>
+<ol>
+  <li>Provision your device</li>
+  <li>Install the App</li>
+</ol>
+
+<h2>Step 1 - Provisioning Your Device</h2>
+<p>This step looks scary, but it only has to be done once.</p>
+
+<div><strong>Warning</strong>While a phone is provisioned to be a test device,
+it will not be able to install or run other apps from the Marketplace.</div>
+
+<h3>Requirements:</h3>
+<p>You need the following pieces to provision your device:</p>
+<ul>
+  <li>USB Cable for your Device</li>
+  <li>Python installed</li>
+  <li>NSS installed</li>
+  <li>adb from the Android SDK or elsewhere</li>
+  <li>???</li>
+</ul>
+
+Make sure you can see your device. One the command line, try
+
+<code>adb devices</code>
+
+<p>If everything worked...  Try the following:</p>
+<code>./configure-2-distribute-2-gecko.sh {{ publicHostname }}</code>
+
+
+<p>Your device should reboot and provisioning is finished.</p>
+<h2>Step 2 - Installing the App</h2>
+<p>A developer should get you an App install link. Load that link on the browser on your device.</p>
+
+<p><strong>Note:</strong> If you have already installed the App, <strong>you must remove the app</strong>, before installing it a second time.</p>
+{% endblock %}
