@@ -16,12 +16,24 @@ Beta testers can install the app from the link.
 * NodeJS 10.x or greater
 * MySQL
 
-## Installation
+## Developer Installation
 
     npm install
     npm start
 
+`npm install` isn't required for stage and production servers.
+The node modules required are checked in with the source code.
+`npm rebuild` is required for all environments.
+
 The webapp is available at http://localhost:8000
+
+## Development
+
+Client side assets are prepared and built with [GruntJS](http://gruntjs.com/).
+
+    grunt
+
+Minified or built assets are commited into `git`.
 
 ## Get Involved
 

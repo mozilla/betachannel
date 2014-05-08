@@ -10,10 +10,10 @@ _ = require('underscore');
 
 exports.sources = {
   js: {
-    '/js/main.min.js': ['/js/main.js']
+    '/js/betafox.min.js': ['/js/main.js', '/js/persona.js']
   },
   css: {
-    '/css/style.min.css': ['/css/style.css']
+    '/css/style.min.css': ['/css/main.css']
   }
 };
 
