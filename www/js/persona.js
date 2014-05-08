@@ -43,6 +43,7 @@ navigator.id.watch({
     var csrf = document.querySelector("#csrf_token").getAttribute('value');
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/persona/logout", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("loadend", function(e) {
       console.log("You have been logged out");
     });
