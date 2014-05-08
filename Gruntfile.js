@@ -50,12 +50,15 @@ module.exports = function(grunt) {
         src: 'www/css/style.css',
         dest: 'www/css/style.min.css'
       }
-    }
+    },
+    clean: ['www/js/betafox.js', 'www/css/style.css']
   });
 
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
+
+  grunt.registerTask('default', ['concat', 'uglify', 'cssmin', 'clean']);
 };

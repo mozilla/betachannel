@@ -8,6 +8,7 @@ www/js/betafox.js
 # Node modules we get from package.json, but shouldn't be commited to the tree
 node_modules/.bin/grunt
 node_modules/grunt-cli/
+node_modules/grunt-contrib-clean/
 node_modules/grunt-contrib-concat/
 node_modules/grunt-contrib-cssmin/
 node_modules/grunt-contrib-jshint/
