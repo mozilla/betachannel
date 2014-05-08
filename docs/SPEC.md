@@ -53,6 +53,10 @@ The system will capture how many installs for each app as number of installs glo
 In the future, d2g could manage versions of apps.
 [ Alternative, testing upgrade cycles multiple times makes this a 1.0 feature. ]
 
+Use Case: A developer wants to test the upgrade path from version 1.0 to 2.0. They upload 1.0 and later 2.0.
+They send links for 1.0 and 2.0 with instructions to their beta testers, who verify the upgrade / downgrade
+flows work.
+
 In the future, d2g could provide private apps and manage the list of email addresses of beta testers.
 [ Alternative, maybe seperate deployments with simple authentication ]
 
