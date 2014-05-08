@@ -1,0 +1,11 @@
+*~
+\#*
+.#*
+
+# Node modules which might be installed and don't belong in the tree
+
+node_modules/.bin/node-dev
+node_modules/node-dev/
+
+node_modules/.bin/nodemon
+node_modules/nodemon/
