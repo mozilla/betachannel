@@ -6,9 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{% endblock %}</title>
-  <!-- TODO use list of sources from server/lib/assets.js
-         and config.env to link to either source or concat / minified CSS -->
-  <link rel="stylesheet" href="/css/style.css">
+  {{ cachify_css('/css/style.min.css') }}
 </head>
 
 <body>
@@ -30,11 +28,7 @@
     <div id="container">{% block content %}{% endblock %}</div>
   </div>
   <script src="https://login.persona.org/include.js"></script>
-  <!-- TODO use list of sources from server/lib/assets.js
-         and config.env to link to either source or concat / minified JS -->
-  <script src="/js/lib/jquery-2.1.1.js"></script>
-  <script src="/js/persona.js"></script>
-  <script src="/js/main.js"></script>
+  {{ cachify_js('/js/betafox.min.js') }}
 </body>
 
 </html>
