@@ -63,7 +63,7 @@ exports.create = function(app, versionData, cb) {
   var aVersion = new exports.Version(app, versionData.version);
   aVersion.withConnection(function(err, conn) {
     conn.query('INSERT INTO version (version, icon_location, signed_package_location, manifest, app_id) VALUES (?, ?, ?, ?, ?)', [versionData.version,
-      'TODO',
+      versionData.iconLocation,
       versionData.signedPackagePath,
       manifest, app.id
     ], function(err, rows) {

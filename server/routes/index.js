@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 var appDetails = require('./app_details.js');
+var appIcon = require('./app_icon.js');
 var appInstall = require('./app_install.js');
 var dashboard = require('./dashboard.js');
 var newApp = require('./new_app.js');
@@ -28,6 +29,9 @@ exports.init = function(config, app) {
   app.get('/app/:appCode', appDetails);
   app.get('/app/install/:appCode', appInstall);
   app.get('/app/v/:version/install/:appCode', appInstall);
+
+  // TODO would be replaced with S3
+  app.get('/app_icon/v/:version/app/:appCode', appIcon);
 
   app.post('/apps', newApp(config));
 }

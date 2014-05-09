@@ -11,12 +11,10 @@ var App = require('../models/app');
 var Version = require('../models/version');
 
 module.exports = function(config, user, unsignedPackagePath, cb) {
-  console.log('app_processor got this far', user, unsignedPackagePath);
   owaReader(unsignedPackagePath, function(err, manifest, extractionDir) {
     if (err) return cb(err);
-    console.log('read ', err, manifest, extractionDir);
-    _createApp(manifest, user, function(err, newApp, newVersion, originalVersion, signedPackagePath) {
-      console.log('create app callback', err, newApp, newVersion, originalVersion);
+    var icon = bestIcon(extractionDir, manifest);
+    _createApp(manifest, user, icon, function(err, newApp, newVersion, originalVersion, signedPackagePath) {
       if (err) return cb(err);
       if (originalVersion !== newVersion.version) {
         var updates = {
@@ -33,10 +31,8 @@ module.exports = function(config, user, unsignedPackagePath, cb) {
   });
 };
 
-function _createApp(manifest, user, cb) {
-  console.log('Creating or finding', manifest, user);
+function _createApp(manifest, user, iconPath, cb) {
   App.findOrCreateApp(user, manifest, function(err, anApp) {
-    console.log('Finding App got', err, anApp);
     if (err) {
       return cb(err);
     }
@@ -49,6 +45,7 @@ function _createApp(manifest, user, cb) {
 
     var versionData = {
       version: version,
+      iconLocation: iconPath,
       signedPackagePath: signedPackagePath,
       manifest: manifest
     };
@@ -80,4 +77,20 @@ function signPackage(config, unsignedPackagePath, newApp, newVersion, signedPack
       cb(null, newApp);
     });
   });
+}
+
+function bestIcon(extractionDir, manifest) {
+  var large;
+  Object.keys(manifest.icons).forEach(function(size) {
+    var aSize = parseInt(size, 10);
+    if (!large || aSize > large) {
+      large = aSize;
+    }
+  });
+
+  if ( !! large) {
+    return path.resolve(extractionDir, path.join('.', manifest.icons[large + '']));
+  } else {
+    return '/i/unknown_app.png';
+  }
 }
