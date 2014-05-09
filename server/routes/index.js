@@ -10,6 +10,7 @@ var reqContext = require('../lib/request_context');
 
 exports.init = function(config, app) {
   app.get('/', reqContext(function(req, res, ctx) {
+    console.log('Doing homepage', ctx);
     if (ctx.isAuthenticated) {
       res.redirect('/dashboard');
     } else {
@@ -24,9 +25,9 @@ exports.init = function(config, app) {
 
   app.get('/dashboard', dashboard);
 
-  app.get('/app/install/:appId', appInstall);
-  app.get('/app/v/:version/install/:appId', appInstall);
-  app.get('/app/:appId', appDetails);
+  app.get('/app/:appCode', appDetails);
+  app.get('/app/install/:appCode', appInstall);
+  app.get('/app/v/:version/install/:appCode', appInstall);
 
-  app.post('/apps', newApp);
+  app.post('/apps', newApp(config));
 }

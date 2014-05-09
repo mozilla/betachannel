@@ -17,9 +17,11 @@ var vm = require('vm');
 var context = vm.createContext();
 var initialized = false;
 
-function env(/* key */) {
-  var i=0, max=arguments.length, value;
-  for ( ; i < max; i++) {
+function env( /* key */ ) {
+  var i = 0,
+    max = arguments.length,
+    value;
+  for (; i < max; i++) {
     value = process.env[arguments[i]];
     if (value) {
       return value;
@@ -51,7 +53,7 @@ exports.init = function(argv) {
     throw new Error("Must specify a build directory");
   }
 
-  if (!! context.buildDir) {
+  if ( !! context.buildDir) {
     context.buildDir = path.resolve(process.cwd(), context.buildDir);
   }
 
@@ -60,7 +62,7 @@ exports.init = function(argv) {
     context.cacheDir ||
     path.resolve(__dirname, "..", "cache");
 
-  if (!! context.cacheDir) {
+  if ( !! context.cacheDir) {
     context.cacheDir = path.resolve(process.cwd(), context.cacheDir);
   }
 
@@ -94,6 +96,14 @@ exports.init = function(argv) {
     context.awsSecretAccessKey;
 
   context.varPath = path.resolve(process.cwd(), (context.varPath));
+
+  var baseDir = path.join(__dirname, '..');
+
+  ['binPath', 'configCertsDir', 'derFilePath'].forEach(function(key) {
+    context[key] =
+      path.resolve(baseDir, context[key])
+    console.log('config updated', key, context[key]);
+  });
 
   // TODO Support this flag (CLI only?)
   context.debug = false;

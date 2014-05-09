@@ -12,22 +12,31 @@
 <body>
   <div id="wrap">
     <div class="nav">
-      <h1>BetaFox</h1>
+      <h1><a href="/">BetaFox</a></h1>
       <div class="tagline">Give Beta Testers access to your Apps</div>
+      <div class="app-list">
+        <h3>Apps</h3>
+        <p>Your other Apps on BetaFox</p>
+        <ul>
+          {% for app in apps %}
+            <li><a href="/app/{{app.code | urlencode}}">{{app.name}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
       <div class="auth">
         <a class="login persona" href="">Log in</a>
         <div class="greeting persona">Hello, <span>{% if isAuthenticated %}{{email}}{% endif %}</span>
         </div>
-
         <a class="logout persona" href="">Sign Out</a>
-
         <input type="hidden" id="csrf_token" value="{{ csrf }}" />
-
       </div>
     </div>
-    <div id="container">{% block content %}{% endblock %}</div>
+    <hr>
   </div>
+  <div id="container">{% block content %}{% endblock %}</div>
+
   <div class="nav">
+<hr>
     <ul><li><a href="/help">Help</a></li></ul>
   </div>
   <script src="https://login.persona.org/include.js"></script>

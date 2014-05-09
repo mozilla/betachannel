@@ -18,8 +18,10 @@ Beta testers can install the app from the link.
 
 ## Developer Installation
 
-    npm install
-    npm start
+    $ mysql < docs/db/schema_up_000.sql
+
+    $ npm install
+    $ npm start
 
 `npm install` isn't required for stage and production servers.
 The node modules required are checked in with the source code.
