@@ -50,6 +50,8 @@ exports.findApp = function(user, manifest, cb) {
  * Callback(err, app) - app is an object or null
  */
 exports.findOrCreateApp = function(user, manifest, cb) {
+  if (!user || !manifest) return cb(
+    new Error('Invalid API usage'));
   var code = appCode(user, manifest);
   // TODO abstract findOneOrCreate in DBAccess
   exports.findApp(user, manifest, function(err, anApp) {

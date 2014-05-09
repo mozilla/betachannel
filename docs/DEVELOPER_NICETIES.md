@@ -12,3 +12,7 @@ you can do node-dev or nodemon
 
     npm install nodemon
     nodemon server/bin/betafox --watch server
+
+## Code Style
+
+    js-beutify -s 2 -r server/lib/*.js

@@ -54,19 +54,23 @@ exports.findOne = function(app, version, cb) {
 /**
  * Callback (err, version) - version is an object or null
  */
-exports.create = function(app, version, manifest, cb) {
+exports.create = function(app, versionData, cb) {
   console.log('app', app);
   if (!app.id) return cb(new Error('app has no id' + app.toString()));
-  if ('string' !== typeof manifest) {
-    manifest = JSON.stringify(manifest);
+  if ('string' !== typeof versionData.manifest) {
+    manifest = JSON.stringify(versionData.manifest);
   }
-  var aVersion = new exports.Version(app, version);
+  var aVersion = new exports.Version(app, versionData.version);
   aVersion.withConnection(function(err, conn) {
-    conn.query('INSERT INTO version (version, icon_location, signed_package_location, manifest, app_id) VALUES (?, ?, ?, ?, ?)', [version, 'TODO', 'TODO', manifest, app.id], function(err, rows) {
+    conn.query('INSERT INTO version (version, icon_location, signed_package_location, manifest, app_id) VALUES (?, ?, ?, ?, ?)', [versionData.version,
+      'TODO',
+      versionData.signedPackagePath,
+      manifest, app.id
+    ], function(err, rows) {
       if (err) {
         return cb(err);
       }
-      return exports.findOne(app, version, cb);
+      return exports.findOne(app, versionData.version, cb);
     });
   });
 };

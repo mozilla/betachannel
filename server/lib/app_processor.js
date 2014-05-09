@@ -4,17 +4,19 @@ var fs = require('fs');
 var os = require('os');
 var path = require('path');
 
-var config = require('../config/config');
 var keygen = require('../lib/keygen');
 var owaReader = require('../lib/owa_reader');
 var owaWriter = require('../lib/owa_writer');
-var Project = require('../models/project');
+var App = require('../models/app');
 var Version = require('../models/version');
 
-module.exports = function(userId, unsignedPackagePath, cb) {
+module.exports = function(config, user, unsignedPackagePath, cb) {
+  console.log('app_processor got this far', user, unsignedPackagePath);
   owaReader(unsignedPackagePath, function(err, manifest, extractionDir) {
     if (err) return cb(err);
-    _createProject(manifest, userId, function(err, newProject, newVersion, originalVersion) {
+    console.log('read ', err, manifest, extractionDir);
+    _createApp(manifest, user, function(err, newApp, newVersion, originalVersion, signedPackagePath) {
+      console.log('create app callback', err, newApp, newVersion, originalVersion);
       if (err) return cb(err);
       if (originalVersion !== newVersion.version) {
         var updates = {
@@ -22,54 +24,50 @@ module.exports = function(userId, unsignedPackagePath, cb) {
         };
         owaWriter(unsignedPackagePath, extractionDir, updates, function(err) {
           if (err) return cb(err);
-          signPackage(unsignedPackagePath, newProject, newVersion, cb);
+          signPackage(config, unsignedPackagePath, newApp, newVersion, signedPackagePath, cb);
         });
       } else {
-        signPackage(unsignedPackagePath, newProject, newVersion, cb);
+        signPackage(config, unsignedPackagePath, newApp, newVersion, signedPackagePath, cb);
       }
     });
   });
 };
 
-function _createProject(manifest, userId, cb) {
-  var aProject = new Project({
-    name: manifest.name,
-    _user: userId
-  });
-  var originalVersion = manifest.version;
-  var version = originalVersion;
-  aProject.save(function(err) {
+function _createApp(manifest, user, cb) {
+  console.log('Creating or finding', manifest, user);
+  App.findOrCreateApp(user, manifest, function(err, anApp) {
+    console.log('Finding App got', err, anApp);
     if (err) {
       return cb(err);
     }
-    if (!version) {
-      version = aProject._id + '.' + Date.now();
-    }
-    var aVersion = new Version({
+
+    // WUT?
+    var originalVersion = manifest.version;
+    var version = originalVersion;
+
+    var signedPackagePath = path.join(os.tmpdir(), 'd2g-signed-packages', anApp.id + '.zip');
+
+    var versionData = {
       version: version,
-      manifest: JSON.stringify(manifest),
-      _project: aProject._id
-    });
-    aVersion.save(function(err) {
+      signedPackagePath: signedPackagePath,
+      manifest: manifest
+    };
+
+
+    Version.create(anApp, versionData, function(err, aVersion) {
       if (err) {
         return cb(err);
       }
-      aProject._version = aVersion._id;
-      aProject.save(function() {
-        // version is the original version
-        return cb(null, aProject, aVersion, originalVersion);
-      });
+      return cb(null, anApp, aVersion, originalVersion, signedPackagePath);
     });
   });
 }
 
-function signPackage(unsignedPackagePath, newProject, newVersion, cb) {
+function signPackage(config, unsignedPackagePath, newApp, newVersion, signedPackagePath, cb) {
   fs.mkdir(path.join(os.tmpdir(), 'd2g-signed-packages'), function(err) {
     // Error is fine, dir exists
 
-    var signedPackagePath = path.join(os.tmpdir(), 'd2g-signed-packages', newProject.id + '.zip');
-
-    keygen.signAppPackage(config.configCertsDir, unsignedPackagePath, signedPackagePath, function(exitCode) {
+    keygen.signAppPackage(config.binPath, config.configCertsDir, unsignedPackagePath, signedPackagePath, function(exitCode) {
       if (0 !== exitCode) {
         return cb(new Error('Unable to sign app ' + exitCode));
       }
@@ -79,10 +77,7 @@ function signPackage(unsignedPackagePath, newProject, newVersion, cb) {
       //signedPackage.signedPackage = fs.readFileSync(signedPackage);
       //signedPackage.save(function(err, newSignedPackage) {
       //newVersion._signedPackage = newSignedPackage.id;
-      newVersion.signedPackagePath = signedPackagePath;
-      newVersion.save(function(err) {
-        return cb(null, newProject);
-      });
+      cb(null, newApp);
     });
   });
 }

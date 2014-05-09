@@ -13,6 +13,7 @@ module.exports = function(config) {
     reqContext(function(req, res, ctx) {
       // Find or create the user
       findOrCreateUserByEmail(ctx.email, function(err, user) {
+        if (err) return res.send('DB Error', 500);
         console.log('new_app.js USER!!!!', err, user);
 
 

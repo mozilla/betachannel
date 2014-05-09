@@ -3,8 +3,12 @@ env = 'development';
 
 publicUrl = 'http://10.0.1.13:8000';
 
+configCertsDir = './config/secrets/';
+derFilePath = './config/secrets/betafox.der'; 
+
 buildDir = '/tmp/betafox-builds';
 varPath = '/tmp/betafox/var';
+binPath = './bin';
 
 // Secrets
 clientSessions = {
@@ -13,13 +17,13 @@ clientSessions = {
   duration: 24 * 60 * 60 * 1000, // in milliseconds
 };
 
-derFilePath = '/tmp/betafox.der';
+
 
 // MySQL
 mysql = {
   host: 'localhost',
-  user: 'app',
-  password: 'password',
+  user: 'root',
+  password: 'pass',
   database: 'betafox'
 }
 

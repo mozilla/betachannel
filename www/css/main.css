@@ -1,4 +1,4 @@
-
-.foo {
-  width: 100px;
+ol.versions {
+  list-style: none;
 }
+
