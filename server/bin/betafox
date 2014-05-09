@@ -17,6 +17,7 @@ var persona = require("express-persona");
 
 var assets = require('../lib/assets');
 var confsys = require('../lib/config');
+var db = require('../lib/db');
 var routes = require('../routes');
 var healthCheck = require('../lib/health_check');
 
@@ -40,6 +41,10 @@ var argv = optimist
 confsys.init(argv);
 
 confsys.withConfig(function(config) {
+  console.log('Setting up db');
+  db.init(config, function(err) {
+    require('../models/user').findUserByEmail('foo@bar.com', function() {});
+  });
   var cachifyRoot = path.join(__dirname, "..", "..", "www");
   app.use(cachify.setup(
     assets.cachifyList, {
