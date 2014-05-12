@@ -11,7 +11,6 @@ module.exports = function(cb) {
     ctx.isAuthenticated = !! req.session.email;
     ctx.email = req.session.email;
     ctx.csrf = req.csrfToken();
-    console.log('Doing ctx.csrf', ctx.csrf);
 
     if (ctx.isAuthenticated) {
       App.appList(ctx.email, function(err, apps) {
@@ -27,7 +26,6 @@ module.exports = function(cb) {
               code: appStr
             });
           });
-          console.log('AOK ', ourApps);
           ctx.apps = ourApps;
         }
         return cb(req, res, ctx);

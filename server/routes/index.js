@@ -9,6 +9,7 @@ var dashboard = require('./dashboard');
 var manifest = require('./manifest');
 var newApp = require('./new_app');
 var packagedApp = require('./packaged_app');
+var publicCertificate = require('./certificate');
 var reqContext = require('../lib/request_context');
 
 exports.init = function(config, app) {
@@ -38,4 +39,6 @@ exports.init = function(config, app) {
   app.get('/packaged/v/:version/app/:appCode/package.zip', packagedApp);
 
   app.post('/apps', newApp(config));
+
+  app.get('/cert', publicCertificate(config));
 }

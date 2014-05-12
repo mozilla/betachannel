@@ -31,7 +31,7 @@ module.exports = reqContext(function(req, res, ctx) {
       aVersion.icon_url = '/app_icon/v/' + aVersion.version + '/app/' + encodeURIComponent(appCode);
       aVersion.manifest_url = '/manifest/v/' + aVersion.version + '/app/' + encodeURIComponent(appCode) + '/manifest.webapp';
       ctx.unsignedPackage = 'TODO';
-      ctx.unsignedPackageSize = 'TODO kb';
+      ctx.unsignedPackageSize = aVersion.signed_package_size + 'kb';
       ctx.version = aVersion;
       Version.versionList(anApp, function(err, versions) {
         if (err) {
