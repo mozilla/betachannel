@@ -13,7 +13,8 @@ exports.sources = {
     '/js/betafox.min.js': [
       '/js/lib/jquery-2.1.1.js',
       '/js/main.js',
-      '/js/persona.js'
+      '/js/persona.js',
+      '/js/app_install.js'
     ]
   },
   css: {

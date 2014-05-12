@@ -2,11 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-var appDetails = require('./app_details.js');
-var appIcon = require('./app_icon.js');
-var appInstall = require('./app_install.js');
-var dashboard = require('./dashboard.js');
-var newApp = require('./new_app.js');
+var appDetails = require('./app_details');
+var appIcon = require('./app_icon');
+var appInstall = require('./app_install');
+var dashboard = require('./dashboard');
+var manifest = require('./manifest');
+var newApp = require('./new_app');
+var packagedApp = require('./packaged_app');
 var reqContext = require('../lib/request_context');
 
 exports.init = function(config, app) {
@@ -32,6 +34,8 @@ exports.init = function(config, app) {
 
   // TODO would be replaced with S3
   app.get('/app_icon/v/:version/app/:appCode', appIcon);
+  app.get('/manifest/v/:version/app/:appCode/manifest.webapp', manifest);
+  app.get('/packaged/v/:version/app/:appCode/package.zip', packagedApp);
 
   app.post('/apps', newApp(config));
 }

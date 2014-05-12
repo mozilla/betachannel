@@ -2,3 +2,7 @@ ol.versions {
   list-style: none;
 }
 
+
+.hidden {
+  display: none;
+}

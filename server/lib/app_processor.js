@@ -43,10 +43,13 @@ function _createApp(manifest, user, iconPath, cb) {
 
     var signedPackagePath = path.join(os.tmpdir(), 'd2g-signed-packages', anApp.id + '.zip');
 
+    var signedPackageSize = 12345;
+
     var versionData = {
       version: version,
       iconLocation: iconPath,
       signedPackagePath: signedPackagePath,
+      signedPackageSize: signedPackageSize,
       manifest: manifest
     };
 
@@ -57,6 +60,7 @@ function _createApp(manifest, user, iconPath, cb) {
       }
       return cb(null, anApp, aVersion, originalVersion, signedPackagePath);
     });
+
   });
 }
 
@@ -74,7 +78,15 @@ function signPackage(config, unsignedPackagePath, newApp, newVersion, signedPack
       //signedPackage.signedPackage = fs.readFileSync(signedPackage);
       //signedPackage.save(function(err, newSignedPackage) {
       //newVersion._signedPackage = newSignedPackage.id;
-      cb(null, newApp);
+      fs.stat(signedPackagePath, function(err, stat) {
+        if (err) {
+          return cb(err);
+        }
+        console.log('Updating to ', stat.size);
+        newVersion.updateSize(newVersion.id, stat.size);
+        cb(null, newApp);
+      });
+
     });
   });
 }

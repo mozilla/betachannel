@@ -1,12 +1,16 @@
 {% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %} {% block content %}
 <h2>Install {{version.manifest.name}}</h2>
-
-<!-- TODO: mozApps installPackage -->
+<div id="needs-mozapps" class="hidden">
+  <p><strong>Unable to install on this browser / device</strong></p>
+  <p>Try this on your FirefoxOS device.</p>
+</div>
 <img src="{{version.icon_url}}" />
 <div class="app-name">{{version.manifest.name}}</div>
 <p class="app-name">{{version.manifest.description}}</p>
 <div class="app-version">{{version.manifest.name}}</div>
-<input type="submit" id="app-install-btn" name="app-install-btn" value="Install" />
+<button data-package-manifest-url="{{version.manifest_url}}" disabled class="install">Install</button>
+
+<a href="{{unsignedPackage}}">{{unsignedPackageSize}}</a>
 
 <h3>Versions</h3>
 <ol class="versions">

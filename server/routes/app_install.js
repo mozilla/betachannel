@@ -29,6 +29,9 @@ module.exports = reqContext(function(req, res, ctx) {
         return res.send('Unable to load latest version', 500);
       }
       aVersion.icon_url = '/app_icon/v/' + aVersion.version + '/app/' + encodeURIComponent(appCode);
+      aVersion.manifest_url = '/manifest/v/' + aVersion.version + '/app/' + encodeURIComponent(appCode) + '/manifest.webapp';
+      ctx.unsignedPackage = 'TODO';
+      ctx.unsignedPackageSize = 'TODO kb';
       ctx.version = aVersion;
       Version.versionList(anApp, function(err, versions) {
         if (err) {

@@ -12,13 +12,27 @@ exports.Version = function(app, version) {
 
 exports.Version.prototype = DBAccess;
 
+exports.Version.prototype.updateSize = function(id, aSize) {
+  this.withConnection(function(err, conn) {
+    console.log(Object.keys(this));
+    console.log('Updating version size=', aSize, 'for version id=', id);
+    conn.query('UPDATE version SET signed_package_size = ? WHERE id = ?', [aSize, id],
+      function(err, rows) {
+        if (err) {
+          console.log("Unable to update size");
+          console.log(err);
+        }
+      });
+  });
+};
+
 /**
  * Callback (err, version) - version is an object or null
  */
 exports.findOne = function(app, version, cb) {
   var aVersion = new exports.Version(app, version);
   aVersion.withConnection(function(err, conn) {
-    conn.query('SELECT id, version, icon_location, signed_package_location, manifest, app_id FROM version WHERE app_id = ? AND version = ?', [app.id, version],
+    conn.query('SELECT id, version, icon_location, signed_package_location, signed_package_size, manifest, app_id FROM version WHERE app_id = ? AND version = ?', [app.id, version],
       function(err, rows) {
         if (err) {
           return cb(err);
@@ -28,7 +42,7 @@ exports.findOne = function(app, version, cb) {
         } else {
           var err;
           [
-            'version', 'icon_location', 'signed_package_location', 'manifest', 'app_id'
+            'id', 'version', 'icon_location', 'signed_package_location', 'signed_package_size', 'manifest', 'app_id'
           ].forEach(function(key) {
             if ('manifest' === key) {
               try {
@@ -62,9 +76,10 @@ exports.create = function(app, versionData, cb) {
   }
   var aVersion = new exports.Version(app, versionData.version);
   aVersion.withConnection(function(err, conn) {
-    conn.query('INSERT INTO version (version, icon_location, signed_package_location, manifest, app_id) VALUES (?, ?, ?, ?, ?)', [versionData.version,
+    conn.query('INSERT INTO version (version, icon_location, signed_package_location, signed_package_size, manifest, app_id) VALUES (?, ?, ?, ?, ?, ?)', [versionData.version,
       versionData.iconLocation,
       versionData.signedPackagePath,
+      versionData.signedPackageSize,
       manifest, app.id
     ], function(err, rows) {
       if (err) {
@@ -78,7 +93,7 @@ exports.create = function(app, versionData, cb) {
 exports.loadByVersion = function(app, version, cb) {
   var aVersion = new exports.Version(app, version);
   aVersion.withConnection(function(err, conn) {
-    conn.query('SELECT id, version, icon_location, signed_package_location, manifest, app_id FROM version WHERE app_id = ? AND version = ?', [app.id, version],
+    conn.query('SELECT id, version, icon_location, signed_package_location, signed_package_size, manifest, app_id FROM version WHERE app_id = ? AND version = ?', [app.id, version],
       function(err, rows) {
         if (err) {
           return cb(err);
@@ -88,7 +103,7 @@ exports.loadByVersion = function(app, version, cb) {
         } else {
           var err;
           [
-            'version', 'icon_location', 'signed_package_location', 'manifest', 'app_id'
+            'id', 'version', 'icon_location', 'signed_package_location', 'signed_package_size', 'manifest', 'app_id'
           ].forEach(function(key) {
             if ('manifest' === key) {
               try {
@@ -118,7 +133,7 @@ exports.latestVersionForApp = function(app, cb) {
   // TODO: We don't have a version yet...
   var aVersion = new exports.Version(app, 'TODO');
   aVersion.withConnection(function(err, conn) {
-    conn.query('SELECT id, version, icon_location, signed_package_location, manifest, app_id FROM version WHERE app_id = ? ORDER BY id DESC LIMIT 1', [app.id],
+    conn.query('SELECT id, version, icon_location, signed_package_location, signed_package_size, manifest, app_id FROM version WHERE app_id = ? ORDER BY id DESC LIMIT 1', [app.id],
       function(err, rows) {
         if (err) {
           return cb(err);
@@ -128,7 +143,7 @@ exports.latestVersionForApp = function(app, cb) {
         } else {
           var err;
           [
-            'version', 'icon_location', 'signed_package_location', 'manifest', 'app_id'
+            'id', 'version', 'icon_location', 'signed_package_location', 'signed_package_size', 'manifest', 'app_id'
           ].forEach(function(key) {
             if ('manifest' === key) {
               try {

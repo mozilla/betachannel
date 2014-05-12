@@ -4,7 +4,7 @@ env = 'development';
 publicUrl = 'http://10.0.1.13:8000';
 
 configCertsDir = './config/secrets/';
-derFilePath = './config/secrets/betafox.der'; 
+derFilePath = './config/secrets/betafox.der';
 
 buildDir = '/tmp/betafox-builds';
 varPath = '/tmp/betafox/var';

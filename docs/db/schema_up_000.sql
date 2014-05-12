@@ -22,6 +22,7 @@ CREATE TABLE version (
   version VARCHAR(20) NOT NULL,
   icon_location VARCHAR(5000) NOT NULL,
   signed_package_location VARCHAR(5000),
+  signed_package_size INT,
   manifest TEXT NOT NULL,
   create_dt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   app_id INT NOT NULL,
