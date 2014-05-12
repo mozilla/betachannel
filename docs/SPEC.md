@@ -27,6 +27,8 @@ medium.
 
 A developer can see their list of Apps and navigate to a specific App.
 
+A developer's company can install an instance of BetaFox behind their corporate firewall. Self-hosting is easy and has few unusual dependencies.
+
 ### Beta Tester Use Cases
 
 A beta tester provisions their phone to be a testing device.
