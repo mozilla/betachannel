@@ -37,8 +37,9 @@ They install NSS, the Android SDK and our provisioning tool.
 They connect their phone via USB and change the root certificates and trusted marketplaces.
 
 A beta tester loads the app testing url onto the browser of their FxOS device.
-They click the install button for the app to be tested.
-They can launch and test the app.
+They click the install button for the app to be tested. It is installed via the navigator.mozApps APIs, not side-loaded. They can launch and test the app.
+
+A beta tester with a provisioned phone can install and test apps without any other devices (Laptop, USB cables, etc).
 
 The beta tester can test an update to an existing app.
 
@@ -49,6 +50,12 @@ A beta tester can browse the homepage, which links to the most recent install pa
 ## Metrics
 
 The system will capture how many installs for each app as number of installs globally.
+
+## Non-Goals
+
+App Manager will continue to be the way to develop and side-load apps onto your devices.
+
+BetaFox only helps with distribution of QA builds.
 
 ## Out of Scope for 1.0
 
