@@ -15,6 +15,9 @@ Beta testers can install the app from the link.
 
 * NodeJS 10.x or greater
 * MySQL
+* NSS
+
+See docs/AWS.md for a fast, simple Ubuntu/EC2 based install.
 
 ## Developer Installation
 
