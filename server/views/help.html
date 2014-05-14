@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
+{% block page_css %}{{ cachify_css('/css/help.css') }}{% endblock %}
 {% block title %}BetaFox - Give Beta Testers access to your Apps{% endblock %}
 {% block content %}
+<div class="help">
 <h2>How to test Apps through BetaFox</h2>
 <p>Getting and testing FirefoxOS apps from a developer happens in X steps.</p>
 <ol>
@@ -37,4 +39,5 @@ Make sure you can see your device. One the command line, try
 <p>A developer should get you an App install link. Load that link on the browser on your device.</p>
 
 <p><strong>Note:</strong> If you have already installed the App, <strong>you must remove the app</strong>, before installing it a second time.</p>
+</div>
 {% endblock %}

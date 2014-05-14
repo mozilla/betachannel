@@ -12,14 +12,25 @@ exports.sources = {
   js: {
     '/js/betafox.min.js': [
       '/js/lib/jquery-2.1.1.js',
+      '/js/lib/jquery.fittext.js',
       '/js/main.js',
       '/js/persona.js',
       '/js/app_install.js'
-    ]
+    ],
+    '/js/home.js': [
+      '/js/home.js'
+    ]    
   },
   css: {
     '/css/style.min.css': [
+      '/css/reset.css',
       '/css/main.css'
+    ],
+    '/css/home.css': [
+      '/css/home.css'
+    ],
+    '/css/help.css': [
+      '/css/help.css'
     ]
   }
 };

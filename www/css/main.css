@@ -1,7 +1,109 @@
+/* Structure */
+#wrap {
+  display: flex;
+  flex-direction: column;
+  xalign-items: stretch;
+  xalign-content: stretch;
+  xjustify-content: center;
+  min-height: 100vh;
+}
+
+.header {
+  height: 75px;
+  border-bottom: solid 1px grey;
+}
+
+.footer {
+  height: 50px;
+  align-content: center;
+  justify-content: center;
+  border-top: solid 1px grey;
+}
+
+#main-content {
+  display: flex;
+  flex-direction: rows;
+  flex: 12;
+  align-self: stretch;
+}
+
+#container {
+  flex: 5;
+}
+
+#sidebar {
+  flex: 2;
+  border-left: solid 1px grey;
+  padding-left: 2.5%;
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+}
+
+.logo {
+  display: flex;
+  flex-direction: row;
+  flex: 5;
+}
+.logo h1, .tagline { align-self: flex-end; margin-right: 5%;}
+.logo h1 {
+  flex: 4;
+}
+.tagline {
+  flex: 4;
+}
+.auth {
+  flex: 2;
+}
+.auth {
+  text-align: right;
+}
+.links {
+  text-align: center;
+}
+
+#container {
+  display: block;
+}
+
+/* auth structure */
+.auth {
+  display: flex;
+  flex-direction: rows;
+  margin-right: 5%;
+}
+
+.auth a, .greeting, .logout {
+  flex: 1;
+  align-self: flex-end;
+}
+
+/* Style */
+
+h1 {
+  font-size: 3em; /* 48px; */
+  line-height: 1.1em;
+}
+h2 {
+  font-size: 2.25em; /* 36px; */ 
+  line-height: 1.5em;
+}
+
+h3 {
+  font-size: 1.125em; /* 18px; */
+  line-height: 1.5em;
+}
+
+code {
+  font-family: Courier, monospace;
+}
+
+/* Behavior */
 ol.versions {
   list-style: none;
 }
-
 
 .hidden {
   display: none;
