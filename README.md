@@ -14,8 +14,9 @@ Beta testers can install the app from the link.
 ## Dependencies
 
 * NodeJS 10.x or greater
+* Python
 * MySQL
-* NSS
+* [NSS Tools](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Tools)
 
 See docs/AWS.md for a fast, simple Ubuntu/EC2 based install.
 

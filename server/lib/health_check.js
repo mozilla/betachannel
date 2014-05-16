@@ -6,15 +6,16 @@ var fs = require('fs');
 
 var keygen = require('./keygen');
 
-module.exports = function(config) {
+module.exports = function(config, cb) {
   // Do we have certificate keypair?
+
   fs.exists(config.derFilePath, function(exists) {
     if (false === exists) {
       console.log('WARNING: No d2g certificates found, creating ephemeral ones');
       console.log('WARNING: Generating DER file at ' + config.derFilePath);
       console.log('WARNING: Generating Cert DB at ' + config.configCertsDir);
       console.log('WARNING: If you care about app compatibility, backup and secure these!');
-      keygen.createKeypair(config.binPath, config.configCertsDir, config.derFilePath);
+      keygen.createKeypair(config.binPath, config.configCertsDir, config.derFilePath, cb);
     }
   });
 };

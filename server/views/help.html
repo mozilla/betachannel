@@ -20,19 +20,19 @@ it will not be able to install or run other apps from the Marketplace.</div>
 <p>You need the following pieces to provision your device:</p>
 <ul>
   <li>USB Cable for your Device</li>
-  <li>Python installed</li>
-  <li>NSS installed</li>
   <li>adb from the Android SDK or elsewhere</li>
-  <li>???</li>
+  <li>`sh` or `bash` and a Terminal</li>
+  <li>Download and unzip <a href="https://github.com/ozten/betafox-addon/raw/master/cli/provision-betafox.zip">provision-betafox.zip</a></li>
 </ul>
 
 Make sure you can see your device. One the command line, try
 
 <code>adb devices</code>
 
-<p>If everything worked...  Try the following:</p>
-<code>./configure-2-distribute-2-gecko.sh {{ publicHostname }}</code>
+Note your device's name. We'll assume `full_unagi` in this example.
 
+<p>If everything worked...  Try the following:</p>
+<code>./provision-betafox.sh full_unagi {{ publicHostname }}</code>
 
 <p>Your device should reboot and provisioning is finished.</p>
 <h2>Step 2 - Installing the App</h2>

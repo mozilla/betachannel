@@ -17,6 +17,9 @@ module.exports = checkAuth(
         // TODO Nicer error pages
         return res.send('Unable to locate ' + ctx.email, 400);
       }
+      if (null === anApp) {
+        return res.send('Unable to locate apps for ' + ctx.email, 404);
+      }
       ctx.app = anApp;
       Version.latestVersionForApp(anApp, function(err, aVersion) {
         if (err) {
