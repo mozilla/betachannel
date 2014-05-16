@@ -1,0 +1,17 @@
+.help {
+  margin: 5%;
+}
+
+ol {
+  list-style: decimal inside;
+  margin: 1em auto;
+}
+
+ul {
+  list-style: disc inside;
+  margin: 1em auto;
+}
+
+h2 {
+  margin: 1em auto;
+}

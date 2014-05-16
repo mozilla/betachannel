@@ -127,7 +127,13 @@ confsys.withConfig(function(config) {
   process.nextTick(function() {
     // 1) Line is used by test/lib/start_stop.js
     // 2) Dev/Ops feedback
-    console.log('BetaFox... Listening on ' + config.publicUrl);
-    healthCheck(config);
+    console.log('doing health check');
+    healthCheck(config, function(err) {
+      if (err) {
+        console.log(err);
+      }
+      console.log('DONE doing health check');
+      console.log('BetaFox... Listening on ' + config.publicUrl);
+    });
   });
 });
