@@ -3,6 +3,10 @@
 .#*
 *pyc
 
+www/cert9.db
+www/key4.db
+www/pkcs11.txt
+
 www/css/style.css
 www/js/betafox.js
 
