@@ -23,7 +23,7 @@ exports.init = function(config, app) {
   }));
 
   app.get('/help', reqContext(function(req, res, ctx) {
-    ctx.publicHostname = config.publicUrl.split('://')[1];
+    ctx.publicHostname = config.publicUrl;
     res.render('help.html', ctx);
   }));
 
