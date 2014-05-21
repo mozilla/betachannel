@@ -2,11 +2,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+
+
 var checkAuth = require('../lib/check_authentication.js');
 var processor = require('../lib/app_processor');
 var reqContext = require('../lib/request_context');
-var findUserByEmail = require('../models/user').findUserByEmail;
-var findOrCreateUserByEmail = require('../models/user').findOrCreateUserByEmail;
+var requireDriver = require('../lib/db').requireDriver;
+
+var findUserByEmail = requireDriver('../models', 'user').findUserByEmail;
+var findOrCreateUserByEmail = requireDriver('../models', 'user').findOrCreateUserByEmail;
 
 module.exports = function(config) {
   return checkAuth(

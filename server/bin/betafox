@@ -4,6 +4,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+
 var path = require('path');
 var util = require('util');
 
@@ -18,9 +19,8 @@ var persona = require("express-persona");
 var assets = require('../lib/assets');
 var confsys = require('../lib/config');
 var db = require('../lib/db');
-var routes = require('../routes');
 var healthCheck = require('../lib/health_check');
-
+var routes; // Must be required after config is initialized
 var app = express();
 
 var argv = optimist
@@ -41,99 +41,107 @@ var argv = optimist
 confsys.init(argv);
 
 confsys.withConfig(function(config) {
-  console.log('Setting up db');
   db.init(config, function(err) {
-    require('../models/user').findUserByEmail('foo@bar.com', function() {});
-  });
-  var cachifyRoot = path.join(__dirname, "..", "..", "www");
-  app.use(cachify.setup(
-    assets.cachifyList, {
-      prefix: config.cachifyPrefix,
-      production: (config.env === 'production' ? true : false),
-      root: cachifyRoot
+    routes = require('../routes');
+    var cachifyRoot = path.join(__dirname, "..", "..", "www");
+    app.use(cachify.setup(
+      assets.cachifyList, {
+        prefix: config.cachifyPrefix,
+        production: (config.env === 'production' ? true : false),
+        root: cachifyRoot
+      }));
+
+    nunjucks.configure(path.join(__dirname, '..', 'views'), {
+      express: app,
+      watch: false
+    });
+
+    app.use(express.json());
+    app.use(express.urlencoded());
+    app.use(express.multipart());
+    app.use(express.methodOverride());
+
+    app.use(express.logger({
+      format: config.expressLogFormat
     }));
 
-  nunjucks.configure(path.join(__dirname, '..', 'views'), {
-    express: app,
-    watch: false
-  });
+    var sessionConf = config.clientSessions;
 
-  app.use(express.json());
-  app.use(express.urlencoded());
-  app.use(express.multipart());
-  app.use(express.methodOverride());
-
-  app.use(express.logger({
-    format: config.expressLogFormat
-  }));
-
-  var sessionConf = config.clientSessions;
-
-  // BetaFox must be deployed behind SSL.
-  // Tell client-sessions everything will be alright
-  app.use(function(req, res, next) {
-    req.connection.proxySecure = true;
-    next();
-  });
-
-  app.use(clientSessions({
-    cookieName: sessionConf.cookieName,
-    secret: sessionConf.secret,
-    duration: sessionConf.duration,
-    cookie: {
-      secure: (config.env === 'production' ? true : false),
-      httpOnly: true,
-      maxAge: sessionConf.duration
-    }
-  }));
-
-  app.use(express.csrf());
-  app.use(function(req, resp, next) {
-    resp.locals({
-      csrf_token: req.session._csrf
+    // BetaFox must be deployed behind SSL.
+    // Tell client-sessions everything will be alright
+    app.use(function(req, res, next) {
+      req.connection.proxySecure = true;
+      next();
     });
-    next();
-  });
 
-  app.use(i18n.abide({
-    supported_languages: config.supportedLanguages,
-    default_lang: config.defaultLang,
-    debug_lang: config.debugLang,
-    translation_directory: path.join(__dirname, config.translationDirectory),
-    disable_locale_check: config.disableLocaleCheck
-  }));
-
-  persona(app, {
-    audience: config.publicUrl // TODO use config
-  });
-
-  routes.init(config, app);
-
-  app.use(function(req, res, next) {
-    res.on('header', function() {
-      // this makes sure caches properly consider language headers
-      res.setHeader('Vary', 'Accept-Encoding,Accept-Language');
-    });
-    next();
-  });
-
-  app.use(express.static(path.join(__dirname, '..', '..', 'www')));
-
-  var port = process.env.PORT || 8000;
-  app.listen(port, '0.0.0.0');
-
-  //statsd.increment('server.started');
-
-  process.nextTick(function() {
-    // 1) Line is used by test/lib/start_stop.js
-    // 2) Dev/Ops feedback
-    console.log('doing health check');
-    healthCheck(config, function(err) {
-      if (err) {
-        console.log(err);
+    app.use(clientSessions({
+      cookieName: sessionConf.cookieName,
+      secret: sessionConf.secret,
+      duration: sessionConf.duration,
+      cookie: {
+        secure: (config.env === 'production' ? true : false),
+        httpOnly: true,
+        maxAge: sessionConf.duration
       }
-      console.log('DONE doing health check');
-      console.log('BetaFox... Listening on ' + config.publicUrl);
+    }));
+
+    app.use(express.csrf());
+    app.use(function(req, resp, next) {
+      resp.locals({
+        csrf_token: req.session._csrf
+      });
+      next();
+    });
+
+    app.use(i18n.abide({
+      supported_languages: config.supportedLanguages,
+      default_lang: config.defaultLang,
+      debug_lang: config.debugLang,
+      translation_directory: path.join(__dirname, config.translationDirectory),
+      disable_locale_check: config.disableLocaleCheck
+    }));
+
+    app.use(function(req, res, next) {
+      if (config.publicUrl.indexOf(req.host) === -1) {
+        res.redirect(config.publicUrl);
+      } else {
+        next();
+      }
+    });
+
+    persona(app, {
+      audience: config.publicUrl // TODO use config
+    });
+
+
+    routes.init(config, app);
+
+    app.use(function(req, res, next) {
+      res.on('header', function() {
+        // this makes sure caches properly consider language headers
+        res.setHeader('Vary', 'Accept-Encoding,Accept-Language');
+      });
+      next();
+    });
+
+    app.use(express.static(path.join(__dirname, '..', '..', 'www')));
+
+    var port = process.env.PORT || 8000;
+    app.listen(port, '0.0.0.0');
+
+    //statsd.increment('server.started');
+
+    process.nextTick(function() {
+      // 1) Line is used by test/lib/start_stop.js
+      // 2) Dev/Ops feedback
+      console.log('doing health check');
+      healthCheck(config, function(err) {
+        if (err) {
+          console.log(err);
+        }
+        console.log('DONE doing health check');
+        console.log('BetaFox... Listening on ' + config.publicUrl);
+      });
     });
   });
 });

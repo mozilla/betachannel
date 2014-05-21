@@ -19,7 +19,7 @@ exports.sources = {
     ],
     '/js/home.js': [
       '/js/home.js'
-    ]    
+    ]
   },
   css: {
     '/css/style.min.css': [

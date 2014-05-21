@@ -2,9 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-var App = require('../models/app');
 var reqContext = require('../lib/request_context');
-var Version = require('../models/version');
+var requireDriver = require('../lib/db').requireDriver;
+
+var App = requireDriver('../models', 'app');
+var Version = requireDriver('../models', 'version');
 
 module.exports = reqContext(function(req, res, ctx) {
   var appCode = req.params.appCode;

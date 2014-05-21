@@ -7,8 +7,10 @@ var path = require('path');
 var keygen = require('../lib/keygen');
 var owaReader = require('../lib/owa_reader');
 var owaWriter = require('../lib/owa_writer');
-var App = require('../models/app');
-var Version = require('../models/version');
+var requireDriver = require('../lib/db').requireDriver;
+
+var App = requireDriver('../models', 'app');
+var Version = requireDriver('../models', 'version');
 
 module.exports = function(config, user, unsignedPackagePath, cb) {
   owaReader(unsignedPackagePath, function(err, manifest, extractionDir) {

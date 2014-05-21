@@ -42,11 +42,11 @@ exports.createKeypair = function(binPath, configCertsDir, derFilePath, cb) {
           console.log('STDERR', stderr);
         } else {
           ['cert9.db', 'key4.db', 'pkcs11.txt'].forEach(function(pubFile) {
-            fs.symlinkSync(path.join(publicDir, 'certdb.tmp' , pubFile), path.join(path.resolve('www'), pubFile));
+            fs.symlinkSync(path.join(publicDir, 'certdb.tmp', pubFile), path.join(path.resolve('www'), pubFile));
           });
         }
         cb(err);
-    });
+      });
   });
 
 };

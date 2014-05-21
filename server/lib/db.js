@@ -2,20 +2,27 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-var mysql = require('mysql');
+var config;
+var dblib;
 
-var pool;
-exports.init = function(config, cb) {
-  pool = mysql.createPool(config.mysql);
-  cb();
+exports.init = function(aConfig, cb) {
+  config = aConfig;
+  if (config.awsAccessKeyId && config.awsAccessKeyId.length > 0) {
+    dblib = require('./aws_mysql');
+  } else if (config.mysql &&
+    config.mysql.user && config.mysql.user.length > 0) {
+    dblib = require('./db_mysql');
+  } else {
+    throw new Error('No DB configuration found - expected AWS or MySQL');
+  }
+  dblib.init(config, cb);
 };
 
-function DB() {};
+exports.requireDriver = function(type, file) {
+  if (config.awsAccessKeyId && config.awsAccessKeyId.length > 0) {
+    return require(type + '/aws/' + file);
 
-DB.prototype.withConnection = function(cb) {
-  if (!pool) return cb(
-    new Error('You must initialize db.js before using models!'));
-  cb(null, pool);
+  } else {
+    return require(type + '/mysql/' + file);
+  }
 };
-
-exports.DBAccess = new DB();

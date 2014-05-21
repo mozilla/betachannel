@@ -5,9 +5,11 @@
 var path = require('path');
 var fs = require('fs');
 
-var App = require('../models/app');
 var reqContext = require('../lib/request_context');
-var Version = require('../models/version');
+var requireDriver = require('../lib/db').requireDriver;
+
+var App = requireDriver('../models', 'app');
+var Version = requireDriver('../models', 'version');
 
 var ctype = 'application/zip';
 
