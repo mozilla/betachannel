@@ -2,9 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-var App = require('../models/app');
 var reqContext = require('../lib/request_context');
-var Version = require('../models/version');
+var requireDriver = require('../lib/db').requireDriver;
+
+var App = requireDriver('../models', 'app');
+var Version = requireDriver('../models', 'version');
 
 module.exports = reqContext(function(req, res, ctx) {
   var appCode = req.params.appCode;
@@ -12,6 +14,7 @@ module.exports = reqContext(function(req, res, ctx) {
 
   App.loadByCode(ctx.email, appCode, function(err, anApp) {
     if (err) {
+      console.log(err.stack || err);
       // TODO Nicer error pages
       return res.send('Unable to locate app ' + appCode, 400);
     }
@@ -25,23 +28,23 @@ module.exports = reqContext(function(req, res, ctx) {
 
     function useVersion(err, aVersion) {
       if (err) {
+        console.log(err.stack || err);
         // TODO Nicer error pages
         return res.send('Unable to load latest version', 500);
       }
-      aVersion.icon_url = '/app_icon/v/' + aVersion.version + '/app/' + encodeURIComponent(appCode);
-      aVersion.manifest_url = '/manifest/v/' + aVersion.version + '/app/' + encodeURIComponent(appCode) + '/manifest.webapp';
+      aVersion.icon_url = '/app_icon/v/' + aVersion.versionId + '/app/' + encodeURIComponent(appCode);
+      aVersion.manifest_url = '/manifest/v/' + aVersion.versionId + '/app/' + encodeURIComponent(appCode) + '/manifest.webapp';
       ctx.unsignedPackage = 'TODO';
       ctx.unsignedPackageSize = aVersion.signed_package_size + 'kb';
       ctx.version = aVersion;
       Version.versionList(anApp, function(err, versions) {
         if (err) {
-          console.error(err);
+          console.error(err.stack || err);
           ctx.versions = [];
         } else {
           ctx.versions = versions;
         }
         res.render('app_install.html', ctx);
-
       });
     }
   });

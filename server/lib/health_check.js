@@ -16,6 +16,8 @@ module.exports = function(config, cb) {
       console.log('WARNING: Generating Cert DB at ' + config.configCertsDir);
       console.log('WARNING: If you care about app compatibility, backup and secure these!');
       keygen.createKeypair(config.binPath, config.configCertsDir, config.derFilePath, cb);
+    } else {
+      cb(null);
     }
   });
 };

@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-var DBAccess = require('../lib/db').DBAccess;
+var DBAccess = require('../../lib/db_mysql').DBAccess;
 
 // TODO Maybe we don't expose this constructor?
 exports.App = function(user, manifest) {

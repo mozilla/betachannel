@@ -2,10 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-var App = require('../models/app');
+
 var checkAuth = require('../lib/check_authentication.js');
 var reqContext = require('../lib/request_context');
-var Version = require('../models/version');
+var requireDriver = require('../lib/db').requireDriver;
+
+var App = requireDriver('../models', 'app');
+var Version = requireDriver('../models', 'version');
 
 module.exports = checkAuth(
   reqContext(function(req, res, ctx) {
@@ -14,6 +17,7 @@ module.exports = checkAuth(
     // TODO use Async to remove pyramid of doom
     App.loadByCode(ctx.email, appCode, function(err, anApp) {
       if (err) {
+        console.log(err.stack || err);
         // TODO Nicer error pages
         return res.send('Unable to locate ' + ctx.email, 400);
       }
@@ -23,20 +27,20 @@ module.exports = checkAuth(
       ctx.app = anApp;
       Version.latestVersionForApp(anApp, function(err, aVersion) {
         if (err) {
+          console.log(err.stack || err);
           // TODO Nicer error pages
           return res.send('Unable to load latest version', 500);
         }
-        aVersion.installUrl = '/app/v/' + aVersion.version + '/install/' +
+        aVersion.installUrl = '/app/v/' + aVersion.versionId + '/install/' +
           encodeURIComponent(anApp.code);
         ctx.version = aVersion;
         Version.versionList(anApp, function(err, versions) {
           if (err) {
-            console.error(err);
+            console.log(err.stack || err);
             ctx.versions = [];
           } else {
             ctx.versions = versions;
           }
-
           res.render('app_details.html', ctx);
 
         });

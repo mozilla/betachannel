@@ -7,8 +7,10 @@ var path = require('path');
 var keygen = require('../lib/keygen');
 var owaReader = require('../lib/owa_reader');
 var owaWriter = require('../lib/owa_writer');
-var App = require('../models/app');
-var Version = require('../models/version');
+var requireDriver = require('../lib/db').requireDriver;
+
+var App = requireDriver('../models', 'app');
+var Version = requireDriver('../models', 'version');
 
 module.exports = function(config, user, unsignedPackagePath, cb) {
   owaReader(unsignedPackagePath, function(err, manifest, extractionDir) {
@@ -36,7 +38,6 @@ function _createApp(manifest, user, iconPath, cb) {
     if (err) {
       return cb(err);
     }
-
     // WUT?
     var originalVersion = manifest.version;
     var version = originalVersion;
@@ -53,12 +54,8 @@ function _createApp(manifest, user, iconPath, cb) {
       manifest: manifest
     };
 
-
     Version.create(anApp, versionData, function(err, aVersion) {
-      if (err) {
-        return cb(err);
-      }
-      return cb(null, anApp, aVersion, originalVersion, signedPackagePath);
+      cb(err, anApp, aVersion, originalVersion, signedPackagePath);
     });
 
   });
@@ -82,11 +79,9 @@ function signPackage(config, unsignedPackagePath, newApp, newVersion, signedPack
         if (err) {
           return cb(err);
         }
-        console.log('Updating to ', stat.size);
         newVersion.updateSize(newVersion.id, stat.size);
         cb(null, newApp);
       });
-
     });
   });
 }

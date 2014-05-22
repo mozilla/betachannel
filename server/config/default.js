@@ -1,7 +1,7 @@
 // Environment
 env = 'development';
 
-publicUrl = 'http://10.0.1.13:8000';
+publicUrl = 'http://10.0.1.18:8000';
 
 configCertsDir = './config/secrets/';
 derFilePath = './config/secrets/betafox.der';
@@ -17,15 +17,26 @@ clientSessions = {
   duration: 24 * 60 * 60 * 1000, // in milliseconds
 };
 
+// You must configure EITHER AWS or MySQL
+// Leave the other one commented out
 
+// AWS
+/*
+awsAccessKeyId = 'SomeValue';
+awsSecretAccessKey = 'SomeSecretValue';
+dynamoReadCapacityUnits = 1;
+dynamoWriteCapacityUnits = 1;
+*/
 
 // MySQL
+/*
 mysql = {
   host: 'localhost',
   user: 'root',
   password: 'pass',
   database: 'betafox'
 }
+*/
 
 // L10n
 defaultLang = 'en';
