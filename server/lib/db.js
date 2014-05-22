@@ -8,7 +8,7 @@ var dblib;
 exports.init = function(aConfig, cb) {
   config = aConfig;
   if (config.awsAccessKeyId && config.awsAccessKeyId.length > 0) {
-    dblib = require('./aws_mysql');
+    dblib = require('./db_aws');
   } else if (config.mysql &&
     config.mysql.user && config.mysql.user.length > 0) {
     dblib = require('./db_mysql');
@@ -21,7 +21,6 @@ exports.init = function(aConfig, cb) {
 exports.requireDriver = function(type, file) {
   if (config.awsAccessKeyId && config.awsAccessKeyId.length > 0) {
     return require(type + '/aws/' + file);
-
   } else {
     return require(type + '/mysql/' + file);
   }

@@ -39,6 +39,7 @@ exports.init = function(argv) {
     } else {
       configFile = path.join(process.cwd(), configPath);
     }
+    console.log('Trying', configFile);
     if (fs.existsSync(configPath)) {
       vm.runInContext(fs.readFileSync(configFile), context, configFile);
     }

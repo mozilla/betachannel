@@ -38,7 +38,6 @@ function _createApp(manifest, user, iconPath, cb) {
     if (err) {
       return cb(err);
     }
-
     // WUT?
     var originalVersion = manifest.version;
     var version = originalVersion;
@@ -55,12 +54,8 @@ function _createApp(manifest, user, iconPath, cb) {
       manifest: manifest
     };
 
-
     Version.create(anApp, versionData, function(err, aVersion) {
-      if (err) {
-        return cb(err);
-      }
-      return cb(null, anApp, aVersion, originalVersion, signedPackagePath);
+      cb(err, anApp, aVersion, originalVersion, signedPackagePath);
     });
 
   });
@@ -84,11 +79,9 @@ function signPackage(config, unsignedPackagePath, newApp, newVersion, signedPack
         if (err) {
           return cb(err);
         }
-        console.log('Updating to ', stat.size);
         newVersion.updateSize(newVersion.id, stat.size);
         cb(null, newApp);
       });
-
     });
   });
 }
