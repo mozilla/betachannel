@@ -91,10 +91,10 @@ exports.create = function(app, versionData, cb) {
   });
 };
 
-exports.loadByVersion = function(app, version, cb) {
-  var aVersion = new exports.Version(app, version);
+exports.loadByVersion = function(app, versionId, cb) {
+  var aVersion = new exports.Version(app, versionId);
   aVersion.withConnection(function(err, conn) {
-    conn.query('SELECT id, version, icon_location, signed_package_location, signed_package_size, manifest, app_id FROM version WHERE app_id = ? AND version = ?', [app.id, version],
+    conn.query('SELECT id, version, icon_location, signed_package_location, signed_package_size, manifest, app_id FROM version WHERE app_id = ? AND id = ?', [app.id, versionId],
       function(err, rows) {
         if (err) {
           return cb(err);
@@ -172,14 +172,14 @@ exports.versionList = function(app, cb) {
   // TODO: We don't have a version yet...
   var aVersion = new exports.Version(app, 'TODO');
   aVersion.withConnection(function(err, conn) {
-    conn.query('SELECT version FROM version WHERE app_id = ? ORDER BY id', [app.id],
+    conn.query('SELECT id, version FROM version WHERE app_id = ? ORDER BY id', [app.id],
       function(err, rows) {
         if (err) {
           return cb(err);
         }
         var vers = [];
         for (var i = 0; i < rows.length; i++) {
-          vers.push(rows[i].version);
+          vers.push([rows[i].id, rows[i].version]);
         }
         return cb(null, vers);
       });

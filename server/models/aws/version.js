@@ -114,13 +114,13 @@ exports.create = function(app, versionData, cb) {
   });
 };
 
-exports.loadByVersion = function(app, version, cb) {
+exports.loadByVersion = function(app, versionId, cb) {
   var dynamoDB = new AWS.DynamoDB();
   var params = {
     TableName: VERSIONS,
     Key: {
       versionId: {
-        S: version
+        S: versionId
       }
     },
     ConsistentRead: false,
@@ -207,7 +207,12 @@ exports.versionList = function(app, cb) {
     if (!err && data.Count > 0) {
       var versionList = [];
       for (var i = 0; i < data.Count; i++) {
-        versionList.push(data.Items[i].versionId.S);
+        try {
+          var version = JSON.parse(data.Items[i].metadata.S).version;
+          versionList.push([data.Items[i].versionId.S, version]);
+        } catch (e) {
+          console.log('Trouble parsing metadata on ', data.Items[i].versionId.S);
+        }
       }
       cb(err, versionList);
     } else {

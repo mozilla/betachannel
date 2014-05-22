@@ -15,7 +15,7 @@
 <h3>Versions</h3>
 <ol class="versions">
 {% for ver in versions %}
-  <li><a href="/app/v/{{ ver | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver }}</a></li>
+  <li><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a></li>
 {% endfor %}
 </ol>
 {% endblock %}
