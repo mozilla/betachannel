@@ -2,6 +2,7 @@
 env = 'development';
 
 publicUrl = 'http://10.0.1.18:8000';
+detectPublicUrlMisMatch = false;
 
 configCertsDir = './config/secrets/';
 derFilePath = './config/secrets/betafox.der';

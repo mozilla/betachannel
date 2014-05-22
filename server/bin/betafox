@@ -101,13 +101,15 @@ confsys.withConfig(function(config) {
       disable_locale_check: config.disableLocaleCheck
     }));
 
-    app.use(function(req, res, next) {
-      if (config.publicUrl.indexOf(req.host) === -1) {
-        res.redirect(config.publicUrl);
-      } else {
-        next();
-      }
-    });
+    if (true === config.detectPublicUrlMisMatch) {
+      app.use(function(req, res, next) {
+        if (config.publicUrl.indexOf(req.host) === -1) {
+          res.redirect(config.publicUrl);
+        } else {
+          next();
+        }
+      });
+    }
 
     persona(app, {
       audience: config.publicUrl // TODO use config
