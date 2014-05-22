@@ -26,6 +26,7 @@ awsAccessKeyId = 'SomeValue';
 awsSecretAccessKey = 'SomeSecretValue';
 dynamoReadCapacityUnits = 1;
 dynamoWriteCapacityUnits = 1;
+awsS3PublicBucket = 'betafox-assets';
 */
 
 // MySQL
