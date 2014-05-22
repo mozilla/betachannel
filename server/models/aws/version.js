@@ -128,7 +128,6 @@ exports.loadByVersion = function(app, version, cb) {
   };
   dynamoDB.getItem(params, function(err, data) {
     if (err) return cb(err.stack || err);
-
     if (data.Item) {
       var aUser = new User(app.user.email);
       try {

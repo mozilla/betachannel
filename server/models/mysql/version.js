@@ -57,6 +57,7 @@ exports.findOne = function(app, version, cb) {
           if (err) {
             return cb(err);
           } else {
+            aVersion.versionId = aVersion.id;
             console.log('This app and version will be available at ', app.code + ',' + version);
             return cb(null, aVersion);
           }
@@ -118,6 +119,7 @@ exports.loadByVersion = function(app, version, cb) {
           if (err) {
             return cb(err);
           } else {
+            aVersion.versionId = aVersion.id;
             console.log('This app and version will be available at ', app.code + ',' + aVersion.version);
             return cb(null, aVersion);
           }

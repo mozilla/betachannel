@@ -14,3 +14,11 @@ exports.stripBOM = function(text) {
   }
   return text.substring(start);
 };
+
+exports.checkInputs = function(inputs) {
+  inputs.forEach(function(input, i) {
+    if (!input) {
+      throw new Error('Input ' + i + ' to checkInputs was bad.' + JSON.stringify(inputs));
+    }
+  });
+};

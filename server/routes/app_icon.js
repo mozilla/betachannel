@@ -25,6 +25,8 @@ module.exports = reqContext(function(req, res, ctx) {
       if (err) {
         // TODO Nicer error pages
         return res.send('Unable to load latest version', 500);
+      } else if (null === aVersion) {
+        return res.send('Unable to load this version', 404);
       }
 
       var ext = path.extname(aVersion.icon_location);

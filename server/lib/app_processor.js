@@ -15,57 +15,38 @@ var Version = requireDriver('../models', 'version');
 module.exports = function(config, user, unsignedPackagePath, cb) {
   owaReader(unsignedPackagePath, function(err, manifest, extractionDir) {
     if (err) return cb(err);
+    var anApp = new App.App(user, manifest);
+    var appCode = anApp.code;
+    var signedPackagePath = path.join(os.tmpdir(), 'd2g-signed-packages', appCode + '.zip');
     var icon = bestIcon(extractionDir, manifest);
-    _createApp(manifest, user, icon, function(err, newApp, newVersion, originalVersion, signedPackagePath) {
-      if (err) return cb(err);
-      if (originalVersion !== newVersion.version) {
-        var updates = {
-          version: newVersion.version
-        };
-        owaWriter(unsignedPackagePath, extractionDir, updates, function(err) {
-          if (err) return cb(err);
-          signPackage(config, unsignedPackagePath, newApp, newVersion, signedPackagePath, cb);
-        });
-      } else {
-        signPackage(config, unsignedPackagePath, newApp, newVersion, signedPackagePath, cb);
-      }
-    });
+    var meta = {
+      iconLocation: icon,
+      signedPackagePath: signedPackagePath,
+      version: manifest.version,
+      manifest: manifest
+    };
+    // TODO: do we detect version numbers and have any biz logic around that?
+    //owaWriter(unsignedPackagePath, extractionDir, updates, function(err) {
+    signPackage(config, user, unsignedPackagePath, meta, cb);
   });
 };
 
-function _createApp(manifest, user, iconPath, cb) {
-  App.findOrCreateApp(user, manifest, function(err, anApp) {
+function _createApp(user, versionMetadata, cb) {
+  App.findOrCreateApp(user, versionMetadata.manifest, function(err, anApp) {
     if (err) {
       return cb(err);
     }
-    // WUT?
-    var originalVersion = manifest.version;
-    var version = originalVersion;
-
-    var signedPackagePath = path.join(os.tmpdir(), 'd2g-signed-packages', anApp.id + '.zip');
-
-    var signedPackageSize = 12345;
-
-    var versionData = {
-      version: version,
-      iconLocation: iconPath,
-      signedPackagePath: signedPackagePath,
-      signedPackageSize: signedPackageSize,
-      manifest: manifest
-    };
-
-    Version.create(anApp, versionData, function(err, aVersion) {
-      cb(err, anApp, aVersion, originalVersion, signedPackagePath);
+    Version.create(anApp, versionMetadata, function(err, aVersion) {
+      cb(err, anApp, aVersion);
     });
-
   });
 }
 
-function signPackage(config, unsignedPackagePath, newApp, newVersion, signedPackagePath, cb) {
+function signPackage(config, user, unsignedPackagePath, meta, cb) {
   fs.mkdir(path.join(os.tmpdir(), 'd2g-signed-packages'), function(err) {
     // Error is fine, dir exists
 
-    keygen.signAppPackage(config.binPath, config.configCertsDir, unsignedPackagePath, signedPackagePath, function(exitCode) {
+    keygen.signAppPackage(config.binPath, config.configCertsDir, unsignedPackagePath, meta.signedPackagePath, function(exitCode) {
       if (0 !== exitCode) {
         return cb(new Error('Unable to sign app ' + exitCode));
       }
@@ -75,12 +56,14 @@ function signPackage(config, unsignedPackagePath, newApp, newVersion, signedPack
       //signedPackage.signedPackage = fs.readFileSync(signedPackage);
       //signedPackage.save(function(err, newSignedPackage) {
       //newVersion._signedPackage = newSignedPackage.id;
-      fs.stat(signedPackagePath, function(err, stat) {
+      fs.stat(meta.signedPackagePath, function(err, stat) {
         if (err) {
           return cb(err);
         }
-        newVersion.updateSize(newVersion.id, stat.size);
-        cb(null, newApp);
+        meta.signedPackageSize = stat.size;
+        _createApp(user, meta, function(err, newApp, newVersion) {
+          cb(err, newApp);
+        });
       });
     });
   });

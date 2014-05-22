@@ -31,6 +31,8 @@ module.exports = reqContext(function(req, res, ctx) {
         console.log(err.stack || err);
         // TODO Nicer error pages
         return res.send('Unable to load latest version', 500);
+      } else if (null === aVersion) {
+        return res.send('Unable to find version', 404);
       }
       aVersion.icon_url = '/app_icon/v/' + aVersion.versionId + '/app/' + encodeURIComponent(appCode);
       aVersion.manifest_url = '/manifest/v/' + aVersion.versionId + '/app/' + encodeURIComponent(appCode) + '/manifest.webapp';

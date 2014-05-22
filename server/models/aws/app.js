@@ -4,6 +4,7 @@
 
 var AWS = require('aws-sdk');
 
+var appBase = require('../app_base');
 var User = require('./user').User;
 var loadByVersion = require('./version').loadByVersion;
 
@@ -20,8 +21,10 @@ var VERSIONS_BY_EMAIL = require('../../lib/db_aws').VERSIONS_BY_EMAIL;
 exports.App = function(user, manifest) {
   this.name = manifest.name;
   this.user = user;
-  this.code = user.email + ',' + manifest.name;
+  this.code = this.appId(user, manifest);
 };
+
+exports.App.prototype.appId = appBase.appId;
 
 exports.findApp = function(user, manifest, cb) {
   cb(null, new exports.App(user, manifest));

@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+var appBase = require('../app_base');
 var DBAccess = require('../../lib/db_mysql').DBAccess;
 
 // TODO Maybe we don't expose this constructor?
@@ -10,9 +11,12 @@ exports.App = function(user, manifest) {
   this.user = user;
   // TODO don't keep all this data in memory, it's in the Version
   this.manifest = manifest;
+  this.code = this.appId(user, manifest);
 };
 
 exports.App.prototype = DBAccess;
+
+exports.App.prototype.appId = appBase.appId;
 
 // TODO not sure about this, need something
 // to get the system bootstrapped
@@ -26,6 +30,7 @@ function appCode(user, manifest) {
  */
 exports.findApp = function(user, manifest, cb) {
   var anApp = new exports.App(user, manifest);
+  // TODO replace with anApp.appId(user, manifest);
   var code = appCode(user, manifest);
   // TODO abstract into findOne in DBAccess
   anApp.withConnection(function(err, conn) {
@@ -78,7 +83,10 @@ exports.loadByCode = function(email, code, cb) {
 
   // email isn't really a user, doh!
   // we don't have a manifest yet... doh!
-  var anApp = new exports.App(email, code);
+  var aName = code.split(',')[1];
+  var anApp = new exports.App(email, {
+    name: aName
+  });
   // TODO abstract into findOne in DBAccess
   anApp.withConnection(function(err, conn) {
     conn.query('SELECT id, code, user_id FROM app WHERE code = ?', [code],
@@ -101,7 +109,9 @@ exports.loadByCode = function(email, code, cb) {
 exports.appList = function(email, cb) {
   // email isn't really a user, doh!
   // we don't have a manifest yet... doh!
-  var anApp = new exports.App(email, 'TODO');
+  var anApp = new exports.App(email, {
+    name: 'TODO'
+  });
   // TODO abstract into findOne in DBAccess
   anApp.withConnection(function(err, conn) {
     conn.query('SELECT code FROM app JOIN user ON user.id = app.user_id WHERE user.email = ? ORDER BY app.id DESC', [email],
