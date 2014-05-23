@@ -208,10 +208,10 @@ exports.versionList = function(app, cb) {
       var versionList = [];
       for (var i = 0; i < data.Count; i++) {
         try {
-          var version = JSON.parse(data.Items[i].metadata.S).version;
+          var version = JSON.parse(data.Items[i].manifest.S).version;
           versionList.push([data.Items[i].versionId.S, version]);
         } catch (e) {
-          console.log('Trouble parsing metadata on ', data.Items[i].versionId.S);
+          console.log('Trouble parsing manifest on ', data.Items[i].versionId.S);
         }
       }
       cb(err, versionList);

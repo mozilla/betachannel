@@ -33,7 +33,7 @@ exports.init = function(config, app) {
   app.get('/app/install/:appCode', appInstall);
   app.get('/app/v/:version/install/:appCode', appInstall);
 
-  // TODO would be replaced with S3
+  // appIcon only used in "Enterprise" deployment, not Cloud
   app.get('/app_icon/v/:version/app/:appCode', appIcon);
   app.get('/manifest/v/:version/app/:appCode/manifest.webapp', manifest);
   app.get('/packaged/v/:version/app/:appCode/package.zip', packagedApp);

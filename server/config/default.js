@@ -38,6 +38,9 @@ mysql = {
   password: 'pass',
   database: 'betafox'
 }
+
+fileStoragePath = '/var/betafox';
+
 */
 
 // L10n

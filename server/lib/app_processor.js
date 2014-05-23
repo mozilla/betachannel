@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 'use strict';
 
 var fs = require('fs');
@@ -11,6 +14,9 @@ var requireDriver = require('../lib/db').requireDriver;
 
 var App = requireDriver('../models', 'app');
 var Version = requireDriver('../models', 'version');
+
+var Icon = requireDriver('../files', 'icon');
+var Package = requireDriver('../files', 'packaged');
 
 module.exports = function(config, user, unsignedPackagePath, cb) {
   owaReader(unsignedPackagePath, function(err, manifest, extractionDir) {
@@ -57,12 +63,19 @@ function signPackage(config, user, unsignedPackagePath, meta, cb) {
       //signedPackage.save(function(err, newSignedPackage) {
       //newVersion._signedPackage = newSignedPackage.id;
       fs.stat(meta.signedPackagePath, function(err, stat) {
-        if (err) {
-          return cb(err);
-        }
+        if (err) return cb(err);
         meta.signedPackageSize = stat.size;
-        _createApp(user, meta, function(err, newApp, newVersion) {
-          cb(err, newApp);
+
+        Icon.save(meta.iconLocation, function(err, newIconLocation) {
+          if (err) return cb(err);
+          meta.iconLocation = newIconLocation;
+          Package.save(meta.signedPackagePath, function(err, newPackPath) {
+            if (err) return cb(err);
+            meta.signedPackagePath = newPackPath;
+            _createApp(user, meta, function(err, newApp, newVersion) {
+              cb(err, newApp);
+            });
+          });
         });
       });
     });

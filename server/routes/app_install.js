@@ -8,6 +8,8 @@ var requireDriver = require('../lib/db').requireDriver;
 var App = requireDriver('../models', 'app');
 var Version = requireDriver('../models', 'version');
 
+var Icon = requireDriver('../files', 'icon');
+
 module.exports = reqContext(function(req, res, ctx) {
   var appCode = req.params.appCode;
   var version = req.params.version || 'latest';
@@ -34,10 +36,10 @@ module.exports = reqContext(function(req, res, ctx) {
       } else if (null === aVersion) {
         return res.send('Unable to find version', 404);
       }
-      aVersion.icon_url = '/app_icon/v/' + aVersion.versionId + '/app/' + encodeURIComponent(appCode);
+      aVersion.icon_url = Icon.url(aVersion);
       aVersion.manifest_url = '/manifest/v/' + aVersion.versionId + '/app/' + encodeURIComponent(appCode) + '/manifest.webapp';
-      ctx.unsignedPackage = 'TODO';
-      ctx.unsignedPackageSize = aVersion.signed_package_size + 'kb';
+      ctx.signedPackage = '/packaged/v/' + aVersion.versionId + '/app/' + encodeURIComponent(appCode) + '/package.zip';
+      ctx.signedPackageSize = aVersion.signed_package_size + 'kb';
       ctx.version = aVersion;
       Version.versionList(anApp, function(err, versions) {
         if (err) {

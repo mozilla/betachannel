@@ -1,7 +1,8 @@
 {% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %} {% block content %}
 <h2>Install {{version.manifest.name}}</h2>
 <div id="needs-mozapps" class="hidden">
-  <p><strong>Unable to install on this browser / device</strong></p>
+  <p><strong>Unable to install on this browser / device</strong>
+  </p>
   <p>Try this on your FirefoxOS device.</p>
 </div>
 <img src="{{version.icon_url}}" />
@@ -10,12 +11,13 @@
 <div class="app-version">{{version.manifest.name}}</div>
 <button data-package-manifest-url="{{version.manifest_url}}" disabled class="install">Install</button>
 
-<a href="{{unsignedPackage}}">{{unsignedPackageSize}}</a>
+<a href="{{signedPackage}}">{{signedPackageSize}}</a>
 
 <h3>Versions</h3>
 <ol class="versions">
-{% for ver in versions %}
-  <li><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a></li>
-{% endfor %}
+  {% for ver in versions %}
+  <li><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a>
+  </li>
+  {% endfor %}
 </ol>
 {% endblock %}
