@@ -5,7 +5,10 @@
 var appDetails = require('./app_details');
 var appIcon = require('./app_icon');
 var appInstall = require('./app_install');
+var confirmDeleteApp = require('./confirm_delete_app');
 var dashboard = require('./dashboard');
+var deleteApp = require('./delete_app');
+var deleteVersion = require('./delete_version');
 var manifest = require('./manifest');
 var newApp = require('./new_app');
 var packagedApp = require('./packaged_app');
@@ -30,6 +33,9 @@ exports.init = function(config, app) {
   app.get('/dashboard', dashboard);
 
   app.get('/app/:appCode', appDetails);
+  app.get('/confirm_delete/app/:appCode', confirmDeleteApp);
+  app.delete('/app/:appCode/v/:version', deleteVersion);
+  app.delete('/app/:appCode', deleteApp);
   app.get('/app/install/:appCode', appInstall);
   app.get('/app/v/:version/install/:appCode', appInstall);
 

@@ -5,6 +5,6 @@
 var utils = require('../lib/utils');
 
 exports.appId = function(user, manifest) {
-  utils.checkInputs([user, manifest.name]);
+  utils.checkInputs([user.email, manifest.name]);
   return user.email + ',' + manifest.name;
 };

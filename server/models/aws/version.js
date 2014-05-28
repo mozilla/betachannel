@@ -50,6 +50,24 @@ exports.Version.prototype.updateSize = function(id, aSize) {
   });
 };
 
+exports.Version.prototype.deleteVersion = function(cb) {
+  var dynamoDB = new AWS.DynamoDB();
+  var params = {
+    TableName: VERSIONS,
+    Key: {
+      versionId: {
+        S: this.versionId
+      },
+    },
+    ReturnConsumedCapacity: 'NONE',
+    ReturnItemCollectionMetrics: 'NONE',
+    ReturnValues: 'NONE'
+  };
+  dynamoDB.deleteItem(params, function(err, data) {
+    cb(err);
+  });
+};
+
 // TODO is findOne actually used?
 exports.findOne = function(app, version, cb) {
 
@@ -132,7 +150,7 @@ exports.loadByVersion = function(app, versionId, cb) {
       var aUser = new User(app.user.email);
       try {
         var manifest = JSON.parse(data.Item.manifest.S);
-        var anApp = new appModel.App(aUser, manifest);
+        var anApp = new appModel.App(aUser.email, manifest);
         var aVersion = new exports.Version(anApp, manifest.version);
         populate(aVersion, manifest, data.Item);
         cb(err, aVersion);

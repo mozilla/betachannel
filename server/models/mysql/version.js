@@ -14,14 +14,26 @@ exports.Version.prototype = DBAccess;
 
 exports.Version.prototype.updateSize = function(id, aSize) {
   this.withConnection(function(err, conn) {
-    console.log(Object.keys(this));
-    console.log('Updating version size=', aSize, 'for version id=', id);
     conn.query('UPDATE version SET signed_package_size = ? WHERE id = ?', [aSize, id],
       function(err, rows) {
         if (err) {
           console.log("Unable to update size");
           console.log(err);
         }
+      });
+  });
+};
+
+exports.Version.prototype.deleteVersion = function(cb) {
+  var versionId = this.versionId;
+  this.withConnection(function(err, conn) {
+    conn.query('DELETE FROM version WHERE id = ?', [versionId],
+      function(err, rows) {
+        if (err) {
+          console.log("Unable to delete version");
+          console.log(err);
+        }
+        cb(err);
       });
   });
 };

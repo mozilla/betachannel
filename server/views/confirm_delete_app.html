@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}BetaFox - Delete {{app.name}}{% endblock %}
+{% block template_name %}confirm_delete_app.html{% endblock %}
+{% block content %}
+
+<h2>Delete {{app.name}}</h2>
+<h3>Please Confirm</h3>
+<p>Type the name of your App, to confirm you really want to delete it and all uploaded versions of it.</p>
+
+<p id="app-name-mismatch" class="hidden error">You must type the full App Name to confirm deletion.</p>
+
+<input type="text" id="app-name" name="app-name" value="" />
+<input type="hidden" id="expected-app-name" name="expected-app-name" value="{{ app.name }}" />
+<button class="confirm-delete-app delete" data-app-code="{{ app.code }}">Delete App</button>
+{% endblock %}
+{% block page_js %}{{ cachify_js('/js/delete.js') }}{% endblock %}

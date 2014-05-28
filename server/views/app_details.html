@@ -1,4 +1,5 @@
-{% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %} {% block content %}
+{% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %} {% block template_name %}app_details.html{% endblock %} {% block content %}
+
 <h2>{{version.manifest.name}}</h2>
 <h3>Install Link</h3>
 <div class="install-link">
@@ -6,11 +7,17 @@
 </div>
 <h3>Versions</h3>
 <ol class="versions">
-{% for ver in versions %}
-  <li><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a></li>
-{% endfor %}
+  {% for ver in versions %}
+  <li id='version-{{ver[0]}}'><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a>
+    &mdash;
+    <button class="delete-version delete" data-app-code="{{ app.code }}" data-version-id="{{ ver[0] }}">Delete this Version</button>
+  </li>
+  {% endfor %}
 </ol>
 <h3>Upload New Version</h3>
 {% include "includes/_upload_app_form.html" %}
-
-{% endblock %}
+<h3>Delete App</h3>
+<p>Delete this app and all of it's versions:
+  <button class="delete-app delete" data-app-code="{{ app.code }}">Delete App</button>
+</p>
+{% endblock %} {% block page_js %}{{ cachify_js('/js/delete.js') }}{% endblock %}

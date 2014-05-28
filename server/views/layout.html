@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{% endblock %}</title>
-  {{ cachify_css('/css/style.min.css') }}
-  {% block page_css %}{% endblock %}
+  <!-- {% block template_name %}{% endblock %} -->
+  {{ cachify_css('/css/style.min.css') }} {% block page_css %}{% endblock %}
 </head>
 
 <body>
@@ -16,41 +16,50 @@
       <div class="logo">
         <h1><a href="/">BetaFox</a></h1>
         <div class="tagline">Give Beta Testers access to your Apps</div>
-      </div>      
+      </div>
       <div class="auth">
         <a class="login persona" href="">Log in</a>
         <div class="greeting persona">Hello, <span>{% if isAuthenticated %}{{email}}{% endif %}</span>
         </div>
         <a class="logout persona" href="">Sign Out</a>
         <input type="hidden" id="csrf_token" value="{{ csrf }}" />
-      </div><!-- .auth -->
-    </div><!-- .nav -->
+      </div>
+      <!-- .auth -->
+    </div>
+    <!-- .nav -->
     <div id="main-content">
       <div id="container">
         {% block content %}{% endblock %}
       </div>
-    <div id="sidebar">
-     {% block sidebar %}
-      <div class="app-list">
-        <h3>My Apps</h3>
-        <p>Other Apps you have uploaded:</p>
-        <ul>
-          {% for app in apps %}
-            <li><a href="/app/{{app.code | urlencode}}">{{app.name}}</a></li>
-          {% endfor %}
-        </ul>
-      </div><!-- .app-list -->
-      {% endblock %}
-    </div><!-- #sidebar -->
+      <div id="sidebar">
+        {% block sidebar %}
+        <div class="app-list">
+          <h3>My Apps</h3>
+          <p>Other Apps you have uploaded:</p>
+          <ul>
+            {% for app in apps %}
+            <li><a href="/app/{{app.code | urlencode}}">{{app.name}}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <!-- .app-list -->
+        {% endblock %}
+      </div>
+      <!-- #sidebar -->
     </div>
     <div class="nav footer">
 
-      <ul class="links"><li><a href="/help">Help</a></li></ul>
-    </div><!-- .nav -->
-  </div><!-- #wrap -->
+      <ul class="links">
+        <li><a href="/help">Help</a>
+        </li>
+      </ul>
+    </div>
+    <!-- .nav -->
+  </div>
+  <!-- #wrap -->
   <script src="https://login.persona.org/include.js"></script>
-  {{ cachify_js('/js/betafox.min.js') }}
-  {% block page_js %}{% endblock %}
+  {{ cachify_js('/js/betafox.min.js') }} {% block page_js %}{% endblock %}
 </body>
 
 </html>
