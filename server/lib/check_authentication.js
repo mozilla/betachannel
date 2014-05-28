@@ -4,7 +4,6 @@
 
 module.exports = function(cb) {
   return function(req, res) {
-    console.log('dashboard says', req.session);
     if ( !! req.session.email) {
       cb(req, res);
     } else {

@@ -1,11 +1,7 @@
-{% extends "layout.html" %}
-{% block page_css %}{{ cachify_css('/css/home.css') }}{% endblock %}
-{% block title %}BetaFox - Give Beta Testers access to your Apps{% endblock %}
-{% block content %}
+{% extends "layout.html" %} {% block page_css %}{{ cachify_css('/css/home.css') }}{% endblock %} {% block template_name %}home.html{% endblock %} {% block title %}BetaFox - Give Beta Testers access to your Apps{% endblock %} {% block content %}
 <div class="home">
   {% if not isAuthenticated %}<a class="login persona btn" href="">Log in</a>{% endif %}
 
-<a class="btn" href="/app/v/1/install/shout%40ozten.com%2CPrivileged">Install me</a>
+  <a class="btn" href="/app/v/1/install/shout%40ozten.com%2CPrivileged">Install me</a>
 </div>
-{% endblock %}
-{% block page_js %}{{ cachify_js('/js/home.js') }}{% endblock %}
+{% endblock %} {% block page_js %}{{ cachify_js('/js/home.js') }}{% endblock %}

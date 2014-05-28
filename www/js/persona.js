@@ -30,7 +30,9 @@
           console.log("You have been logged in as: " + data.email);
           $('.logout,.greeting').show();
           $('.greeting span').text(data.email);
-          if (afterLogin) { afterLogin(); }
+          if (window.afterLogin) {
+            afterLogin();
+          }
         }
       }, false);
 

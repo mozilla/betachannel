@@ -21,7 +21,7 @@ var Package = requireDriver('../files', 'packaged');
 module.exports = function(config, user, unsignedPackagePath, cb) {
   owaReader(unsignedPackagePath, function(err, manifest, extractionDir) {
     if (err) return cb(err);
-    var anApp = new App.App(user, manifest);
+    var anApp = new App.App(user.email, manifest);
     var appCode = anApp.code;
     var signedPackagePath = path.join(os.tmpdir(), 'd2g-signed-packages', appCode + '.zip');
     var icon = bestIcon(extractionDir, manifest);
