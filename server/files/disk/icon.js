@@ -29,5 +29,5 @@ exports.save = function(iconPath, cb) {
 };
 
 exports.url = function(version) {
-  return '/app_icon/v/' + aVersion.versionId + '/app/' + encodeURIComponent(version.appId)
+  return '/app_icon/v/' + version.versionId + '/app/' + encodeURIComponent(version.app.code)
 };

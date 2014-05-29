@@ -17,7 +17,12 @@ module.exports = reqContext(function(req, res, ctx) {
   var appCode = req.params.appCode;
   var version = req.params.version;
 
-  App.loadByCode(ctx.email, appCode, function(err, anApp) {
+  // TODO: get email address out of app public identifier
+  // this is weak sauce
+  var parts = appCode.split(',');
+  var email = parts[0];
+
+  App.loadByCode(email, appCode, function(err, anApp) {
     if (err) {
       console.log('loadByCode failed');
       // TODO Nicer error pages
@@ -33,10 +38,9 @@ module.exports = reqContext(function(req, res, ctx) {
         return res.send('Unable to load latest version', 500);
       }
 
-      console.log(aVersion.manifest);
       delete aVersion.manifest.launch_path;
       aVersion.manifest.package_path =
-        '/packaged/v/' + aVersion.version + '/app/' + encodeURIComponent(appCode) + '/package.zip';
+        '/packaged/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/package.zip';
       aVersion.manifest.size = aVersion.signed_package_size;
 
       fs.readFile(aVersion.icon_location, {

@@ -24,10 +24,10 @@ exports.App = function(email, manifest) {
   if ('string' !== typeof email) throw new Error('expected string, got ' + typeof email);
   this.user = new User(email);
   this.name = manifest.name;
-  this.code = this.appId(this.user, manifest);
+  this.code = this.makeAppId(this.user, manifest);
 };
 
-exports.App.prototype.appId = appBase.appId;
+exports.App.prototype.makeAppId = appBase.makeAppId;
 
 exports.App.prototype.deleteApp = function(cb) {
   var theApp = this;

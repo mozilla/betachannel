@@ -14,12 +14,12 @@ exports.App = function(email, manifest) {
   // TODO don't keep all this data in memory, it's in the Version
   this.manifest = manifest;
   this.name = manifest.name;
-  this.code = this.appId(this.user, manifest);
+  this.code = this.makeAppId(this.user, manifest);
 };
 
 exports.App.prototype = DBAccess;
 
-exports.App.prototype.appId = appBase.appId;
+exports.App.prototype.makeAppId = appBase.makeAppId;
 
 // TODO: this prototype pattern cannot have 'delete'
 // because app.js and version.js both share DBAccess
@@ -57,7 +57,7 @@ function appCode(user, manifest) {
  */
 exports.findApp = function(user, manifest, cb) {
   var anApp = new exports.App(user.email, manifest);
-  // TODO replace with anApp.appId(user, manifest);
+  // TODO replace with anApp.makeAppId(user, manifest);
   var code = appCode(user, manifest);
   // TODO abstract into findOne in DBAccess
   anApp.withConnection(function(err, conn) {
@@ -104,6 +104,8 @@ exports.findOrCreateApp = function(user, manifest, cb) {
   });
 };
 
+// TODO: Why do we require email here?
+// Painful for anonymous access to icon, manifest and packaged app
 exports.loadByCode = function(email, code, cb) {
 
   if (!code) return cb(new Error('Must provide app code'));

@@ -45,7 +45,7 @@ exports.Version.prototype.updateSize = function(id, aSize) {
   };
   dynamoDB.updateItem(params, function(err, data) {
     if (err) {
-      console.log(err, err.stack); // an error occurred
+      console.log(err.stack || err);
     }
   });
 };
@@ -97,7 +97,7 @@ exports.create = function(app, versionData, cb) {
       iconLocation: {
         S: versionData.iconLocation
       },
-      signedPackagePath: {
+      signedPackageLocation: {
         S: versionData.signedPackagePath
       },
       signedPackageSize: {
@@ -125,7 +125,7 @@ exports.create = function(app, versionData, cb) {
     aVersion.createdBy = app.user.email;
 
     aVersion.icon_location = versionData.iconLocation;
-    aVersion.signed_package_path = versionData.signedPackagePath;
+    aVersion.signed_package_location = versionData.signedPackagePath;
     aVersion.signed_package_size = versionData.signedPackageSize;
     aVersion.createdAt = createdAt;
     cb(err, aVersion);
@@ -251,8 +251,8 @@ function populate(aVersion, manifest, dynData) {
   if (dynData.iconLocation) {
     aVersion.icon_location = dynData.iconLocation.S;
   }
-  if (dynData.signedPackagePath) {
-    aVersion.signed_package_path = dynData.signedPackagePath.S;
+  if (dynData.signedPackageLocation) {
+    aVersion.signed_package_location = dynData.signedPackageLocation.S;
   }
   if (dynData.signedPackageSize) {
     aVersion.signed_package_size = parseInt(dynData.signedPackageSize.N, 10);
