@@ -11,7 +11,7 @@ you can do node-dev or nodemon
 ## nodemon
 
     npm install nodemon
-    nodemon server/bin/betafox --watch server
+    nodemon server/bin/betafox --watch server -- --config-files=server/config/default.js,server/config/developer.js
 
 ## Code Style
 
