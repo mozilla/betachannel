@@ -15,11 +15,15 @@ module.exports = reqContext(function(req, res, ctx) {
   var appCode = req.params.appCode;
   var version = req.params.version;
 
-  App.loadByCode(ctx.email, appCode, function(err, anApp) {
+  var parts = appCode.split(',');
+  var email = parts[0];
+
+  App.loadByCode(email, appCode, function(err, anApp) {
     if (err) {
       // TODO Nicer error pages
       return res.send('Unable to locate app ' + appCode, 400);
     }
+    if (null === anApp) return res.send(404);
     ctx.app = anApp;
     Version.loadByVersion(anApp, version, function(err, aVersion) {
       if (err) {

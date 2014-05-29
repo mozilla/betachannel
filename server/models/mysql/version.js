@@ -82,7 +82,6 @@ exports.findOne = function(app, version, cb) {
  * Callback (err, version) - version is an object or null
  */
 exports.create = function(app, versionData, cb) {
-  console.log('app', app);
   if (!app.id) return cb(new Error('app has no id' + app.toString()));
   if ('string' !== typeof versionData.manifest) {
     manifest = JSON.stringify(versionData.manifest);
@@ -103,10 +102,16 @@ exports.create = function(app, versionData, cb) {
   });
 };
 
+/**
+ * @versionID - The system id for a version record,
+ *     not the user visible Version number
+ */
 exports.loadByVersion = function(app, versionId, cb) {
+
   var aVersion = new exports.Version(app, versionId);
   aVersion.withConnection(function(err, conn) {
-    conn.query('SELECT id, version, icon_location, signed_package_location, signed_package_size, manifest, app_id FROM version WHERE app_id = ? AND id = ?', [app.id, versionId],
+    var appId = app.id;
+    conn.query('SELECT id, version, icon_location, signed_package_location, signed_package_size, manifest, app_id FROM version WHERE app_id = ? AND id = ?', [appId, versionId],
       function(err, rows) {
         if (err) {
           return cb(err);
@@ -131,6 +136,7 @@ exports.loadByVersion = function(app, versionId, cb) {
           if (err) {
             return cb(err);
           } else {
+            aVersion.appId = aVersion.app_id;
             aVersion.versionId = aVersion.id;
             console.log('This app and version will be available at ', app.code + ',' + aVersion.version);
             return cb(null, aVersion);
