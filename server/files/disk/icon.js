@@ -28,6 +28,13 @@ exports.save = function(iconPath, cb) {
   });
 };
 
+exports.delete = function(version, cb) {
+  fs.unlink(version.icon_location, function(err) {
+    if (err) console.log(err.stack || err);
+    cb(null);
+  });
+};
+
 exports.url = function(version) {
   return '/app_icon/v/' + version.versionId + '/app/' + encodeURIComponent(version.app.code)
 };

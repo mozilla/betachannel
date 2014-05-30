@@ -37,3 +37,15 @@ exports.save = function(signedPackage, cb) {
     });
   });
 };
+
+exports.delete = function(version, cb) {
+  var s3 = new AWS.S3();
+  var params = {
+    Bucket: config.awsS3PublicBucket,
+    Key: version.signed_package_location
+  };
+  s3.deleteObject(params, function(err, data) {
+    if (err) console.log(err.stack || err);
+    cb(null);
+  });
+};

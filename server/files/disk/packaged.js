@@ -25,3 +25,10 @@ exports.save = function(signedPackage, cb) {
     cb(err, dest);
   });
 };
+
+exports.delete = function(version, cb) {
+  fs.unlink(version.signed_package_location, function(err) {
+    if (err) console.log(err.stack || err);
+    cb(null);
+  });
+};

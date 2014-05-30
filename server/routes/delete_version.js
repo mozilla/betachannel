@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+var async = require('async');
+
 var checkAuth = require('../lib/check_authentication.js');
 var reqContext = require('../lib/request_context');
 var requireDriver = require('../lib/db').requireDriver;
@@ -9,10 +11,14 @@ var requireDriver = require('../lib/db').requireDriver;
 var App = requireDriver('../models', 'app');
 var Version = requireDriver('../models', 'version');
 
+var Icon = requireDriver('../files', 'icon');
+var Package = requireDriver('../files', 'packaged');
+
 module.exports = checkAuth(
   reqContext(function(req, res, ctx) {
     var appCode = req.params.appCode;
     var versionId = req.params.version;
+    var goToDashboard = false;
     App.loadByCode(ctx.email, appCode, function(err, anApp) {
       if (err) {
         console.log(err.stack || err);
@@ -32,19 +38,45 @@ module.exports = checkAuth(
           // TODO Nicer error pages
           return res.send('Unable to load version', 500);
         }
-        aVersion.deleteVersion(function(err) {
-          if (err) {
-            console.log(err.stack || err);
-            res.send({
-              error: 'Unable to delete this version'
-            }, 400);
-          } else {
-            console.log('VERSION [' + versionId + '] DELETED BY [' + ctx.email + ']');
-            res.send({
-              status: 'okay'
-            });
-          }
-        });
+
+        async.parallel([
+
+            function(cb2) {
+              Icon.delete(aVersion, cb2);
+            },
+            function(cb2) {
+              Package.delete(aVersion, cb2);
+            },
+            function(cb2) {
+              aVersion.deleteVersion(cb2);
+            },
+            function(cb2) {
+              Version.versionList(anApp, function(err, vers) {
+                // If we've removed the last version... remove the App too
+                if (0 === vers.length) {
+                  anApp.deleteApp(cb2);
+                  goToDashboard = true;
+                } else {
+                  cb2(null);
+                }
+              });
+            }
+          ],
+          function(err, results) {
+            if (err) {
+              console.log(err.stack || err);
+              res.send({
+                error: 'Unable to delete this version'
+              }, 400);
+            } else {
+              console.log('VERSION [' + versionId + '] DELETED BY [' + ctx.email + ']');
+              res.send({
+                status: 'okay',
+                goToDashboard: goToDashboard
+              });
+            }
+          });
+
       });
     });
   }));

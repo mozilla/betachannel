@@ -11,6 +11,8 @@ _ = require('underscore');
 exports.sources = {
   js: {
     '/js/betafox.min.js': [
+      '/js/lib/zone.js',
+      '/js/lib/long-stack-trace-zone.js',
       '/js/lib/jquery-2.1.1.js',
       '/js/lib/jquery.fittext.js',
       '/js/main.js',

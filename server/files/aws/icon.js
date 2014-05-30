@@ -61,6 +61,18 @@ exports.save = function(iconPath, cb) {
   });
 };
 
+exports.delete = function(version, cb) {
+  var s3 = new AWS.S3();
+  var params = {
+    Bucket: config.awsS3PublicBucket,
+    Key: version.icon_location
+  };
+  s3.deleteObject(params, function(err, data) {
+    if (err) console.log(err.stack || err);
+    cb(null);
+  });
+};
+
 exports.url = function(version) {
   //  ://s3-us-west-1.amazonaws.com/betafox-assets-dev/7d732961-47e8-497e-9959-1ea8a9755d70.jpg
   return 'https://s3-us-west-1.amazonaws.com/' + config.awsS3PublicBucket + '/' + version.icon_location;

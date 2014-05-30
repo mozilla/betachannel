@@ -56,7 +56,11 @@
 
         var data = JSON.parse(this.responseText);
         if (data && data.status === "okay") {
-          $('#version-' + verId).remove();
+          if (data.goToDashboard) {
+            window.location = '/dashboard';
+          } else {
+            $('#version-' + verId).remove();
+          }
         }
       }, false);
 
