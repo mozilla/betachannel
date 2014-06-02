@@ -98,6 +98,12 @@ exports.init = function(argv) {
 
   context.varPath = path.resolve(process.cwd(), (context.varPath));
 
+  if (context.awsAccessKeyId && context.awsAccessKeyId.length > 0) {
+    if (!context.dynamodbTablePrefix) {
+      context.dynamodbTablePrefix = 'betafox.';
+    }
+  }
+
   var baseDir = path.join(__dirname, '..');
 
   ['binPath', 'configCertsDir', 'derFilePath'].forEach(function(key) {

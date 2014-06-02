@@ -5,11 +5,10 @@
 var AWS = require('aws-sdk');
 var uuid = require('node-uuid').v4;
 
+var DB = require('../../lib/db_aws');
 var User = require('./user').User;
-var appModel = require('./app'); // Node module isn't fully loaded yet
 
-var VERSIONS = require('../../lib/db_aws').VERSIONS;
-var VERSIONS_BY_APP_NAME = require('../../lib/db_aws').VERSIONS_BY_APP_NAME;
+var appModel = require('./app'); // Node module isn't fully loaded yet
 
 exports.Version = function(app, version) {
   this.app = app;
@@ -25,7 +24,7 @@ exports.Version.prototype.updateSize = function(id, aSize) {
   }
   var dynamoDB = new AWS.DynamoDB();
   var params = {
-    TableName: VERSIONS,
+    TableName: DB.VERSIONS,
     Key: {
       versionId: {
         S: id
@@ -53,7 +52,7 @@ exports.Version.prototype.updateSize = function(id, aSize) {
 exports.Version.prototype.deleteVersion = function(cb) {
   var dynamoDB = new AWS.DynamoDB();
   var params = {
-    TableName: VERSIONS,
+    TableName: DB.VERSIONS,
     Key: {
       versionId: {
         S: this.versionId
@@ -79,7 +78,7 @@ exports.create = function(app, versionData, cb) {
 
   var dynamoDB = new AWS.DynamoDB();
   var params = {
-    TableName: VERSIONS,
+    TableName: DB.VERSIONS,
     Item: {
       versionId: {
         S: versionId
@@ -135,7 +134,7 @@ exports.create = function(app, versionData, cb) {
 exports.loadByVersion = function(app, versionId, cb) {
   var dynamoDB = new AWS.DynamoDB();
   var params = {
-    TableName: VERSIONS,
+    TableName: DB.VERSIONS,
     Key: {
       versionId: {
         S: versionId
@@ -166,8 +165,8 @@ exports.loadByVersion = function(app, versionId, cb) {
 exports.latestVersionForApp = function(app, cb) {
   var dynamoDB = new AWS.DynamoDB();
   var params = {
-    TableName: VERSIONS,
-    IndexName: VERSIONS_BY_APP_NAME,
+    TableName: DB.VERSIONS,
+    IndexName: DB.VERSIONS_BY_APP_NAME,
     AttributesToGet: ['versionId', 'appId', 'manifest', 'createdAt'],
     Select: 'SPECIFIC_ATTRIBUTES',
     KeyConditions: {
@@ -208,8 +207,8 @@ exports.latestVersionForApp = function(app, cb) {
 exports.versionList = function(app, cb) {
   var dynamoDB = new AWS.DynamoDB();
   var params = {
-    TableName: VERSIONS,
-    IndexName: VERSIONS_BY_APP_NAME,
+    TableName: DB.VERSIONS,
+    IndexName: DB.VERSIONS_BY_APP_NAME,
     AttributesToGet: ['versionId', 'appId', 'manifest', 'createdAt'],
     Select: 'SPECIFIC_ATTRIBUTES',
     KeyConditions: {

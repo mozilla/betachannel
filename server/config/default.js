@@ -25,6 +25,7 @@ clientSessions = {
 /*
 awsAccessKeyId = 'SomeValue';
 awsSecretAccessKey = 'SomeSecretValue';
+dynamodbTablePrefix = 'betafox.';
 dynamoReadCapacityUnits = 1;
 dynamoWriteCapacityUnits = 1;
 awsS3PublicBucket = 'betafox-assets';
