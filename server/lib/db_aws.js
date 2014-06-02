@@ -4,9 +4,10 @@
 
 var AWS = require('aws-sdk');
 
-const VERSIONS = 'betafox-versions';
-const VERSIONS_BY_APP_NAME = 'versions-by-appname';
-const VERSIONS_BY_EMAIL = 'versions-by-email';
+var VERSIONS;
+var VERSIONS_BY_APP_NAME;
+var VERSIONS_BY_EMAIL;
+
 
 exports.init = function(config, cb) {
   AWS.config.update({
@@ -17,6 +18,12 @@ exports.init = function(config, cb) {
   AWS.config.update({
     region: 'us-west-1'
   });
+
+
+  module.exports.VERSIONS = VERSIONS = config.dynamodbTablePrefix + 'versions';
+  module.exports.VERSIONS_BY_APP_NAME = VERSIONS_BY_APP_NAME = config.dynamodbTablePrefix + 'versions-by-appname';
+  module.exports.VERSIONS_BY_EMAIL = VERSIONS_BY_EMAIL = config.dynamodbTablePrefix + 'versions-by-email';
+
   var dynamoDB = new AWS.DynamoDB();
 
 

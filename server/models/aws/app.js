@@ -6,13 +6,10 @@ var async = require('async');
 var AWS = require('aws-sdk');
 
 var appBase = require('../app_base');
+var DB = require('../../lib/db_aws');
 var User = require('./user').User;
 var loadByVersion = require('./version').loadByVersion;
 var versionList = require('./version').versionList;
-
-var VERSIONS = require('../../lib/db_aws').VERSIONS;
-var VERSIONS_BY_APP_NAME = require('../../lib/db_aws').VERSIONS_BY_APP_NAME;
-var VERSIONS_BY_EMAIL = require('../../lib/db_aws').VERSIONS_BY_EMAIL;
 
 /**
  * TODO: Currently we just have one table Version
@@ -74,8 +71,8 @@ exports.findOrCreateApp = function(user, manifest, cb) {
 exports.loadByCode = function(email, code, cb) {
   var dynamoDB = new AWS.DynamoDB();
   var params = {
-    TableName: VERSIONS,
-    IndexName: VERSIONS_BY_APP_NAME,
+    TableName: DB.VERSIONS,
+    IndexName: DB.VERSIONS_BY_APP_NAME,
     AttributesToGet: ['versionId', 'appId', 'manifest', 'createdAt'],
     Select: 'SPECIFIC_ATTRIBUTES',
     KeyConditions: {
@@ -107,8 +104,8 @@ exports.loadByCode = function(email, code, cb) {
 exports.appList = function(email, cb) {
   var dynamoDB = new AWS.DynamoDB();
   var params = {
-    TableName: VERSIONS,
-    IndexName: VERSIONS_BY_EMAIL,
+    TableName: DB.VERSIONS,
+    IndexName: DB.VERSIONS_BY_EMAIL,
     AttributesToGet: ['versionId', 'appId'],
     Select: 'SPECIFIC_ATTRIBUTES',
     KeyConditions: {
