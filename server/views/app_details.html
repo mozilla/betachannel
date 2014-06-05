@@ -3,9 +3,9 @@
 <h2>{{version.manifest.name}}</h2>
 <h3>Install Link</h3>
 <div class="install-link">
-  <a href="{{version.installUrl}}">Install Current Version</a>  <a href="" class="share">Share</a>
+  <a href="{{version.installUrl}}">Install Current</a> Version {{version.version}}  <a href="" class="share">Share</a>
 </div>
-<h3>Versions</h3>
+<h3>Version History</h3>
 <ol class="versions">
   {% for ver in versions %}
   <li id='version-{{ver[0]}}'><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a>

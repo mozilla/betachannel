@@ -23,8 +23,6 @@ exports.App.prototype.makeAppId = appBase.makeAppId;
 
 exports.App.prototype.deleteApp = function(cb) {
   var theApp = this;
-  // Uses versionList instead of this.versionList to avoid
-  // leaving data, even if we have bugs in synchronizing our list
   versionList(this, function(err, versions) {
     async.each(versions, function(version, eachCB) {
       loadByVersion(theApp, version[0], function(err, aVersion) {
@@ -32,7 +30,7 @@ exports.App.prototype.deleteApp = function(cb) {
           console.log('Error while enumerating known versions');
           console.log(err.stack || err);
           return eachCB(err);
-        } else {
+        } else if ( !! aVersion) {
           aVersion.deleteVersion(function(err) {
             if (err) {
               console.log('Error while deleting one of the versions');
@@ -41,10 +39,26 @@ exports.App.prototype.deleteApp = function(cb) {
             }
             eachCB();
           });
+        } else {
+          eachCB();
         }
       });
     }, function(err) {
-      cb(err);
+      var dynamoDB = new AWS.DynamoDB();
+      var params = {
+        TableName: DB.APPS,
+        Key: {
+          appId: {
+            S: theApp.appId
+          },
+        },
+        ReturnConsumedCapacity: 'NONE',
+        ReturnItemCollectionMetrics: 'NONE',
+        ReturnValues: 'NONE'
+      };
+      dynamoDB.deleteItem(params, function(err, data) {
+        cb(err);
+      });
     });
   });
 };

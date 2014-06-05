@@ -171,40 +171,11 @@ exports.loadByVersion = function(app, versionId, cb) {
 };
 
 exports.latestVersionForApp = function(app, cb) {
-  var dynamoDB = new AWS.DynamoDB();
-  var params = {
-    TableName: DB.VERSIONS,
-    IndexName: DB.VERSIONS_BY_APP_NAME,
-    AttributesToGet: ['versionId', 'appId', 'manifest', 'createdAt'],
-    Select: 'SPECIFIC_ATTRIBUTES',
-    KeyConditions: {
-      appId: {
-        ComparisonOperator: 'EQ',
-        AttributeValueList: [{
-          S: app.code
-        }]
-      }
-    }
-  };
-  dynamoDB.query(params, function(err, data) {
-    if (err) return cb(err);
-
-    if (data.Count > 0) {
-
-      // TODO this isn't very efficient
-      var latest = 0;
-      for (var i = 1; i < data.Count; i++) {
-        var latestTime = parseInt(data.Items[latest].createdAt, 10);
-        var curTime = parseInt(data.Items[i].createdAt, 10);
-        if (latestTime < curTime) {
-          latest = i;
-        }
-      }
-      return exports.loadByVersion(app, data.Items[latest].versionId.S, cb);
-    } else {
-      cb(err, null);
-    }
-  });
+  if (app && app.latestVersion) {
+    return exports.loadByVersion(app, app.latestVersion, cb);
+  } else {
+    cb(err, null);
+  }
 };
 
 // TODO: version number - from system or from the manifest.version?
@@ -212,43 +183,14 @@ exports.latestVersionForApp = function(app, cb) {
 // TODO make versionId nicer than UUID?
 // or
 // Support short codes?
-/**
- * This method if for getting all of the Version documents from
- * DynamoDB for deletion... use App.versionList for most
- * purposes
- */
 exports.versionList = function(app, cb) {
-  var dynamoDB = new AWS.DynamoDB();
-  var params = {
-    TableName: DB.VERSIONS,
-    IndexName: DB.VERSIONS_BY_APP_NAME,
-    AttributesToGet: ['versionId', 'appId', 'manifest', 'createdAt'],
-    Select: 'SPECIFIC_ATTRIBUTES',
-    KeyConditions: {
-      appId: {
-        ComparisonOperator: 'EQ',
-        AttributeValueList: [{
-          S: app.appId
-        }]
-      }
-    }
-  };
-  dynamoDB.query(params, function(err, data) {
-    if (!err && data.Count > 0) {
-      var versionList = [];
-      for (var i = 0; i < data.Count; i++) {
-        try {
-          var version = JSON.parse(data.Items[i].manifest.S).version;
-          versionList.push([data.Items[i].versionId.S, version]);
-        } catch (e) {
-          console.log('Trouble parsing manifest on ', data.Items[i].versionId.S);
-        }
-      }
-      cb(err, versionList);
-    } else {
-      cb(err, []);
-    }
-  });
+  var versionList = [];
+  for (var i = 0; i < app.versionList.versions.length; i++) {
+    var ver = app.versionList.versions[i];
+    versionList.push([ver.id, ver.version]);
+  }
+
+  cb(null, versionList);
 };
 
 function populate(aVersion, manifest, dynData) {
