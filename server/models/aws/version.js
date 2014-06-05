@@ -87,7 +87,10 @@ exports.create = function(app, versionData, cb) {
         S: app.user.email
       },
       appId: {
-        S: app.code
+        S: app.appId
+      },
+      appCode: {
+        S: app.appCode
       },
 
       manifest: {
@@ -120,14 +123,19 @@ exports.create = function(app, versionData, cb) {
     aVersion.versionId = versionId;
     aVersion.manifest = versionData.manifest;
 
-    aVersion.appId = app.code;
+    aVersion.appId = app.appId;
+    aVersion.appCode = app.appCode;
     aVersion.createdBy = app.user.email;
 
     aVersion.icon_location = versionData.iconLocation;
     aVersion.signed_package_location = versionData.signedPackagePath;
     aVersion.signed_package_size = versionData.signedPackageSize;
     aVersion.createdAt = createdAt;
-    cb(err, aVersion);
+
+    // Give out backend a chance to associate App and Version
+    app.addVersion(aVersion, function(err) {
+      cb(err, aVersion);
+    });
   });
 };
 
@@ -204,6 +212,11 @@ exports.latestVersionForApp = function(app, cb) {
 // TODO make versionId nicer than UUID?
 // or
 // Support short codes?
+/**
+ * This method if for getting all of the Version documents from
+ * DynamoDB for deletion... use App.versionList for most
+ * purposes
+ */
 exports.versionList = function(app, cb) {
   var dynamoDB = new AWS.DynamoDB();
   var params = {
@@ -215,7 +228,7 @@ exports.versionList = function(app, cb) {
       appId: {
         ComparisonOperator: 'EQ',
         AttributeValueList: [{
-          S: app.code
+          S: app.appId
         }]
       }
     }
@@ -244,6 +257,9 @@ function populate(aVersion, manifest, dynData) {
   aVersion.versionId = dynData.versionId.S;
   aVersion.id = dynData.versionId.S;
   aVersion.appId = dynData.appId.S;
+  if (dynData.appCode) {
+    aVersion.appCode = dynData.appCode.S;
+  }
   if (dynData.createdBy) {
     aVersion.createdBy = dynData.createdBy.S;
   }
