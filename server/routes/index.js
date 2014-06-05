@@ -36,8 +36,8 @@ exports.init = function(config, app) {
   app.get('/confirm_delete/app/:appCode', confirmDeleteApp);
   app.delete('/app/:appCode/v/:version', deleteVersion);
   app.delete('/app/:appCode', deleteApp);
-  app.get('/app/install/:appCode', appInstall);
-  app.get('/app/v/:version/install/:appCode', appInstall);
+  app.get('/app/install/:appCode', appInstall(config));
+  app.get('/app/v/:version/install/:appCode', appInstall(config));
 
   // appIcon only used in "Enterprise" deployment, not Cloud
   app.get('/app_icon/v/:version/app/:appCode', appIcon);

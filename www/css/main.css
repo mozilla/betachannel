@@ -35,6 +35,7 @@
   flex: 2;
   border-left: solid 1px grey;
   padding-left: 2.5%;
+  padding-right: 2.5%;
 }
 
 .nav {
@@ -62,6 +63,10 @@
 }
 .links {
   text-align: center;
+}
+
+.qrcode img {
+  width: 100%;
 }
 
 #container {

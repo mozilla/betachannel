@@ -23,4 +23,15 @@
       }
     });
   }
+
+  var qel = document.querySelectorAll('.qrcode');
+  for (var i = 0; i < qel.length; i++) {
+    var installUrl = qel[i].getAttribute('data-qrcode-url');
+
+    new QRCode(qel[i], installUrl);
+
+    //var qr = qrcode(7, 'M');
+    //qr.addData(installUrl);qr.make();
+    //qel[i].innerHTML = qr.createImgTag();
+  }
 })();

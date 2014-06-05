@@ -10,51 +10,55 @@ var Version = requireDriver('../models', 'version');
 
 var Icon = requireDriver('../files', 'icon');
 
-module.exports = reqContext(function(req, res, ctx) {
-  var appCode = req.params.appCode;
-  var version = req.params.version || 'latest';
+module.exports = function(config) {
 
-  var parts = appCode.split(',');
-  var email = parts[0];
+  return reqContext(function(req, res, ctx) {
+    var appCode = req.params.appCode;
+    var version = req.params.version || 'latest';
 
-  App.loadByCode(email, appCode, function(err, anApp) {
-    if (err) {
-      console.log(err.stack || err);
-      // TODO Nicer error pages
-      return res.send('Unable to locate app ' + appCode, 400);
-    }
-    ctx.app = anApp;
-    if ('latest' === version) {
-      Version.latestVersionForApp(anApp, useVersion);
+    var parts = appCode.split(',');
+    var email = parts[0];
 
-    } else {
-      Version.loadByVersion(anApp, version, useVersion);
-    }
-
-    function useVersion(err, aVersion) {
+    App.loadByCode(email, appCode, function(err, anApp) {
       if (err) {
         console.log(err.stack || err);
         // TODO Nicer error pages
-        return res.send('Unable to load latest version', 500);
-      } else if (null === aVersion) {
-        return res.send('Unable to find version', 404);
+        return res.send('Unable to locate app ' + appCode, 400);
       }
-      aVersion.icon_url = Icon.url(aVersion);
-      aVersion.manifest_url = '/manifest/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/manifest.webapp';
-      ctx.signedPackage = '/packaged/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/package.zip';
-      ctx.signedPackageSize = aVersion.signed_package_size + 'kb';
-      ctx.version = aVersion;
-      Version.versionList(anApp, function(err, versions) {
+      ctx.app = anApp;
+      if ('latest' === version) {
+        Version.latestVersionForApp(anApp, useVersion);
+
+      } else {
+        Version.loadByVersion(anApp, version, useVersion);
+      }
+
+      function useVersion(err, aVersion) {
         if (err) {
-          console.error(err.stack || err);
-          ctx.versions = [];
-        } else {
-          ctx.versions = versions;
+          console.log(err.stack || err);
+          // TODO Nicer error pages
+          return res.send('Unable to load latest version', 500);
+        } else if (null === aVersion) {
+          return res.send('Unable to find version', 404);
         }
-        res.render('app_install.html', ctx);
-      });
-    }
+        aVersion.icon_url = Icon.url(aVersion);
+        aVersion.manifest_url = '/manifest/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/manifest.webapp';
+        ctx.signedPackage = '/packaged/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/package.zip';
+        ctx.signedPackageSize = aVersion.signed_package_size + 'kb';
+        ctx.version = aVersion;
+        Version.versionList(anApp, function(err, versions) {
+          if (err) {
+            console.error(err.stack || err);
+            ctx.versions = [];
+          } else {
+            ctx.versions = versions;
+          }
+          ctx.publicUrl = config.publicUrl;
+          res.render('app_install.html', ctx);
+        });
+      }
+    });
+
+
   });
-
-
-});
+};
