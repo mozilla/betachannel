@@ -23,5 +23,5 @@
 {% endblock %}
 {% block sidebar %}
 <a href="">Version {{ ver[1] }}</a>
-<div class="qrcode" data-qrcode-url="{{ publicUrl }}/app/v/{{version.versionId | urlencode}}/install/{{ app.code | urlencode }}"></div>
+<div class="qrcode" data-qrcode-url="{{ publicUrl }}/app/v/{{version.versionId | string | urlencode}}/install/{{ app.code | urlencode }}"></div>
 {% endblock %}

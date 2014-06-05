@@ -62,6 +62,9 @@ exports.findOne = function(app, version, cb) {
               } catch (e) {
                 err = new Error(e);
               }
+            } else if ('id' === key) {
+              aVersion[key] = rows[0][key];
+              aVersion.versionId = rows[0][key];
             } else {
               aVersion[key] = rows[0][key];
             }
@@ -129,6 +132,9 @@ exports.loadByVersion = function(app, versionId, cb) {
               } catch (e) {
                 err = new Error(e);
               }
+            } else if ('id' === key) {
+              aVersion[key] = rows[0][key];
+              aVersion.versionId = rows[0][key];
             } else {
               aVersion[key] = rows[0][key];
             }
@@ -171,6 +177,9 @@ exports.latestVersionForApp = function(app, cb) {
               } catch (e) {
                 err = new Error(e);
               }
+            } else if ('id' === key) {
+              aVersion[key] = rows[0][key];
+              aVersion.versionId = rows[0][key];
             } else {
               aVersion[key] = rows[0][key];
             }
