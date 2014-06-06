@@ -1,4 +1,4 @@
-var exec = require('child_process').exec;
+var execFile = require('child_process').execFile;
 var fs = require('fs');
 var path = require('path');
 
@@ -20,12 +20,12 @@ module.exports = function(packagedAppPath, extractDir, props, cb) {
       function(err) {
         // Package up the app
         // Package up the app
-        var zipCmd = 'zip -r ' + packagedAppPath + ' .';
-        exec(zipCmd, {
+        var zipCmd = ['zip', '-r', packagedAppPath, '.'];
+        exec(zipCmd[0], zipCmd.slice(1), {
           cwd: extractDir
         }, function(err, stdout, stderr) {
           if (err) {
-            console.error('Unable to ' + zipCmd);
+            console.error('Unable to ' + zipCmd.join(' '));
             if (stdout) console.error(stdout);
             if (stderr) console.error(stderr);
             console.error(err);

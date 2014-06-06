@@ -1,4 +1,4 @@
-var exec = require('child_process').exec;
+var execFile = require('child_process').execFile;
 var fs = require('fs');
 var os = require('os');
 var path = require('path');
@@ -14,8 +14,7 @@ module.exports = function(zipFileLocation, cb) {
     if (err) {
       return cb(err);
     }
-    var unzipCmd = 'unzip ' + zipFileLocation;
-    exec(unzipCmd, {
+    execFile('unzip', [zipFileLocation], {
       cwd: extractDir
     }, function(err, stdout, stderr) {
       if (err) {
