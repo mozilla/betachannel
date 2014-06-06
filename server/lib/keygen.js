@@ -8,7 +8,7 @@ var _ = require('underscore');
 var os = require('os');
 var path = require('path');
 var fs = require('fs');
-var exec = require('child_process').exec;
+var execFile = require('child_process').execFile;
 
 // see http://stackoverflow.com/questions/8520973/how-to-create-a-pair-private-public-keys-using-node-js-crypto
 // see https://github.com/digitarald/d2g/issues/2
@@ -19,15 +19,15 @@ exports.createKeypair = function(binPath, configCertsDir, derFilePath, cb) {
 
   // TODO: do this ./generate_cert.sh $PWD $PWD/phone-cert.der
   // this will have the side effect of generatign the DER
-  var generateCertCommand = [binPath + '/generate_cert.sh', configCertsDir, derFilePath].join(' ');
+  var generateCertCommand = [binPath + '/generate_cert.sh', configCertsDir, derFilePath];
 
   var derBasename = derFilePath.substring(0, derFilePath.length - ('.der'.length));
   var publicDir = path.join(path.dirname(configCertsDir), 'public');
-  var generatePhoneCertDB = [binPath + '/generate_phone_cert_db.sh', derBasename, publicDir].join(' ');
+  var generatePhoneCertDB = [binPath + '/generate_phone_cert_db.sh', derBasename, publicDir];
 
-  console.log(generateCertCommand);
+  console.log(generateCertCommand.join(' '));
 
-  exec(generateCertCommand, function(err, stdout, stderr) {
+  execFile(generateCertCommand[0], generateCertCommand.slice(1), function(err, stdout, stderr) {
     if (stdout) console.log('STDOUT', stdout);
     if (err) {
       console.log('ERROR', err);
@@ -35,7 +35,7 @@ exports.createKeypair = function(binPath, configCertsDir, derFilePath, cb) {
       return cb(err);
     }
 
-    exec(generatePhoneCertDB,
+    execFile(generatePhoneCertDB[0], generatePhoneCertDB.slice(1),
       function(err, stdout, stderr) {
         console.log('STDOUT', stdout);
         if (err) {
@@ -54,11 +54,11 @@ exports.createKeypair = function(binPath, configCertsDir, derFilePath, cb) {
 exports.signAppPackage = function(binPath, configCertsDir, inputFile, outputFile, cb) {
   // TODO: do this ./sign_app.sh configCertsDir $PWD/unsigned.zip $PWD/valid.zip
 
-  var signAppCommand = [binPath + '/sign_app.sh', configCertsDir, inputFile, outputFile].join(' ');
+  var signAppCommand = [binPath + '/sign_app.sh', configCertsDir, inputFile, outputFile];
 
-  console.log(signAppCommand);
+  console.log(signAppCommand.join(' '));
 
-  exec(signAppCommand, function(error, stdout, stderr) {
+  execFile(signAppCommand[0], signAppCommand.slice(1), function(error, stdout, stderr) {
     if (stdout) console.log('STDOUT', stdout);
     if (error) {
       console.log('ERROR', error);
