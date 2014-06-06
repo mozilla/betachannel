@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -e -u
+set -x
+
+cd "$(dirname "${0}")"
+ROOT="${PWD}"
+
+RPMNAME=${RPMNAME-"$(basename "${ROOT}")"}
+BUILD_ID=$(date +%Y%m%d%H%M%S)
+
+build_rpm() {
+    local package_file="${1}"
+    local ref=$(cd "${ROOT}"; git rev-parse --short=12 HEAD)
+
+    npm install
+
+    pushd "${ROOT}"/../
+
+    fpm -s dir -t rpm \
+        -n "${RPMNAME}" \
+        --provides moz-deploy-app \
+        --depends 'nss-tools' \
+        --depends 'nodejs > 0.10' \
+        --depends 'unzip' \
+        --rpm-compression none \
+        -v "${BUILD_ID}" \
+        -p "${package_file}" \
+        --iteration "${ref}" \
+        --directories / \
+        -x "*.git" -x "*.pyc" \
+        -C . --prefix "/opt/${RPMNAME}" \
+        "${RPMNAME}/"
+
+    popd
+}
+
+case "${1:-}" in
+    rpm)
+        if [ $# -lt 2 ]; then
+            echo "Usage: ./build rpm <outfile>"
+            exit 1
+        fi
+        build_rpm "${2}"
+        ;;
+    *)
+        echo "Usage: $0 rpm <outfile>."
+        exit 1
+        ;;
+esac
