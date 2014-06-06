@@ -6,22 +6,25 @@
   <p>Try this on your FirefoxOS device.</p>
 </div>
 <img src="{{version.icon_url}}" />
-<div class="app-name">{{version.manifest.name}}</div>
+<div class="app-name">{{version.manifest.name}} <span class="version">version:{{version.version}}</span></div>
 <p class="app-name">{{version.manifest.description}}</p>
-<div class="app-version">{{version.manifest.name}}</div>
+
 <button data-package-manifest-url="{{version.manifest_url}}" disabled class="install">Install</button>
 
 <a class="package-link" href="{{signedPackage}}">{{signedPackageSize}}</a>
 
-<h3>Versions</h3>
+{% endblock %}
+
+{% block sidebar %}
+<h3>Share this Page</h3>
+<div class="qrcode" data-qrcode-url="{{ publicUrl }}/app/v/{{version.versionId | string | urlencode}}/install/{{ app.code | urlencode }}"></div>
+<a href="{{tinyUrl | urlencode }}">{{tinyUrl}}</a>
+
+<h3>Other Versions</h3>
 <ol class="versions">
   {% for ver in versions %}
   <li><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a>
   </li>
   {% endfor %}
 </ol>
-{% endblock %}
-{% block sidebar %}
-<a href="">Version {{ ver[1] }}</a>
-<div class="qrcode" data-qrcode-url="{{ publicUrl }}/app/v/{{version.versionId | string | urlencode}}/install/{{ app.code | urlencode }}"></div>
 {% endblock %}
