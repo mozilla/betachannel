@@ -20,6 +20,9 @@ build_rpm() {
     fpm -s dir -t rpm \
         -n "${RPMNAME}" \
         --provides moz-deploy-app \
+        --depends 'nss-tools' \
+        --depends 'nodejs > 0.10' \
+        --depends 'unzip' \
         --rpm-compression none \
         -v "${BUILD_ID}" \
         -p "${package_file}" \
