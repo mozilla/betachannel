@@ -21,7 +21,7 @@ exports.init = function(config, cb) {
 
   // TODO region
   AWS.config.update({
-    region: 'us-west-1'
+    region: config.awsDynamoRegion
   });
 
   module.exports.APPS = APPS = config.dynamodbTablePrefix + 'apps';

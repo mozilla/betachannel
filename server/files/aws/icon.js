@@ -24,7 +24,7 @@ exports.init = function(aConfig) {
     Bucket: config.awsS3PublicBucket, // required
     ACL: 'public-read',
     CreateBucketConfiguration: {
-      LocationConstraint: 'us-west-1',
+      LocationConstraint: config.awsS3Region,
     }
   };
   var s3 = new AWS.S3();
@@ -75,5 +75,5 @@ exports.delete = function(version, cb) {
 
 exports.url = function(version) {
   //  ://s3-us-west-1.amazonaws.com/betafox-assets-dev/7d732961-47e8-497e-9959-1ea8a9755d70.jpg
-  return 'https://s3-us-west-1.amazonaws.com/' + config.awsS3PublicBucket + '/' + version.icon_location;
+  return 'https://s3-' + config.awsS3Region + '.amazonaws.com/' + config.awsS3PublicBucket + '/' + version.icon_location;
 };
