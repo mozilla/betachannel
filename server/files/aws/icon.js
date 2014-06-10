@@ -20,13 +20,23 @@ exports.init = function(aConfig) {
   });
 
 
+  if (config.awsS3CreateBucket) {
+    createBucket(config.awsS3PublicBucket, config.awsS3Region);
+  }
+};
+
+function createBucket(bucket, region) {
   var params = {
-    Bucket: config.awsS3PublicBucket, // required
+    Bucket: bucket, // required
     ACL: 'public-read',
-    CreateBucketConfiguration: {
-      LocationConstraint: config.awsS3Region,
-    }
   };
+
+  if (region != 'us-east-1') {
+    params.CreateBucketConfiguration = {
+      LocationConstraint: region,
+    };
+  }
+
   var s3 = new AWS.S3();
   // 'http://{awsS3PublicBucket}.amazonaws.com/'
   s3.createBucket(params, function(err, data) {
@@ -36,7 +46,7 @@ exports.init = function(aConfig) {
       console.log('Created S3 Bucket');
     }
   });
-};
+}
 
 exports.save = function(iconPath, cb) {
 
