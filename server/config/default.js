@@ -28,6 +28,7 @@ awsSecretAccessKey = 'SomeSecretValue';
 dynamodbTablePrefix = 'betafox.';
 dynamoReadCapacityUnits = 1;
 dynamoWriteCapacityUnits = 1;
+awsS3CreateBucket = true;
 awsS3PublicBucket = 'betafox-assets';
 awsS3Region = awsDynamoRegion = 'us-west-1';
 */
