@@ -11,6 +11,8 @@
 # see https://github.com/digitarald/d2g
 # see https://wiki.mozilla.org/Marketplace/Reviewers/Apps/InstallingReviewerCerts
 
+set -e
+
 if [ $# -ne 2 ]; then
 	echo "usage: generate_phone_cert_db.sh <der_file> <public_directory>"
         echo "der_file should not have the .der file extension in the input"
@@ -23,18 +25,12 @@ fi
 echo "\n*** generate_phone_cert_db.sh $1 $2"
 
 echo "\n*** wiping temporary cert DB"
-mkdir -p ${publicDirectory}
-rm -Rf ${publicDirectory}/certdb.tmp
+mkdir -p "${publicDirectory}"
+rm -Rf "${publicDirectory}/certdb.tmp"
 
 echo "\n*** create new temporary cert DB"
 pwd
-./server/bin/new_certdb.sh ${publicDirectory}/certdb.tmp
-
-
-if [ $wgetResponse -ne 0 ]; then
-	echo "could not download DER file from $derFileURL, check your hostname and server and try again"
-	exit 1
-fi
+./server/bin/new_certdb.sh "${publicDirectory}/certdb.tmp"
 
 echo "\n*** add d2g cert to temporary cert DB"
-./server/bin/add_or_replace_root_cert.sh ${publicDirectory}/certdb.tmp $derFile
+./server/bin/add_or_replace_root_cert.sh "${publicDirectory}/certdb.tmp" "$derFile"
