@@ -5,7 +5,7 @@ Give beta testers access to your Apps
 This is the source code to the BetaFox webapp.
 
 FirefoxOS, Firefox for Android and other future runtimes let developers write Open Web Apps.
-Distributing privelged apps to remote testers is very difficult.
+Distributing privileged apps to remote testers is very difficult.
 
 This webapp allows developers to upload their packaged apps and
 gives them versioned install links.
