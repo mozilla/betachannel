@@ -13,6 +13,9 @@ var execFile = require('child_process').execFile;
 // see http://stackoverflow.com/questions/8520973/how-to-create-a-pair-private-public-keys-using-node-js-crypto
 // see https://github.com/digitarald/d2g/issues/2
 
+/**
+ * Places generated keys onto local disk
+ */
 exports.createKeypair = function(binPath, configCertsDir, derFilePath, cb) {
 
   console.log('Creating Keypair ', binPath, configCertsDir, derFilePath);
@@ -22,7 +25,8 @@ exports.createKeypair = function(binPath, configCertsDir, derFilePath, cb) {
   var generateCertCommand = [binPath + '/generate_cert.sh', configCertsDir, derFilePath];
 
   var derBasename = derFilePath.substring(0, derFilePath.length - ('.der'.length));
-  var publicDir = path.join(path.dirname(configCertsDir), 'public');
+  var publicDir = path.join(configCertsDir, 'public');
+
   var generatePhoneCertDB = [binPath + '/generate_phone_cert_db.sh', derBasename, publicDir];
 
   console.log(generateCertCommand.join(' '));
@@ -42,13 +46,16 @@ exports.createKeypair = function(binPath, configCertsDir, derFilePath, cb) {
           console.log('STDERR', stderr);
         } else {
           ['cert9.db', 'key4.db', 'pkcs11.txt'].forEach(function(pubFile) {
-            fs.symlinkSync(path.join(publicDir, 'certdb.tmp', pubFile), path.join(path.resolve('www'), pubFile));
+            var symLink = path.join(path.resolve('www'), pubFile);
+            try {
+              fs.unlinkSync(symLink);
+            } catch (e) {}
+            fs.symlinkSync(path.join(publicDir, 'certdb.tmp', pubFile), symLink);
           });
         }
         cb(err);
       });
   });
-
 };
 
 exports.signAppPackage = function(binPath, configCertsDir, inputFile, outputFile, cb) {

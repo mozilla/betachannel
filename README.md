@@ -17,6 +17,7 @@ Beta testers can install the app from the link.
 * Python
 * MySQL
 * [NSS Tools](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Tools)
+* zip/unzip (UnZip, by Info-ZIP will work)
 
 See docs/AWS.md for a fast, simple Ubuntu/EC2 based install.
 

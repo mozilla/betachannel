@@ -1,4 +1,8 @@
-{% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %} {% block template_name %}app_install.html{% endblock %} {% block content %}
+{% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %}
+
+{% block template_name %}app_install{% endblock %}
+
+{% block content %}
 <h2>Install {{version.manifest.name}}</h2>
 <div id="needs-mozapps" class="hidden">
   <p><strong>Unable to install on this browser / device</strong>

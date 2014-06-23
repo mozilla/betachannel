@@ -7,13 +7,13 @@ var dblib;
 
 exports.init = function(aConfig, cb) {
   config = aConfig;
-  if (config.awsAccessKeyId && config.awsAccessKeyId.length > 0) {
+  if (config.dynamodbTablePrefix && config.dynamodbTablePrefix.length > 0) {
     dblib = require('./db_aws');
   } else if (config.mysql &&
     config.mysql.user && config.mysql.user.length > 0) {
     dblib = require('./db_mysql');
   } else {
-    throw new Error('No DB configuration found - expected AWS or MySQL');
+    throw new Error('No DB configuration found - expected DynamoDB or MySQL');
   }
 
   exports.requireDriver('../files', 'icon').init(config);
@@ -31,19 +31,27 @@ var loggedMode = false;
  * 'mysql' and 'disk' depending on if they are 'models' or 'files'
  */
 exports.requireDriver = function(type, file) {
-  if (config.awsAccessKeyId && config.awsAccessKeyId.length > 0) {
+  if (-1 !== type.indexOf('models') &&
+    config.dynamodbTablePrefix && config.dynamodbTablePrefix.length > 0) {
     if (false === loggedMode) {
       loggedMode = true;
-      console.log('Deploying in Cloud mode');
+      console.log('Deploying with DynamoDB');
     }
     return require(type + '/aws/' + file);
   } else if (-1 !== type.indexOf('models')) {
     if (false === loggedMode) {
       loggedMode = true;
-      console.log('Deploying in Enterprise mode');
+      console.log('Deploying with MySQL');
     }
     return require(type + '/mysql/' + file);
-  } else {
+  } else if (-1 !== type.indexOf('files') &&
+    config.awsS3PublicBucket && config.awsS3PublicBucket.length > 0) {
+    return require(type + '/aws/' + file);
+  } else if (-1 !== type.indexOf('files') &&
+    config.fileStoragePath && config.fileStoragePath.length > 0) {
     return require(type + '/disk/' + file);
+  } else {
+    throw new Error('requireDriver for unknown type/file pair type=' +
+      type + ' file=' + file);
   }
 };

@@ -39,7 +39,6 @@ exports.init = function(argv) {
     } else {
       configFile = path.join(process.cwd(), configPath);
     }
-    console.log('Trying', configFile);
     if (fs.existsSync(configPath)) {
       vm.runInContext(fs.readFileSync(configFile), context, configFile);
     }
@@ -98,17 +97,24 @@ exports.init = function(argv) {
 
   context.varPath = path.resolve(process.cwd(), (context.varPath));
 
-  if (context.awsAccessKeyId && context.awsAccessKeyId.length > 0) {
-    if (!context.dynamodbTablePrefix) {
-      context.dynamodbTablePrefix = 'betafox.';
-    }
-  }
-
   var baseDir = path.join(__dirname, '..');
+
+  var certsDir;
+  if (!context.certificateStorage) {
+    throw new Error('certificateStorage must be setup for either S3 or local disk');
+  }
+  if ( !! context.certificateStorage.local) {
+    certsDir = path.resolve(process.cwd(), context.certificateStorage.local);
+  } else {
+    certsDir = path.resolve(process.cwd(), context.certificateStorage.localCertsDir);
+  }
+  context.configCertsDir = certsDir;
+  context.derFilePath = path.join(certsDir, 'betafox.der');
+
 
   ['binPath', 'configCertsDir', 'derFilePath'].forEach(function(key) {
     context[key] =
-      path.resolve(baseDir, context[key])
+      path.resolve(baseDir, context[key]);
     console.log('config updated', key, context[key]);
   });
 
