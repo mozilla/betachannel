@@ -20,6 +20,7 @@ If there are errors while checking, it will retry or give up.
     certificateStorage = { local: '/etc/betafox/certdb' }
 
 or
+
     certificateStorage = {
       s3Bucket: 'betafox-certificate',
       s3ItemPrefix: 'betafox-certdb',
