@@ -4,8 +4,6 @@ env = 'development';
 publicUrl = 'http://10.0.1.18:8000';
 detectPublicUrlMisMatch = false;
 
-configCertsDir = './config/secrets/';
-derFilePath = './config/secrets/betafox.der';
 
 buildDir = '/tmp/betafox-builds';
 varPath = '/tmp/betafox/var';
@@ -18,32 +16,57 @@ clientSessions = {
   duration: 24 * 60 * 60 * 1000, // in milliseconds
 };
 
-// You must configure EITHER AWS or MySQL
-// Leave the other one commented out
+// AWS - If you use S3 and/or DynamoDB
+// You must configure aws access
+//awsAccessKeyId = 'SomeValue';
+//awsSecretAccessKey = 'SomeSecretValue';
 
-// AWS
-/*
-awsAccessKeyId = 'SomeValue';
-awsSecretAccessKey = 'SomeSecretValue';
+
+// You must configure EITHER AWS DynamoDB or MySQL
+// This will store app metadata
+
+/* DynamoDB
 dynamodbTablePrefix = 'betafox.';
 dynamoReadCapacityUnits = 1;
 dynamoWriteCapacityUnits = 1;
-awsS3CreateBucket = true;
-awsS3PublicBucket = 'betafox-assets';
-awsS3Region = awsDynamoRegion = 'us-west-1';
 */
 
-// MySQL
-/*
+/* MySQL
 mysql = {
   host: 'localhost',
   user: 'root',
   password: 'pass',
   database: 'betafox'
 }
+*/
 
+// App Storage - Files like Apps and Icons
+// You must configure EITHER S3 or Local Disk
+
+/* S3
+awsS3PublicBucket = 'betafox-assets';
+awsS3Region = awsDynamoRegion = 'us-west-1';
+*/
+
+/* Local Disk 
 fileStoragePath = '/var/betafox';
+*/
 
+// Crypto - Signing Certificates
+// You must configure EITHER S3 or Local Disk
+// This is where sensative aspects of your
+// Signing Certificate are stored
+
+/* S3
+certificateStorage = {
+  awsS3PrivateBucket: 'betafox-certificate',
+  awsS3ItemPrefix: 'betafox-certdb',
+  localCertsDir: '/etc/betafox/certdb'
+}
+*/
+
+/* Local Disk
+certificateStorage = { local: '/etc/betafox/certdb' }
 */
 
 // L10n

@@ -42,6 +42,10 @@ img {
   padding-right: 2.5%;
 }
 
+.app_install #container, .app_install #sidebar {
+  flex: 1;
+}
+
 .nav {
   display: flex;
   flex-direction: row;
@@ -75,6 +79,32 @@ img {
 
 #container {
   display: block;
+}
+
+.install {
+  font-size: 3em;
+}
+
+@media (max-width: 400px) {
+  #main-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .logo {
+    flex-direction: column;
+  }
+  .tagline {
+    width: 100%;
+    margin-left: 20px;
+  }
+  button {
+    width: 90%;
+    margin: auto;
+  }
+
+  #sidebar { border-top: solid 1px black; margin-top: 10px; }
+
 }
 
 /* auth structure */

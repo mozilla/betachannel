@@ -10,6 +10,36 @@ packaged apps with your private keys.
 
 These keys should be generated once and the private assets should be protected.
 
+You can do this manually or let the server do it.
+On server startup, the server will check for the presence of certificates.
+If the do not exist, it will attempt to create them based on `certificateStorage`.
+If there are errors while checking, it will retry or give up.
+
+`certificateStorage` can be set to either:
+
+    certificateStorage = { local: '/etc/betafox/certdb' }
+
+or
+    certificateStorage = {
+      s3Bucket: 'betafox-certificate',
+      s3ItemPrefix: 'betafox-certdb',
+      localCertsDir: '/etc/betafox/certdb'
+    }
+
+Either deployent configuration requires a local directory where it is okay to read and write the cert.
+At runtime when signing apps, we need a copy of the certificate on the local filesystem.
+If you choose `S3` then this is just a copy of the canonical certificate stored in S3.
+
+On server startup, if it is configured to use `S3`, then it will download and setup certificates.
+
+### Cloud mode and S3
+
+Review the local file system'sf optional manual steps below.
+The only difference is that files on disk are copies of the S3 data.
+
+### Local File System
+
+#### Optional Manual Steps
 Assuming you will store these sensitive assets in `/etc/betafox/certdb`, create
 that directory and make sure the same user that will run the betafox NodeJS 
 process can access it. Restrict access to user only.
@@ -47,7 +77,17 @@ This happens automatically.
 These files will be served up as static assets to phones during provisioning.
 *They are not* part of the source code, and must be backed up along with the key material.
 
-If any of these files are lost, or security is compromised, files under `/etc/betafox/certdb` should be deleted and the process re-run. Developers will need to re-upload their apps and beta testers will need to re-provision their devices.
+If any of these files are lost, the server will re-create them.
+
+## Security Events and Revocation
+
+If  security is compromised, you should delete the private and public assets.
+
+In a future release, a script will be provided to automate this task.
+
+If you are using S3, you must delete the the private items in the bucket you've configured, otherwise your app server will re-download them.
+
+Also, developers will need to re-upload their apps and beta testers will need to re-provision their devices.
 
 ## Signing Scope
 

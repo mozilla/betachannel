@@ -54,7 +54,7 @@ function signPackage(config, user, unsignedPackagePath, meta, cb) {
 
     keygen.signAppPackage(config.binPath, config.configCertsDir, unsignedPackagePath, meta.signedPackagePath, function(exitCode) {
       if (0 !== exitCode) {
-        return cb(new Error('Unable to sign app ' + exitCode));
+        return cb(new Error('Unable to sign app exit code:' + exitCode));
       }
 
       // https://github.com/digitarald/d2g/issues/34

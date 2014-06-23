@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{% endblock %}</title>
-  <!-- {% block template_name %}{% endblock %} -->
   {{ cachify_css('/css/style.min.css') }} {% block page_css %}{% endblock %}
 </head>
 
-<body>
+<body class="{% block template_name %}{% endblock %}">
   <div id="wrap">
     <div class="nav header">
       <div class="logo">

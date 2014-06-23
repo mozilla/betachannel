@@ -9,6 +9,7 @@ var User = require('./user').User;
 // TODO Maybe we don't expose this constructor?
 exports.App = function(email, manifest) {
   if ('string' !== typeof email) throw new Error('expected string, got ' + typeof email);
+
   // TODO don't keep all this data in memory, it's in the User
   this.user = new User(email);
   // TODO don't keep all this data in memory, it's in the Version
@@ -107,12 +108,12 @@ exports.findOrCreateApp = function(user, manifest, cb) {
 // TODO: Why do we require email here?
 // Painful for anonymous access to icon, manifest and packaged app
 exports.loadByCode = function(email, code, cb) {
-
   if (!code) return cb(new Error('Must provide app code'));
 
   // email isn't really a user, doh!
   // we don't have a manifest yet... doh!
   var aName = code.split(',')[1];
+
   var anApp = new exports.App(email, {
     name: aName
   });
