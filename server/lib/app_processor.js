@@ -44,7 +44,7 @@ module.exports = function(config, user, unsignedPackagePath, cb) {
 function makeId(name) {
   return name.toLowerCase()
       .replace(/ /g, '_')
-      .replace(/[^a-z_-]/g, '');
+      .replace(/[^a-z0-9_-]/g, '');
 }
 
 function _createApp(user, versionMetadata, cb) {
