@@ -41,7 +41,7 @@ exports.init = function(config, app) {
 
   // appIcon only used in "Enterprise" deployment, not Cloud
   app.get('/app_icon/v/:version/app/:appCode', appIcon);
-  app.get('/manifest/v/:version/app/:appCode/manifest.webapp', manifest);
+  app.get('/manifest/v/:version/app/:appCode/manifest.webapp', manifest(config));
   app.get('/packaged/v/:version/app/:appCode/package.zip', packagedApp);
 
   app.post('/apps', newApp(config));

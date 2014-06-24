@@ -13,43 +13,47 @@ var Version = requireDriver('../models', 'version');
 
 var ctype = 'application/x-web-app-manifest+json';
 
-module.exports = reqContext(function(req, res, ctx) {
-  var appCode = req.params.appCode;
-  var version = req.params.version;
+module.exports = function(config) {
+  return reqContext(function(req, res, ctx) {
+    var appCode = req.params.appCode;
+    var version = req.params.version;
 
-  // TODO: get email address out of app public identifier
-  // this is weak sauce
-  var parts = appCode.split(',');
-  var email = parts[0];
+    // TODO: get email address out of app public identifier
+    // this is weak sauce
+    var parts = appCode.split(',');
+    var email = parts[0];
 
-  App.loadByCode(email, appCode, function(err, anApp) {
-    if (err) {
-      console.log('loadByCode failed');
-      // TODO Nicer error pages
-      console.log(err);
-      return res.send('Unable to locate app ' + appCode, 400);
-    }
-    ctx.app = anApp;
-    Version.loadByVersion(anApp, version, function(err, aVersion) {
+    App.loadByCode(email, appCode, function(err, anApp) {
       if (err) {
-        console.log('loadByVersion failed');
-        console.log(err);
+        console.log('loadByCode failed');
         // TODO Nicer error pages
-        return res.send('Unable to load latest version', 500);
+        console.log(err);
+        return res.send('Unable to locate app ' + appCode, 400);
       }
+      ctx.app = anApp;
+      Version.loadByVersion(anApp, version, function(err, aVersion) {
+        if (err) {
+          console.log('loadByVersion failed');
+          console.log(err);
+          // TODO Nicer error pages
+          return res.send('Unable to load latest version', 500);
+        }
 
-      delete aVersion.manifest.launch_path;
-      aVersion.manifest.package_path =
-        '/packaged/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/package.zip';
-      aVersion.manifest.size = aVersion.signed_package_size;
+        delete aVersion.manifest.launch_path;
+        aVersion.manifest.package_path =
+          '/packaged/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/package.zip';
+        aVersion.manifest.size = aVersion.signed_package_size;
 
-      fs.readFile(aVersion.icon_location, {
-        encoding: null
-      }, function(err, img) {
+        if (1 === aVersion.manifest.installs_allowed_from.length &&
+          '*' === aVersion.manifest.installs_allowed_from[0]) {
+          // BetaFox installs will work from '*', NO-OP
+        } else {
+          aVersion.manifest.installs_allowed_from = aVersion.manifest.installs_allowed_from || [];
+          aVersion.manifest.installs_allowed_from.push(config.publicUrl);
+        }
         res.setHeader('Content-Type', ctype);
         res.send(aVersion.manifest);
       });
     });
   });
-
-});
+};
