@@ -58,10 +58,10 @@ exports.createKeypair = function(binPath, configCertsDir, derFilePath, cb) {
   });
 };
 
-exports.signAppPackage = function(binPath, configCertsDir, inputFile, outputFile, cb) {
+exports.signAppPackage = function(binPath, configCertsDir, inputFile, outputFile, appId, appVersionId, cb) {
   // TODO: do this ./sign_app.sh configCertsDir $PWD/unsigned.zip $PWD/valid.zip
 
-  var signAppCommand = [binPath + '/sign_app.sh', configCertsDir, inputFile, outputFile];
+  var signAppCommand = [binPath + '/sign_app.sh', configCertsDir, inputFile, outputFile, appId, appVersionId];
 
   console.log(signAppCommand.join(' '));
 

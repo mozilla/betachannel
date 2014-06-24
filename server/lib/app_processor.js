@@ -25,17 +25,27 @@ module.exports = function(config, user, unsignedPackagePath, cb) {
     var appCode = anApp.code;
     var signedPackagePath = path.join(os.tmpdir(), 'd2g-signed-packages', appCode + '.zip');
     var icon = bestIcon(extractionDir, manifest);
+    // TODO Bug#38 - Need requirements - Should we use app.id, app.code or manifest.name
+    // Should we use manifest.version, version.id, or a timestamp?
     var meta = {
       iconLocation: icon,
       signedPackagePath: signedPackagePath,
       version: manifest.version,
-      manifest: manifest
+      manifest: manifest,
+      appId: makeId(manifest.name),
+      appVersionId: new Date().getTime()
     };
     // TODO: do we detect version numbers and have any biz logic around that?
     //owaWriter(unsignedPackagePath, extractionDir, updates, function(err) {
     signPackage(config, user, unsignedPackagePath, meta, cb);
   });
 };
+
+function makeId(name) {
+  return name.toLowerCase()
+      .replace(/ /g, '_')
+      .replace(/[^a-z_-]/g, '');
+}
 
 function _createApp(user, versionMetadata, cb) {
   App.findOrCreateApp(user, versionMetadata.manifest, function(err, anApp) {
@@ -52,7 +62,7 @@ function signPackage(config, user, unsignedPackagePath, meta, cb) {
   fs.mkdir(path.join(os.tmpdir(), 'd2g-signed-packages'), function(err) {
     // Error is fine, dir exists
 
-    keygen.signAppPackage(config.binPath, config.configCertsDir, unsignedPackagePath, meta.signedPackagePath, function(exitCode) {
+    keygen.signAppPackage(config.binPath, config.configCertsDir, unsignedPackagePath, meta.signedPackagePath, meta.appId, meta.appVersionId, function(exitCode) {
       if (0 !== exitCode) {
         return cb(new Error('Unable to sign app exit code:' + exitCode));
       }
