@@ -44,7 +44,8 @@ module.exports = function(config) {
           '/packaged/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/package.zip';
         aVersion.manifest.size = aVersion.signed_package_size;
 
-        if (1 === aVersion.manifest.installs_allowed_from.length &&
+        if (!! aVersion.manifest.installs_allowed_from &&
+          1 === aVersion.manifest.installs_allowed_from.length &&
           '*' === aVersion.manifest.installs_allowed_from[0]) {
           // BetaFox installs will work from '*', NO-OP
         } else {
