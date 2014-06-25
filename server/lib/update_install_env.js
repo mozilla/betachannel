@@ -24,6 +24,13 @@ module.exports = function(config, zipFilePath, extractionDir, cb) {
     } catch (err) {
       return cb(err.stack || err);
     }
+
+    // package's manifest may not have a version, but the mini-manifest does
+    // Make one up, fixes Issue#42
+    if (! manifest.version) {
+      manifest.version = new Date().getTime();
+    }
+
     if ( !! manifest.installs_allowed_from &&
       1 === manifest.installs_allowed_from.length &&
       '*' === manifest.installs_allowed_from[0]) {
