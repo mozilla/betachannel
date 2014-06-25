@@ -50,6 +50,7 @@ module.exports = function(config) {
         ].join('/');
 
         ctx.signedPackage = [
+          config.publicUrl,
           'packaged/v', aVersion.id, 'app',
           encodeURIComponent(appCode), 'package.zip'].join('/');
 
