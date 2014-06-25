@@ -40,4 +40,12 @@ Note your device's name. We'll assume `full_unagi` in this example.
 
 <p><strong>Note:</strong> If you have already installed the App, <strong>you must remove the app</strong>, before installing it a second time.</p>
 </div>
+<h2>Reverting to Marketplace</h2>
+<p>A device that trusts BetaFox will no longer work with production Marketplace.
+The original directory you ran these commands from, will include a <code>backup</code> directory.</p>
+<p>From the same directory, do:</p>
+<code>./revert-provisioning.sh full_unagi</code>
+
+<p>Your phone will reboot and should now work with Marketplace again.</p>
+
 {% endblock %}
