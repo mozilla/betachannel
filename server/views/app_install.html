@@ -22,7 +22,7 @@ Download raw <a class="package-link" href="{{signedPackage}}">package.zip ({{sig
 {% block sidebar %}
 <h3>Share this Page</h3>
 <div class="qrcode" data-qrcode-url="{{ publicUrl }}/app/v/{{version.versionId | string | urlencode}}/install/{{ app.code | urlencode }}"></div>
-<a href="{{tinyUrl | urlencode }}">{{tinyUrl}}</a>
+<a href="{{tinyUrl | urlencode }}" class="tinyurl">{{tinyUrl}}</a>
 
 <h3>Other Versions</h3>
 <ol class="versions">

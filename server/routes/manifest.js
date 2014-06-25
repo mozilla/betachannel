@@ -45,15 +45,6 @@ module.exports = function(config) {
           encodeURIComponent(appCode), 'package.zip'
         ].join('/');
         aVersion.manifest.size = aVersion.signed_package_size;
-
-        if ( !! aVersion.manifest.installs_allowed_from &&
-          1 === aVersion.manifest.installs_allowed_from.length &&
-          '*' === aVersion.manifest.installs_allowed_from[0]) {
-          // BetaFox installs will work from '*', NO-OP
-        } else {
-          aVersion.manifest.installs_allowed_from = aVersion.manifest.installs_allowed_from || [];
-          aVersion.manifest.installs_allowed_from.push(config.publicUrl);
-        }
         res.setHeader('Content-Type', ctype);
         res.send(aVersion.manifest);
       });

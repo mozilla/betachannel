@@ -149,3 +149,7 @@ ol.versions {
 .hidden {
   display: none;
 }
+
+.tinyurl {
+  font-family: Courier, monospace;
+}
