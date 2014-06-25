@@ -10,13 +10,12 @@
 
       install.addEventListener('click', function f(e) {
         var url = install.getAttribute('data-package-manifest-url');
-        url = location.origin + url;
         var request = navigator.mozApps.installPackage(url);
         request.onsuccess = function() {
           // if (!this.result || !this.result.manifest) {
           // 	return alert('Install failed without error');
           // }
-          alert('Installed!');
+          // TODO replace "install" button with 'installed' widget
         };
         request.onerror = function() {
           alert(this.error.name);

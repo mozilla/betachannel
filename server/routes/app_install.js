@@ -43,8 +43,16 @@ module.exports = function(config) {
           return res.send('Unable to find version', 404);
         }
         aVersion.icon_url = Icon.url(aVersion);
-        aVersion.manifest_url = '/manifest/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/manifest.webapp';
-        ctx.signedPackage = '/packaged/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/package.zip';
+
+        aVersion.manifest_url = [
+          config.publicUrl, 'manifest/v', aVersion.id, 'app',
+          encodeURIComponent(appCode), 'manifest.webapp'
+        ].join('/');
+
+        ctx.signedPackage = [
+          'packaged/v', aVersion.id, 'app',
+          encodeURIComponent(appCode), 'package.zip'].join('/');
+
         ctx.signedPackageSize = aVersion.signed_package_size + 'kb';
         ctx.version = aVersion;
         Version.versionList(anApp, function(err, versions) {

@@ -39,12 +39,14 @@ module.exports = function(config) {
           return res.send('Unable to load latest version', 500);
         }
 
-        delete aVersion.manifest.launch_path;
-        aVersion.manifest.package_path =
-          '/packaged/v/' + aVersion.id + '/app/' + encodeURIComponent(appCode) + '/package.zip';
+        //delete aVersion.manifest.launch_path;
+        aVersion.manifest.package_path = [
+          config.publicUrl, 'packaged/v', aVersion.id, 'app',
+          encodeURIComponent(appCode), 'package.zip'
+        ].join('/');
         aVersion.manifest.size = aVersion.signed_package_size;
 
-        if (!! aVersion.manifest.installs_allowed_from &&
+        if ( !! aVersion.manifest.installs_allowed_from &&
           1 === aVersion.manifest.installs_allowed_from.length &&
           '*' === aVersion.manifest.installs_allowed_from[0]) {
           // BetaFox installs will work from '*', NO-OP
