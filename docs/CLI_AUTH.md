@@ -52,6 +52,9 @@ This avoids a server side session for BetaFox.
 ## Security
 
 For the `polling` url, the `hawk-key` will be given back once and then deleted from memory.
+[ Actually... How do we know it was used? Will come from the secure session cookie instead? or we will have to add a backend. ]
+[ For this app, adding a backend would not be tough. I was erring on no backend so the pattern could be used more genreally
+in scalable environments ]
 
 All requests after `/cli/start-session` must include the original cookies set earlier, so a coookie jar should be used.
 
