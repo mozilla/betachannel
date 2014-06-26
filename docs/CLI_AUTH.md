@@ -133,6 +133,11 @@ except the following steps are the difference from the secure cookie proposal.
 }
 ```
 
+This polling is how Hawk credential exchange is done.
+This must be done over a secure channel,
+otherwise someone can listen and also have these credentials.
+With them, they can make unlimited requests **as you**.
+
 ### Step 3) API Usage
 
 Similar to the main proposal,
@@ -147,3 +152,5 @@ All API calls are signed via Hawk. No `_csrf` is included. No HTTP Cookie is sen
 The server would provide Hawk endpoints in addition to the web content endpoints,
 so that it's authentication layer would deal with hawk authentication,
 instead of web based authentication.
+
+The server may wish to track how old Hawk credentials are and expire them.
