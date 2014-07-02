@@ -27,7 +27,13 @@ exports.sources = {
   css: {
     '/css/style.min.css': [
       '/css/reset.css',
+      '/css/common.css',
       '/css/main.css'
+    ],
+    '/css/app_install.min.css': [
+      '/css/reset.css',
+      '/css/common.css',
+      '/css/app_install.css'
     ],
     '/css/home.css': [
       '/css/home.css'

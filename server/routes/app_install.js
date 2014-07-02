@@ -63,6 +63,8 @@ module.exports = function(config) {
           } else {
             ctx.versions = versions;
           }
+          // Hide really long descriptions
+          aVersion.shortDescription = aVersion.manifest.description.substring(0, 140);
           ctx.publicUrl = config.publicUrl;
           tinyUrl(config.publicUrl + '/app/v/' + aVersion.versionId + '/install/' + anApp.code, function(err, tUrl) {
             if (!err) ctx.tinyUrl = tUrl;

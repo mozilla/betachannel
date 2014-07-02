@@ -1,0 +1,59 @@
+/* app_install.css */
+
+#wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.header, #main-content, .footer {
+  flex: 1;
+}
+
+#main-content {
+  display: flex;
+  flex-direction: column;
+}
+
+#tagline, #app-name-icon, #container, #sidebar {
+
+}
+
+#container {
+  margin-top: 25px;
+  padding-bottom: 25px;
+  border-bottom: solid 25px #F1F1F1;
+}
+
+#app-name-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+#sidebar {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+h3 {
+  
+}
+
+.version {   line-height: 2em; }
+
+button.install {
+  color: #FFF;
+  background-color: #42cafe;
+  border-radius: 5px;
+}
+button.install:hover {
+  color: #FFF;
+  background-color: #67e0fd;
+}
+button.install:active {
+  color: #CBCBCB;
+  background-color: #559dbd;
+}
+
+.tinyurl { font-family: monospace; font-size: 1.25em; font-weight: 600; }

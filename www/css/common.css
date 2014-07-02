@@ -1,0 +1,68 @@
+/* common.css */
+
+body {
+
+
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 300
+  font-size: 15px;
+  line-height: 22.5px;
+
+  color: #797979;
+}
+
+.label-field {
+  display: flex;
+}
+
+.label, .field {
+  flex: 1;
+}
+
+button {
+    font-size: 1.25em;
+    line-height: 2em;
+    width: 100%;
+    margin: auto;
+}
+
+h1 {
+  font-size: 3em;
+  line-height: 1em;
+  
+  font-weight: 600;
+}
+
+.logo h1 a {
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+h2 {
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 1.25em;
+  line-height: 2em;
+}
+
+h3 {
+  font-size: 1.1em;
+  line-height: 1.6em;
+  font-weight: 500;
+
+  margin-top: 0.3em;
+}
+
+
+#wrap {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+strong {
+  font-weight: 500;
+}
+
+.hidden {
+  display: none;
+}

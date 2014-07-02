@@ -1,34 +1,87 @@
-{% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %}
-
 {% block template_name %}app_install{% endblock %}
+<!DOCTYPE html>
+<html class="is-standalone">
 
-{% block content %}
-<h2>Install {{version.manifest.name}}</h2>
-<div id="needs-mozapps" class="hidden">
-  <p><strong>Unable to install on this browser / device</strong>
-  </p>
-  <p>Try this on your FirefoxOS device.</p>
-</div>
-<img src="{{version.icon_url}}" />
-<div class="app-name">{{version.manifest.name}} <span class="version">version:{{version.version}}</span></div>
-<p class="app-name">{{version.manifest.description}}</p>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BetaFox - {{app.name}}</title>
+  <link rel="stylesheet" href="/fonts/Fira-master/fira.css">
+  {{ cachify_css('/css/app_install.min.css') }} {% block page_css %}{% endblock %}
+</head>
 
-<button data-package-manifest-url="{{version.manifest_url}}" disabled class="install">Install</button>
+<body class="{% block template_name %}{% endblock %}">
+  <div id="wrap">
+    <div class="nav header">
+      <div class="logo">
+        <h1><a href="/">BetaFox</a></h1>        
+      </div>
+    </div><!-- .nav -->    
+    <div id="main-content">
+      <p id="tagline">Install a pre-release <strong>testing</strong> version of:</p>
+      <div id="app-name-icon" class="centered">
+        <h2>{{version.manifest.name}}</h2>
+        <img src="{{version.icon_url}}" />
+      </div>
+      <div id="container">                
+        <div class="label-field">
+          <h3 class="label">Version</h3>
+          <div class="app-version field"><span class="version">{{version.version}}</span></div>
+        </div>
 
-Download raw <a class="package-link" href="{{signedPackage}}">package.zip ({{signedPackageSize}})</a>
+        <div id="needs-mozapps" class="hidden">
+          <p><strong>Unable to install on this browser / device</strong></p>
+          <p>Try this on your FirefoxOS device.</p>
+        </div>
+        
+        <button data-package-manifest-url="{{version.manifest_url}}" disabled class="install">Install</button>
+        <h3>Description</h3>
+        <p class="app-description">{{version.shortDescription}}</p>
 
-{% endblock %}
+        Download raw <a class="package-link" href="{{signedPackage}}">package.zip </a>({{signedPackageSize}})
+      </div><!-- #container -->
 
-{% block sidebar %}
-<h3>Share this Page</h3>
-<div class="qrcode" data-qrcode-url="{{ publicUrl }}/app/v/{{version.versionId | string | urlencode}}/install/{{ app.code | urlencode }}"></div>
-<a href="{{tinyUrl | urlencode }}" class="tinyurl">{{tinyUrl}}</a>
+      <div id="sidebar">
+        <h3>Share this Page</h3>
+        <p>Need to load this install page on another device? You can use the tiny url:</p>
+        <div><a href="{{tinyUrl}}" class="tinyurl">{{tinyUrl}}</a></div>
+        <p>Or use a QR Code scanner:</p>
+        <div class="qrcode" data-qrcode-url="{{ publicUrl }}/app/v/{{version.versionId | string | urlencode}}/install/{{ app.code | urlencode }}"></div>
 
-<h3>Other Versions</h3>
-<ol class="versions">
-  {% for ver in versions %}
-  <li><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a>
-  </li>
-  {% endfor %}
-</ol>
-{% endblock %}
+
+        <h3>Other Versions</h3>
+        <p>In additon to version {{version.version}}, the following versions are available:</p>
+        <ol class="versions">
+          {% for ver in versions %}
+            <li><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a></li>
+          {% endfor %}
+        </ol>
+      </div><!-- #sidebar -->
+    </div><!-- #main-content -->
+    <div class="nav footer">
+      <ul class="links">
+        <li><a href="/help">Help</a>
+        </li>
+<li>
+      <div class="auth">
+        <a class="login persona" href="">Log in</a>
+        <div class="greeting persona">Hello, <span>{% if isAuthenticated %}{{email}}{% endif %}</span>
+        </div>
+        <a class="logout persona" href="">Sign Out</a>
+        <input type="hidden" id="csrf_token" value="{{ csrf }}" />
+          </div><!-- .auth -->
+        </li>
+      </ul>
+    </div>
+
+  </div><!-- #wrap -->
+
+  <!-- TODO Lazy load Persona on this page -->
+  <!-- script src="https://login.persona.org/include.js"></script -->
+  {{ cachify_js('/js/betafox.min.js') }} {% block page_js %}{% endblock %}
+</body>
+
+</html>
+
+

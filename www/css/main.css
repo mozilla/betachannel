@@ -98,10 +98,6 @@ img {
     width: 100%;
     margin-left: 20px;
   }
-  button {
-    width: 90%;
-    margin: auto;
-  }
 
   #sidebar { border-top: solid 1px black; margin-top: 10px; }
 
@@ -146,9 +142,7 @@ ol.versions {
   list-style: none;
 }
 
-.hidden {
-  display: none;
-}
+
 
 .tinyurl {
   font-family: Courier, monospace;
