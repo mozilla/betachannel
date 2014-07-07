@@ -27,6 +27,7 @@ exports.sources = {
   css: {
     '/css/style.min.css': [
       '/css/reset.css',
+      '/fonts/Fira-master/fira.css',
       '/css/common.css',
       '/css/main.css'
     ],

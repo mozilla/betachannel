@@ -14,6 +14,29 @@
   flex-direction: column;
 }
 
+@media (min-width: 500px) {
+  #main-content {
+    flex-direction: row;
+  }
+  #container {
+    margin-right: 25px;
+    border-bottom: none;
+  }
+}
+@media (min-width: 1000px) {
+  #sidebar {
+    display: flex;
+    flex-direction: row;
+  }
+  #share-page {
+    order: 1;
+  }
+  #other-version {
+    order: 0;
+    margin-right: 25px;
+  }
+}
+
 #tagline, #app-name-icon, #container, #sidebar {
 
 }
@@ -54,6 +77,10 @@ button.install:hover {
 button.install:active {
   color: #CBCBCB;
   background-color: #559dbd;
+}
+
+.qrcode img {
+  width: 100%;
 }
 
 .tinyurl { font-family: monospace; font-size: 1.25em; font-weight: 600; }

@@ -46,10 +46,6 @@ img {
   flex: 1;
 }
 
-.nav {
-  display: flex;
-  flex-direction: row;
-}
 
 .logo {
   display: flex;
@@ -68,13 +64,6 @@ img {
 }
 .auth {
   text-align: right;
-}
-.links {
-  text-align: center;
-}
-
-.qrcode img {
-  width: 100%;
 }
 
 #container {

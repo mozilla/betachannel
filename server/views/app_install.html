@@ -19,12 +19,13 @@
       </div>
     </div><!-- .nav -->    
     <div id="main-content">
-      <p id="tagline">Install a pre-release <strong>testing</strong> version of:</p>
-      <div id="app-name-icon" class="centered">
-        <h2>{{version.manifest.name}}</h2>
-        <img src="{{version.icon_url}}" />
-      </div>
       <div id="container">                
+        <p id="tagline">Install a pre-release <strong>testing</strong> version of:</p>
+        <div id="app-name-icon" class="centered">
+          <h2>{{version.manifest.name}}</h2>
+          <img src="{{version.icon_url}}" />
+        </div>
+
         <div class="label-field">
           <h3 class="label">Version</h3>
           <div class="app-version field"><span class="version">{{version.version}}</span></div>
@@ -43,28 +44,30 @@
       </div><!-- #container -->
 
       <div id="sidebar">
-        <h3>Share this Page</h3>
-        <p>Need to load this install page on another device? You can use the tiny url:</p>
-        <div><a href="{{tinyUrl}}" class="tinyurl">{{tinyUrl}}</a></div>
-        <p>Or use a QR Code scanner:</p>
-        <div class="qrcode" data-qrcode-url="{{ publicUrl }}/app/v/{{version.versionId | string | urlencode}}/install/{{ app.code | urlencode }}"></div>
+        <div id="share-page">
+          <h3>Share this Page</h3>
+          <p>Need to load this install page on another device? You can use the tiny url:</p>
+          <div><a href="{{tinyUrl}}" class="tinyurl">{{tinyUrl}}</a></div>
+          <p>Or use a QR Code scanner:</p>
+          <div class="qrcode" data-qrcode-url="{{ publicUrl }}/app/v/{{version.versionId | string | urlencode}}/install/{{ app.code | urlencode }}"></div>
 
-
-        <h3>Other Versions</h3>
-        <p>In additon to version {{version.version}}, the following versions are available:</p>
-        <ol class="versions">
-          {% for ver in versions %}
-            <li><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a></li>
-          {% endfor %}
-        </ol>
+        </div><!-- #share-page -->
+        <div id="other-version">
+          <h3>Other Versions</h3>
+          <p>In additon to version {{version.version}}, the following versions are available:</p>
+          <ol class="versions">
+            {% for ver in versions %}
+              <li><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a></li>
+            {% endfor %}
+          </ol>
+        </div><!-- #other-version -->
       </div><!-- #sidebar -->
     </div><!-- #main-content -->
     <div class="nav footer">
       <ul class="links">
-        <li><a href="/help">Help</a>
-        </li>
-<li>
-      <div class="auth">
+        <li><a href="/help">Help</a></li>
+        <li>
+      <div class="auth hidden">
         <a class="login persona" href="">Log in</a>
         <div class="greeting persona">Hello, <span>{% if isAuthenticated %}{{email}}{% endif %}</span>
         </div>

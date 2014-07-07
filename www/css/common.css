@@ -66,3 +66,14 @@ strong {
 .hidden {
   display: none;
 }
+
+.nav {
+  display: flex;
+  flex-direction: row;
+}
+
+.links {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
