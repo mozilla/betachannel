@@ -22,8 +22,8 @@ If there are errors while checking, it will retry or give up.
 or
 
     certificateStorage = {
-      s3Bucket: 'betafox-certificate',
-      s3ItemPrefix: 'betafox-certdb',
+      awsS3PrivateBucket: 'betafox-certificate',
+      awsS3ItemPrefix: 'betafox-certdb',
       localCertsDir: '/etc/betafox/certdb'
     }
 
@@ -35,7 +35,7 @@ On server startup, if it is configured to use `S3`, then it will download and se
 
 ### Cloud mode and S3
 
-Review the local file system'sf optional manual steps below.
+Review the local file system's optional manual steps below.
 The only difference is that files on disk are copies of the S3 data.
 
 ### Local File System
