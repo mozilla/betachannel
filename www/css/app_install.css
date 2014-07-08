@@ -65,16 +65,16 @@ h3 {
 
 .version {   line-height: 2em; }
 
-button.install {
+button.install, button.launch {
   color: #FFF;
   background-color: #42cafe;
   border-radius: 5px;
 }
-button.install:hover {
+button.install:hover, button.launch:hover {
   color: #FFF;
   background-color: #67e0fd;
 }
-button.install:active {
+button.install:active, button.launch:active {
   color: #CBCBCB;
   background-color: #559dbd;
 }
@@ -84,3 +84,9 @@ button.install:active {
 }
 
 .tinyurl { font-family: monospace; font-size: 1.25em; font-weight: 600; }
+
+#needs-mozapps {
+  background-color: #f54b3c;
+  color: #000;
+  padding: 1em;
+}
