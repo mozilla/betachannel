@@ -14,7 +14,7 @@ Beta testers can install the app from the link.
 ## Dependencies
 
 * NodeJS 10.x or greater
-* Python
+* Python 2.7 or greater, but less than Python 3.x
 * MySQL
 * [NSS Tools](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Tools)
 * zip/unzip (UnZip, by Info-ZIP will work)
