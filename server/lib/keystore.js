@@ -189,36 +189,22 @@ exports.backupRemotely = function() {
 };
 
 exports.delete = function(cb) {
-  var www = path.join(__dirname, '..', '..', 'www');
-  var pubFiles = [
-    path.join(www, 'cert9.db'),
-    path.join(www, 'key4.db'),
-    path.join(www, 'pkcs11.txt')
-  ];
-  async.each(pubFiles, function(file, eachCb) {
-    console.log('Removing symlink', file);
-    fs.unlink(file, eachCb);
-  }, function(err) {
-    if (err) {
-      console.log('ERR:', err.stack || err);
-    }
-    if (usingS3()) {
-      var s3 = new AWS.S3();
-      var params = {
-        Bucket: config.certificateStorage.awsS3PrivateBucket,
-        Key: config.certificateStorage.awsS3ItemPrefix + 'certdb.zip'
-      };
-      s3.deleteObject(params, function(err, data) {
-        if (err) console.log(err.stack || err);
-        cb(null);
-      });
-    } else {
-      console.log('Removing', config.certificateStorage.local);
-      rmrf(config.certificateStorage.local, function(err) {
-        cb(err);
-      });
-    }
-  });
+  if (usingS3()) {
+    var s3 = new AWS.S3();
+    var params = {
+      Bucket: config.certificateStorage.awsS3PrivateBucket,
+      Key: config.certificateStorage.awsS3ItemPrefix + 'certdb.zip'
+    };
+    s3.deleteObject(params, function(err, data) {
+      if (err) console.log(err.stack || err);
+      cb(null);
+    });
+  } else {
+    console.log('Removing', config.certificateStorage.local);
+    rmrf(config.certificateStorage.local, function(err) {
+      cb(err);
+    });
+  }
 };
 
 exports.url = function(version) {

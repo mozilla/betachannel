@@ -44,14 +44,6 @@ exports.createKeypair = function(binPath, configCertsDir, derFilePath, cb) {
         console.log('STDOUT', stdout);
         if (err) {
           console.log('STDERR', stderr);
-        } else {
-          ['cert9.db', 'key4.db', 'pkcs11.txt'].forEach(function(pubFile) {
-            var symLink = path.join(path.resolve('www'), pubFile);
-            try {
-              fs.unlinkSync(symLink);
-            } catch (e) {}
-            fs.symlinkSync(path.join(publicDir, 'certdb.tmp', pubFile), symLink);
-          });
         }
         cb(err);
       });
