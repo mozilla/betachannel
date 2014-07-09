@@ -79,7 +79,7 @@ confsys.withConfig(function(config) {
       secret: sessionConf.secret,
       duration: sessionConf.duration,
       cookie: {
-        secure: (config.env === 'production' ? true : false),
+        secureProxy: (config.env === 'production' ? true : false),
         httpOnly: true,
         maxAge: sessionConf.duration
       }
