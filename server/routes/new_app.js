@@ -21,6 +21,7 @@ module.exports = function(config) {
           console.log(err.stack || err);
           return res.send('DB Error', 500);
         }
+        console.log(req.files);
         if (!req.files || !req.files.app_package || !req.files.app_package.path) {
           return res.send(400, 'Bad upload');
         }

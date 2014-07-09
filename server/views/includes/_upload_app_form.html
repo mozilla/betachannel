@@ -1,7 +1,6 @@
   <!-- TODO form should be able to POST to either /apps or /app/:appId -->
   <form action="/apps" method="POST" enctype="multipart/form-data">
     <input type="hidden" id="csrf_token" name="_csrf" value="{{ csrf }}" />
-    <label for="app_package">Upload packaged app zip</label>
-    <input type="file" id="app_package" name="app_package" />
-    <input type="submit" name="submit" value="Upload" />
+    <label for="app_package">Choose zip file</label>
+    <input type="file" id="app_package" name="app_package"/>
   </form>

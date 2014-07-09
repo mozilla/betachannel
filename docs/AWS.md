@@ -1,3 +1,7 @@
+# Mozilla dev is 
+
+    ssh ozten@ec2-54-198-98-151.compute-1.amazonaws.com
+
 # AWS - Easy Deployment of BetaFox
 
 1) Launch medium ec2 instance with Ubuntu 14.10 and not it's Public DNS
