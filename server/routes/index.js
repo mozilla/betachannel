@@ -50,7 +50,6 @@ exports.init = function(config, app) {
 
   ['cert9.db', 'key4.db', 'pkcs11.txt'].forEach(function(pubFile) {
     app.get('/' + pubFile, function(req, res) {
-      console.log('AOK config.configCertsDir=', config.configCertsDir);
       res.download(path.join(config.configCertsDir, 'public', 'certdb.tmp', pubFile));
     });
   });
