@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+var log = require('winston');
+
 var reqContext = require('../lib/request_context');
 var requireDriver = require('../lib/db').requireDriver;
 var tinyUrl = require('../lib/tiny_url');
@@ -22,7 +24,7 @@ module.exports = function(config) {
 
     App.loadByCode(email, appCode, function(err, anApp) {
       if (err) {
-        console.log(err.stack || err);
+        log.error(err.stack || err);
         // TODO Nicer error pages
         return res.send('Unable to locate app ' + appCode, 400);
       }
@@ -36,7 +38,7 @@ module.exports = function(config) {
 
       function useVersion(err, aVersion) {
         if (err) {
-          console.log(err.stack || err);
+          log.error(err.stack || err);
           // TODO Nicer error pages
           return res.send('Unable to load latest version', 500);
         } else if (null === aVersion) {

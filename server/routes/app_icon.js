@@ -5,6 +5,8 @@
 var path = require('path');
 var fs = require('fs');
 
+var log = require('winston');
+
 var reqContext = require('../lib/request_context');
 var requireDriver = require('../lib/db').requireDriver;
 
@@ -51,12 +53,12 @@ module.exports = reqContext(function(req, res, ctx) {
 
       Icon.load(aVersion.icon_location, function(err, img) {
         if (err) {
-          console.log(err);
+          log.error(err);
           return res.send(404);
         }
         res.setHeader('Content-Type', ctype);
         res.send(img);
-      });      
+      });
     });
   });
 });

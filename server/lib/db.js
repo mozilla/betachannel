@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+var log = require('winston');
+
 var config;
 var dblib;
 
@@ -35,13 +37,13 @@ exports.requireDriver = function(type, file) {
     config.dynamodbTablePrefix && config.dynamodbTablePrefix.length > 0) {
     if (false === loggedMode) {
       loggedMode = true;
-      console.log('Deploying with DynamoDB');
+      log.error('Deploying with DynamoDB');
     }
     return require(type + '/aws/' + file);
   } else if (-1 !== type.indexOf('models')) {
     if (false === loggedMode) {
       loggedMode = true;
-      console.log('Deploying with MySQL');
+      log.error('Deploying with MySQL');
     }
     return require(type + '/mysql/' + file);
   } else if (-1 !== type.indexOf('files') &&

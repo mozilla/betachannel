@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+var log = require('winston');
+
 var DBAccess = require('../../lib/db_mysql').DBAccess;
 
 // TODO Maybe we don't expose this constructor?
@@ -17,8 +19,7 @@ exports.Version.prototype.updateSize = function(id, aSize) {
     conn.query('UPDATE version SET signed_package_size = ? WHERE id = ?', [aSize, id],
       function(err, rows) {
         if (err) {
-          console.log("Unable to update size");
-          console.log(err);
+          log.error(err);
         }
       });
   });
@@ -30,8 +31,8 @@ exports.Version.prototype.deleteVersion = function(cb) {
     conn.query('DELETE FROM version WHERE id = ?', [versionId],
       function(err, rows) {
         if (err) {
-          console.log("Unable to delete version");
-          console.log(err);
+          log.error("Unable to delete version");
+          log.error(err);
         }
         cb(err);
       });
@@ -73,7 +74,7 @@ exports.findOne = function(app, version, cb) {
             return cb(err);
           } else {
             aVersion.versionId = aVersion.id;
-            console.log('This app and version will be available at ', app.code + ',' + version);
+            log.error('This app and version will be available at ', app.code + ',' + version);
             return cb(null, aVersion);
           }
         }
@@ -144,7 +145,7 @@ exports.loadByVersion = function(app, versionId, cb) {
           } else {
             aVersion.appId = aVersion.app_id;
             aVersion.versionId = aVersion.id;
-            console.log('This app and version will be available at ', app.code + ',' + aVersion.version);
+            log.error('This app and version will be available at ', app.code + ',' + aVersion.version);
             return cb(null, aVersion);
           }
         }
@@ -187,7 +188,7 @@ exports.latestVersionForApp = function(app, cb) {
           if (err) {
             return cb(err);
           } else {
-            console.log('This app and version will be available at ', app.code + ',' + aVersion.version);
+            log.error('This app and version will be available at ', app.code + ',' + aVersion.version);
             return cb(null, aVersion);
           }
         }

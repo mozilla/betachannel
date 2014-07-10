@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 var async = require('async');
+var log = require('winston');
 
 var checkAuth = require('../lib/check_authentication.js');
 var reqContext = require('../lib/request_context');
@@ -19,7 +20,7 @@ module.exports = checkAuth(
     var appCode = req.params.appCode;
     App.loadByCode(ctx.email, appCode, function(err, anApp) {
       if (err) {
-        console.log(err.stack || err);
+        log.error(err.stack || err);
         // TODO Nicer error pages
         return res.send('Unable to locate ' + ctx.email, 400);
       }
@@ -54,7 +55,7 @@ module.exports = checkAuth(
         }, function(err) { // each is done
           anApp.deleteApp(function(err) {
             if (err) {
-              console.log(err.stack || err);
+              log.error(err.stack || err);
               res.send({
                 error: 'Unable to delete this app'
               }, 400);

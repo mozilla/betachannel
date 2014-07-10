@@ -80,3 +80,5 @@ disableLocaleCheck = true;
 // Rarely Configured
 cachifyPrefix = 'v';
 expressLogFormat = 'default';
+logLevel = 'info';
+logFile = './var/log/betafox.log';

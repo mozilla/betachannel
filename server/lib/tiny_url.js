@@ -13,7 +13,6 @@ module.exports = function(url, cb) {
     request('http://tinyurl.com/api-create.php?url=' + encodeURI(url), function(err, res, data) {
       if (err) return cb(err);
       if (200 !== res.statusCode) {
-        console.log('tinyurl status=', res.statusCode, 'body=', data);
         return cb(new Error('Tiny Url Error: ' + res.statusCode));
       } else {
         cache[url] = data;

@@ -5,6 +5,7 @@
 var fs = require('fs');
 
 var AWS = require('aws-sdk');
+var log = require('winston');
 var uuid = require('node-uuid').v4;
 
 var utils = require('../../lib/utils');
@@ -47,7 +48,7 @@ exports.load = function(s3Item, cb) {
 
   s3.getObject(params, function(err, data) {
     if (err || !data.Body) {
-      console.log(err.stack || err);
+      log.error(err.stack || err);
       cb(err);
     } else {
       cb(null, data.Body);
@@ -62,7 +63,7 @@ exports.delete = function(version, cb) {
     Key: version.signed_package_location
   };
   s3.deleteObject(params, function(err, data) {
-    if (err) console.log(err.stack || err);
+    if (err) log.error(err.stack || err);
     cb(null);
   });
 };

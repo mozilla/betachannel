@@ -11,6 +11,7 @@
  * exception will be thrown.
  */
 var fs = require('fs');
+var fse = require('fs-extra');
 var path = require('path');
 var vm = require('vm');
 
@@ -115,8 +116,11 @@ exports.init = function(argv) {
   ['binPath', 'configCertsDir', 'derFilePath'].forEach(function(key) {
     context[key] =
       path.resolve(baseDir, context[key]);
-    console.log('config updated', key, context[key]);
   });
+
+  context.logFile = path.resolve(process.cwd(), context.logFile);
+  fse.mkdirp(path.dirname(context.logFile));
+  fs.close(fs.openSync(context.logFile, 'a'));
 
   // TODO Support this flag (CLI only?)
   context.debug = false;

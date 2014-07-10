@@ -5,6 +5,8 @@
 var async = require('async');
 var AWS = require('aws-sdk');
 
+var log = require('winston');
+
 var APPS;
 var APPS_BY_APP_CODE;
 var APPS_BY_CREATED_BY;
@@ -144,15 +146,15 @@ function createAppTable(dynamoDB, config, cb) {
       }
     }]
   };
-  console.log('SETUP: Creating Table ' + APPS);
+  log.error('SETUP: Creating Table ' + APPS);
   dynamoDB.createTable(params, function(err, data) {
     if (err) return cb(err);
-    console.log('SETUP: Waiting for Table Creation to finish');
+    log.error('SETUP: Waiting for Table Creation to finish');
     dynamoDB.waitFor('tableExists', {
       TableName: APPS
     }, function(err, data) {
-      console.log('SETUP: Finished Creating ' + APPS);
-      if (err) console.log('Errors=', err);
+      log.error('SETUP: Finished Creating ' + APPS);
+      if (err) log.error('Errors=', err);
       cb(err, data);
     });
   });
@@ -215,15 +217,15 @@ function createVersionTable(dynamoDB, config, cb) {
     }]
     //, LocalSecondaryIndexes: []
   };
-  console.log('SETUP: Creating Table ' + VERSIONS);
+  log.error('SETUP: Creating Table ' + VERSIONS);
   dynamoDB.createTable(params, function(err, data) {
     if (err) return cb(err);
-    console.log('SETUP: Waiting for Table Creation to finish');
+    log.error('SETUP: Waiting for Table Creation to finish');
     dynamoDB.waitFor('tableExists', {
       TableName: VERSIONS
     }, function(err, data) {
-      console.log('SETUP: Finished Creating ' + VERSIONS);
-      if (err) console.log('Errors=', err);
+      log.error('SETUP: Finished Creating ' + VERSIONS);
+      if (err) log.error('Errors=', err);
       cb(err, data);
     });
   });

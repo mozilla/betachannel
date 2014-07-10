@@ -5,6 +5,8 @@
 var path = require('path');
 var fs = require('fs');
 
+var log = require('winston');
+
 var reqContext = require('../lib/request_context');
 var requireDriver = require('../lib/db').requireDriver;
 
@@ -25,16 +27,16 @@ module.exports = function(config) {
 
     App.loadByCode(email, appCode, function(err, anApp) {
       if (err) {
-        console.log('loadByCode failed');
+        log.error('loadByCode failed');
         // TODO Nicer error pages
-        console.log(err);
+        log.error(err);
         return res.send('Unable to locate app ' + appCode, 400);
       }
       ctx.app = anApp;
       Version.loadByVersion(anApp, version, function(err, aVersion) {
         if (err) {
-          console.log('loadByVersion failed');
-          console.log(err);
+          log.error('loadByVersion failed');
+          log.error(err);
           // TODO Nicer error pages
           return res.send('Unable to load latest version', 500);
         }

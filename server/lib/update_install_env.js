@@ -7,6 +7,8 @@ var fs = require('fs');
 var path = require('path');
 var spawn = require('child_process').spawn;
 
+var log = require('winston');
+
 /**
  * Update files in the extractionDir with regards to our
  * BetaFox install environment.
@@ -27,7 +29,7 @@ module.exports = function(config, zipFilePath, extractionDir, cb) {
 
     // package's manifest may not have a version, but the mini-manifest does
     // Make one up, fixes Issue#42
-    if (! manifest.version) {
+    if (!manifest.version) {
       manifest.version = new Date().getTime();
     }
 
@@ -50,12 +52,12 @@ module.exports = function(config, zipFilePath, extractionDir, cb) {
         });
 
         zip.stderr.on('data', function(data) {
-          console.log('zip STDERR: ' + data);
+          log.error('zip STDERR: ' + data);
         });
 
         zip.on('close', function(code) {
           if (0 !== code) {
-            console.log('zip finished with an error, exit code:', code);
+            log.error('zip finished with an error, exit code:', code);
             cb(new Error('zip finished with an error, exit code:', code));
           } else {
             cb(null, manifest);

@@ -4,6 +4,7 @@
 
 var async = require('async');
 var AWS = require('aws-sdk');
+var log = require('winston');
 var uuid = require('node-uuid').v4;
 
 var appBase = require('../app_base');
@@ -27,14 +28,14 @@ exports.App.prototype.deleteApp = function(cb) {
     async.each(versions, function(version, eachCB) {
       loadByVersion(theApp, version[0], function(err, aVersion) {
         if (err) {
-          console.log('Error while enumerating known versions');
-          console.log(err.stack || err);
+          log.error('Error while enumerating known versions');
+          log.error(err.stack || err);
           return eachCB(err);
         } else if ( !! aVersion) {
           aVersion.deleteVersion(function(err) {
             if (err) {
-              console.log('Error while deleting one of the versions');
-              console.log(err.stack || err);
+              log.error('Error while deleting one of the versions');
+              log.error(err.stack || err);
               return eachCB(err);
             }
             eachCB();
@@ -187,8 +188,8 @@ function populate(anApp, dynData) {
     try {
       anApp.versionList = JSON.parse(dynData.versionList.S);
     } catch (e) {
-      console.log('Unable to parse JSON versionList', dynData.versionList.S);
-      console.log(e.stack || e);
+      log.error('Unable to parse JSON versionList', dynData.versionList.S);
+      log.error(e.stack || e);
       anApp.versionList = {
         versions: []
       };

@@ -10,6 +10,8 @@ var path = require('path');
 var fs = require('fs');
 var execFile = require('child_process').execFile;
 
+var log = require('winston');
+
 // TODO take config instead, simplies a lot
 module.exports = function(config, cb) {
   cb = cb || function() {};
@@ -19,9 +21,9 @@ module.exports = function(config, cb) {
   var generatePhoneCertDB = [config.binPath + '/generate_phone_cert_db.sh', derBasename, publicDir];
   execFile(generatePhoneCertDB[0], generatePhoneCertDB.slice(1),
     function(err, stdout, stderr) {
-      console.log('STDOUT', stdout);
+      log.error('STDOUT', stdout);
       if (err) {
-        console.log('STDERR', stderr);
+        log.error('STDERR', stderr);
         return cb(err);
       } else {
         ['cert9.db', 'key4.db', 'pkcs11.txt'].forEach(function(pubFile) {

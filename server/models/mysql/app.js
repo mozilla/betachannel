@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+var log = require('winston');
+
 var appBase = require('../app_base');
 var DBAccess = require('../../lib/db_mysql').DBAccess;
 var User = require('./user').User;
@@ -31,12 +33,12 @@ exports.App.prototype.deleteApp = function(cb) {
     conn.query('DELETE FROM version WHERE app_id IN (SELECT id FROM app where code = ?)', [theApp.code],
       function(err, rows) {
         if (err) {
-          console.log(err);
+          log.error(err);
           return cb(err);
         } else {
           conn.query('DELETE FROM app WHERE code = ?', [theApp.code], function(err, rows) {
             if (err) {
-              console.log(err.stack || err);
+              log.error(err.stack || err);
             }
             cb(err);
           });
@@ -72,7 +74,7 @@ exports.findApp = function(user, manifest, cb) {
           ['id', 'code', 'user_id'].forEach(function(key) {
             anApp[key] = rows[0][key];
           });
-          console.log('This app will be available at ', encodeURIComponent(anApp.code));
+          log.error('This app will be available at ', encodeURIComponent(anApp.code));
           return cb(null, anApp);
         }
       });
@@ -129,7 +131,7 @@ exports.loadByCode = function(email, code, cb) {
           ['id', 'code', 'user_id'].forEach(function(key) {
             anApp[key] = rows[0][key];
           });
-          console.log('This app will be available at ', encodeURIComponent(anApp.code));
+          log.error('This app will be available at ', encodeURIComponent(anApp.code));
           return cb(null, anApp);
         }
       });

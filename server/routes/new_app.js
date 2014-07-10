@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-
+var log = require('winston');
 
 var checkAuth = require('../lib/check_authentication.js');
 var processor = require('../lib/app_processor');
@@ -18,17 +18,17 @@ module.exports = function(config) {
       // Find or create the user
       findOrCreateUserByEmail(ctx.email, function(err, user) {
         if (err) {
-          console.log(err.stack || err);
+          log.error(err.stack || err);
           return res.send('DB Error', 500);
         }
-        console.log(req.files);
+        log.error(req.files);
         if (!req.files || !req.files.app_package || !req.files.app_package.path) {
           return res.send(400, 'Bad upload');
         }
         var unsignedPackagePath = req.files.app_package.path;
         processor(config, user, unsignedPackagePath, function(err, anApp) {
           if (err) {
-            console.log(err.stack || err);
+            log.error(err.stack || err);
             return res.send(404, 'Unable to read app zip');
           }
           res.redirect('/app/' + encodeURIComponent(anApp.code));

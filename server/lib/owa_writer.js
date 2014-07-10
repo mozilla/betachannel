@@ -3,6 +3,7 @@ var fs = require('fs');
 var path = require('path');
 
 var _ = require('underscore');
+var log = require('winston');
 
 var stripBOM = require('./utils').stripBOM;
 
@@ -25,10 +26,10 @@ module.exports = function(packagedAppPath, extractDir, props, cb) {
           cwd: extractDir
         }, function(err, stdout, stderr) {
           if (err) {
-            console.error('Unable to ' + zipCmd.join(' '));
-            if (stdout) console.error(stdout);
-            if (stderr) console.error(stderr);
-            console.error(err);
+            log.error('Unable to ' + zipCmd.join(' '));
+            if (stdout) log.error(stdout);
+            if (stderr) log.error(stderr);
+            log.error(err);
             return cb(err);
           }
           readMetadata(extractDir, cb);

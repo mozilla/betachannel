@@ -4,6 +4,7 @@
 
 var spawn = require('child_process').spawn;
 
+var log = require('winston');
 var tmp = require('tmp');
 
 /**
@@ -18,12 +19,12 @@ module.exports = function(certDir, cb) {
     });
 
     zip.stderr.on('data', function(data) {
-      console.log('zip STDERR: ' + data);
+      log.error('zip STDERR: ' + data);
     });
 
     zip.on('close', function(code) {
       if (0 !== code) {
-        console.log('zip finished with an error, exit code:', code);
+        log.error('zip finished with an error, exit code:', code);
         cb(new Error('zip finished with an error, exit code:', code));
       } else {
         cb(null, zipPath);

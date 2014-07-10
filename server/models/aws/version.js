@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 var AWS = require('aws-sdk');
+var log = require('winston');
 var uuid = require('node-uuid').v4;
 
 var DB = require('../../lib/db_aws');
@@ -44,7 +45,7 @@ exports.Version.prototype.updateSize = function(id, aSize) {
   };
   dynamoDB.updateItem(params, function(err, data) {
     if (err) {
-      console.log(err.stack || err);
+      log.error(err.stack || err);
     }
   });
 };

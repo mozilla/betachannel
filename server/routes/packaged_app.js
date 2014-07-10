@@ -5,6 +5,8 @@
 var path = require('path');
 var fs = require('fs');
 
+var log = require('winston');
+
 var reqContext = require('../lib/request_context');
 var requireDriver = require('../lib/db').requireDriver;
 
@@ -29,7 +31,7 @@ module.exports = reqContext(function(req, res, ctx) {
     ctx.app = anApp;
     Version.loadByVersion(anApp, version, function(err, aVersion) {
       if (err) {
-        console.log(err.stack || err);
+        log.error(err.stack || err);
 
         // TODO Nicer error pages
         return res.send('Unable to load latest version', 500);
@@ -37,7 +39,7 @@ module.exports = reqContext(function(req, res, ctx) {
 
       Package.load(aVersion.signed_package_location, function(err, zip) {
         if (err) {
-          console.log(err);
+          log.error(err);
           return res.send(404);
         }
         res.setHeader('Content-Type', ctype);

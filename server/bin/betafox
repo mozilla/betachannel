@@ -12,9 +12,10 @@ var cachify = require('connect-cachify');
 var clientSessions = require('client-sessions');
 var express = require('express');
 var i18n = require('i18n-abide');
+var log = require('winston');
 var nunjucks = require('nunjucks');
 var optimist = require('optimist');
-var persona = require("express-persona");
+var persona = require('express-persona');
 
 var assets = require('../lib/assets');
 var confsys = require('../lib/config');
@@ -41,6 +42,9 @@ var argv = optimist
 confsys.init(argv);
 
 confsys.withConfig(function(config) {
+  // Side effects only
+  require('../lib/logger')(config);
+
   db.init(config, function(err) {
     routes = require('../routes');
     var cachifyRoot = path.join(__dirname, "..", "..", "www");
@@ -136,13 +140,13 @@ confsys.withConfig(function(config) {
     process.nextTick(function() {
       // 1) Line is used by test/lib/start_stop.js
       // 2) Dev/Ops feedback
-      console.log('doing health check');
+      log.info('doing health check');
       healthCheck(config, function(err) {
         if (err) {
-          console.log(err);
+          log.error(err);
         }
-        console.log('DONE doing health check');
-        console.log('BetaFox... Listening on ' + config.publicUrl);
+        log.info('DONE doing health check');
+        log.info('BetaFox... Listening on ' + config.publicUrl);
       });
     });
   });

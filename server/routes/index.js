@@ -4,6 +4,8 @@
 
 var path = require('path');
 
+var log = require('winston');
+
 var appDetails = require('./app_details');
 var appIcon = require('./app_icon');
 var appInstall = require('./app_install');
@@ -19,7 +21,6 @@ var reqContext = require('../lib/request_context');
 
 exports.init = function(config, app) {
   app.get('/', reqContext(function(req, res, ctx) {
-    console.log('Doing homepage', ctx);
     if (ctx.isAuthenticated) {
       res.redirect('/dashboard');
     } else {

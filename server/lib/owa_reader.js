@@ -3,6 +3,8 @@ var fs = require('fs');
 var os = require('os');
 var path = require('path');
 
+var log = require('winston');
+
 var stripBOM = require('./utils').stripBOM;
 
 module.exports = function(zipFileLocation, cb) {
@@ -18,10 +20,10 @@ module.exports = function(zipFileLocation, cb) {
       cwd: extractDir
     }, function(err, stdout, stderr) {
       if (err) {
-        console.error('Unable to unzip ' + zipFileLocation);
-        if (stdout) console.error(stdout);
-        if (stderr) console.error(stderr);
-        console.error(err);
+        log.error('Unable to unzip ' + zipFileLocation);
+        if (stdout) log.error(stdout);
+        if (stderr) log.error(stderr);
+        log.error(err);
         return cb(err);
       }
       readMetadata(extractDir, cb);

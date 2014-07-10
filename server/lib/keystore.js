@@ -8,9 +8,10 @@ var path = require('path');
 var _ = require('underscore');
 var async = require('async');
 var AWS = require('aws-sdk');
-var uuid = require('node-uuid').v4;
-var tmp = require('tmp');
+var log = require('winston');
 var rmrf = require('fs-extra').remove;
+var tmp = require('tmp');
+var uuid = require('node-uuid').v4;
 
 var publishKeys = require('./publish_keys');
 var unzip = require('./unzip');
@@ -54,7 +55,7 @@ function createBucket(bucket, region, cb) {
     if (err && 'BucketAlreadyOwnedByYou' !== err.code) {
       cb(err);
     } else {
-      console.log('Created S3 Bucket');
+      log.error('Created S3 Bucket');
       cb(null);
     }
   });
@@ -166,7 +167,7 @@ exports.getFromLocalDisk = function(cb) {
 exports.backupRemotely = function() {
   if (false === usingS3()) return;
   zip(config.configCertsDir, function(err, zipPath) {
-    if (err) return console.log(err);
+    if (err) return log.error(err);
 
     var s3 = new AWS.S3();
     fs.readFile(zipPath, {
@@ -181,7 +182,7 @@ exports.backupRemotely = function() {
       };
       s3.putObject(params, function(err, data) {
         if (err) {
-          console.log('Error backing up cert DB', err);
+          log.error('Error backing up cert DB', err);
         }
       });
     });
@@ -196,11 +197,11 @@ exports.delete = function(cb) {
       Key: config.certificateStorage.awsS3ItemPrefix + 'certdb.zip'
     };
     s3.deleteObject(params, function(err, data) {
-      if (err) console.log(err.stack || err);
+      if (err) log.error(err.stack || err);
       cb(null);
     });
   } else {
-    console.log('Removing', config.certificateStorage.local);
+    log.error('Removing', config.certificateStorage.local);
     rmrf(config.certificateStorage.local, function(err) {
       cb(err);
     });

@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 var async = require('async');
+var log = require('winston');
 
 var checkAuth = require('../lib/check_authentication.js');
 var reqContext = require('../lib/request_context');
@@ -21,7 +22,7 @@ module.exports = checkAuth(
     var goToDashboard = false;
     App.loadByCode(ctx.email, appCode, function(err, anApp) {
       if (err) {
-        console.log(err.stack || err);
+        log.error(err.stack || err);
         // TODO Nicer error pages
         return res.send('Unable to locate ' + ctx.email, 400);
       }
@@ -34,7 +35,7 @@ module.exports = checkAuth(
       }
       Version.loadByVersion(anApp, versionId, function(err, aVersion) {
         if (err) {
-          console.log(err.stack || err);
+          log.error(err.stack || err);
           // TODO Nicer error pages
           return res.send('Unable to load version', 500);
         }
@@ -64,12 +65,12 @@ module.exports = checkAuth(
           ],
           function(err, results) {
             if (err) {
-              console.log(err.stack || err);
+              log.error(err.stack || err);
               res.send({
                 error: 'Unable to delete this version'
               }, 400);
             } else {
-              console.log('VERSION [' + versionId + '] DELETED BY [' + ctx.email + ']');
+              log.error('VERSION [' + versionId + '] DELETED BY [' + ctx.email + ']');
               res.send({
                 status: 'okay',
                 goToDashboard: goToDashboard

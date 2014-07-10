@@ -5,6 +5,7 @@
 var fs = require('fs');
 var path = require('path');
 
+var log = require('winston');
 var uuid = require('node-uuid').v4;
 
 var utils = require('../../lib/utils');
@@ -36,7 +37,7 @@ exports.load = function(iconPath, cb) {
 
 exports.delete = function(version, cb) {
   fs.unlink(version.icon_location, function(err) {
-    if (err) console.log(err.stack || err);
+    if (err) log.error(err.stack || err);
     cb(null);
   });
 };
