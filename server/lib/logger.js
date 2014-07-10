@@ -14,7 +14,6 @@ module.exports = function(config) {
   });
 
   if (!process.env.LOG_TO_CONSOLE) {
-console.log('Aok removing');
     winston.remove(winston.transports.Console);
   }
 };
