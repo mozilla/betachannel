@@ -30,7 +30,6 @@ exports.load = function(packagePath, cb) {
   fs.readFile(packagePath, {
     encoding: null
   }, cb);
-});
 };
 
 exports.delete = function(version, cb) {

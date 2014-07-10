@@ -44,6 +44,7 @@ exports.load = function(s3Item, cb) {
     Bucket: config.awsS3PublicBucket,
     Key: s3Item
   };
+
   s3.getObject(params, function(err, data) {
     if (err || !data.Body) {
       console.log(err.stack || err);

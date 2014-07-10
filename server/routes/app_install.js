@@ -42,7 +42,11 @@ module.exports = function(config) {
         } else if (null === aVersion) {
           return res.send('Unable to find version', 404);
         }
-        aVersion.icon_url = Icon.url(aVersion);
+        aVersion.icon_url = ['/app_icon/v/',
+          aVersion.versionId,
+          '/app/',
+          encodeURIComponent(aVersion.app.code)
+        ].join('');
 
         aVersion.manifest_url = [
           config.publicUrl, 'manifest/v', aVersion.id, 'app',
@@ -52,7 +56,8 @@ module.exports = function(config) {
         ctx.signedPackage = [
           config.publicUrl,
           'packaged/v', aVersion.id, 'app',
-          encodeURIComponent(appCode), 'package.zip'].join('/');
+          encodeURIComponent(appCode), 'package.zip'
+        ].join('/');
 
         ctx.signedPackageSize = aVersion.signed_package_size + 'kb';
         ctx.version = aVersion;

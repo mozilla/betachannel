@@ -9,6 +9,7 @@ var reqContext = require('../lib/request_context');
 var requireDriver = require('../lib/db').requireDriver;
 
 var App = requireDriver('../models', 'app');
+var Icon = requireDriver('../files', 'icon');
 var Version = requireDriver('../models', 'version');
 
 module.exports = reqContext(function(req, res, ctx) {
@@ -48,13 +49,14 @@ module.exports = reqContext(function(req, res, ctx) {
 
       var ctype = ctypeMap[ext];
 
-      fs.readFile(aVersion.icon_location, {
-        encoding: null
-      }, function(err, img) {
+      Icon.load(aVersion.icon_location, function(err, img) {
+        if (err) {
+          console.log(err);
+          return res.send(404);
+        }
         res.setHeader('Content-Type', ctype);
         res.send(img);
-      });
+      });      
     });
   });
-
 });

@@ -49,7 +49,6 @@ function createBucket(bucket, region) {
 }
 
 exports.save = function(iconPath, cb) {
-
   fs.readFile(iconPath, {
     binary: true
   }, function(err, iconData) {
@@ -71,6 +70,22 @@ exports.save = function(iconPath, cb) {
   });
 };
 
+exports.load = function(s3Item, cb) {
+  var s3 = new AWS.S3();
+  var params = {
+    Bucket: config.awsS3PublicBucket,
+    Key: s3Item
+  };
+  s3.getObject(params, function(err, data) {
+    if (err || !data.Body) {
+      console.log(err.stack || err);
+      cb(err);
+    } else {
+      cb(null, data.Body);
+    }
+  });
+};
+
 exports.delete = function(version, cb) {
   var s3 = new AWS.S3();
   var params = {
@@ -81,9 +96,4 @@ exports.delete = function(version, cb) {
     if (err) console.log(err.stack || err);
     cb(null);
   });
-};
-
-exports.url = function(version) {
-  //  ://s3-us-west-1.amazonaws.com/betafox-assets-dev/7d732961-47e8-497e-9959-1ea8a9755d70.jpg
-  return 'https://s3-' + config.awsS3Region + '.amazonaws.com/' + config.awsS3PublicBucket + '/' + version.icon_location;
 };
