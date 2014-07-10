@@ -9,6 +9,7 @@ var reqContext = require('../lib/request_context');
 var requireDriver = require('../lib/db').requireDriver;
 
 var App = requireDriver('../models', 'app');
+var Package = requireDriver('../files', 'packaged');
 var Version = requireDriver('../models', 'version');
 
 var ctype = 'application/zip';
@@ -34,9 +35,11 @@ module.exports = reqContext(function(req, res, ctx) {
         return res.send('Unable to load latest version', 500);
       }
 
-      fs.readFile(aVersion.signed_package_location, {
-        encoding: null
-      }, function(err, zip) {
+      Package.load(aVersion.signed_package_location, function(err, zip) {
+        if (err) {
+          console.log(err);
+          return res.send(404);
+        }
         res.setHeader('Content-Type', ctype);
         res.send(zip);
       });

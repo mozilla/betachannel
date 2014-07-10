@@ -26,6 +26,13 @@ exports.save = function(signedPackage, cb) {
   });
 };
 
+exports.load = function(packagePath, cb) {
+  fs.readFile(packagePath, {
+    encoding: null
+  }, cb);
+});
+};
+
 exports.delete = function(version, cb) {
   fs.unlink(version.signed_package_location, function(err) {
     if (err) console.log(err.stack || err);

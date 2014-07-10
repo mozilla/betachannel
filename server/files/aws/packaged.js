@@ -38,6 +38,22 @@ exports.save = function(signedPackage, cb) {
   });
 };
 
+exports.load = function(s3Item, cb) {
+  var s3 = new AWS.S3();
+  var params = {
+    Bucket: config.awsS3PublicBucket,
+    Key: s3Item
+  };
+  s3.getObject(params, function(err, data) {
+    if (err || !data.Body) {
+      console.log(err.stack || err);
+      cb(err);
+    } else {
+      cb(null, data.Body);
+    }
+  });
+};
+
 exports.delete = function(version, cb) {
   var s3 = new AWS.S3();
   var params = {
