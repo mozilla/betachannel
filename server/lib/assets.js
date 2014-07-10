@@ -15,13 +15,16 @@ exports.sources = {
       '/js/lib/long-stack-trace-zone.js',
       '/js/lib/jquery-2.1.1.js',
       '/js/lib/jquery.fittext.js',
-      '/js/lib/qrcode.js',
+
       '/js/main.js',
-      '/js/persona.js',
-      '/js/app_install.js'
+      '/js/persona.js'
     ],
-    '/js/home.js': [
+    '/js/home.min.js': [
       '/js/home.js'
+    ],
+    '/js/app_install.min.js': [
+      '/js/lib/jquery-2.1.1.js',
+      '/js/app_install.js'
     ]
   },
   css: {
@@ -36,10 +39,10 @@ exports.sources = {
       '/css/common.css',
       '/css/app_install.css'
     ],
-    '/css/home.css': [
+    '/css/home.min.css': [
       '/css/home.css'
     ],
-    '/css/help.css': [
+    '/css/help.min.css': [
       '/css/help.css'
     ]
   }

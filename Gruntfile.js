@@ -1,57 +1,63 @@
+var _ = require('underscore');
+var path = require('path');
+
 var assetLists = require('./server/lib/assets').sources;
 
-function prefixAssets(prefix, assets) {
-  if ('string' === typeof assets) {
-    assets = ('www' + assets).replace('.min', '');
-  } else {
-    assets.forEach(function(asset, i) {
-      assets[i] = ('www' + asset).replace('.min', '');
-    });
-  }
-  return assets;
+function minToSourceFilename(min) {
+  return min.replace('.min', '.full');
 }
 
+
 module.exports = function(grunt) {
-  // TODO: Supports only one JS Build destination,
-  // Should do any/all .js mappings. Same for CSS
-  var jsAssetKey = Object.keys(assetLists.js)[0];
-  var jsDest = prefixAssets('www', jsAssetKey);
-  var jsDestMin = jsDest.replace('.js', '.min.js');
-  var jsSources = prefixAssets('www', assetLists.js[jsAssetKey]);
+  var concatConfig = {};
+  var cleanConfig = [];
+  var uglifyConfig = {};
+  var cssminConfig = {};
 
-  uglifyAssets = {};
-  uglifyAssets[jsDestMin] = [jsDest];
+  ['js', 'css'].forEach(function(type) {
+    Object.keys(assetLists[type]).forEach(function(minifiedFile) {
+      var sources = _.map(assetLists[type][minifiedFile], function(filename) {
+        return path.join('www', filename);
+      });
 
-  var cssAssetKey = Object.keys(assetLists.css)[0];
-  var cssDest = prefixAssets('www', cssAssetKey);
-  var cssSources = prefixAssets('www', assetLists.css[cssAssetKey]);
+      concatConfig[minifiedFile] = {
+        src: sources,
+        dest: path.join('www', minToSourceFilename(minifiedFile))
+      };
 
-  allAssets = {};
-  allAssets[jsDest] = jsSources;
-  allAssets[cssDest] = cssSources;
+      cleanConfig.push(path.join('www', minToSourceFilename(minifiedFile)));
+
+      if ('js' === type) {
+        uglifyConfig[path.join('www', minifiedFile)] = sources
+        //[path.join('www', minToSourceFilename(minifiedFile))];
+      } else if ('css' === type) {
+        cssminConfig[minifiedFile] = {
+          src: path.join('www', minToSourceFilename(minifiedFile)),
+          dest: path.join('www', minifiedFile)
+        }
+      }
+
+    });
+  });
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    concat: {
-      all_assets: {
-        files: allAssets
-      },
-    },
+
+    concat: concatConfig,
+
     uglify: {
       options: {
         banner: '/* This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at http://mozilla.org/MPL/2.0/. */\n\n',
+        sourceMap: true,
+        mangle: false,
+        compress: false
       },
       all_assets: {
-        files: uglifyAssets
+        files: uglifyConfig
       }
     },
-    cssmin: {
-      css: {
-        src: 'www/css/style.css',
-        dest: 'www/css/style.min.css'
-      }
-    },
-    clean: ['www/js/betafox.js', 'www/css/style.css']
+    cssmin: cssminConfig,
+    clean: cleanConfig
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');

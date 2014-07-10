@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BetaFox - {{app.name}}</title>
-  <link rel="stylesheet" href="/fonts/Fira-master/fira.css">
+  <link rel="stylesheet" href="">
   {{ cachify_css('/css/app_install.min.css') }} {% block page_css %}{% endblock %}
 </head>
 
@@ -82,7 +82,8 @@
 
   <!-- TODO Lazy load Persona on this page -->
   <!-- script src="https://login.persona.org/include.js"></script -->
-  {{ cachify_js('/js/betafox.min.js') }} {% block page_js %}{% endblock %}
+  <script src="/js/lib/qrcode.js"></script>
+  {{ cachify_js('/js/app_install.min.js') }}
 </body>
 
 </html>
