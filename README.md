@@ -23,8 +23,9 @@ See docs/AWS.md for a fast, simple Ubuntu/EC2 based install.
 
 ## Developer Installation
 
+    $ cp server/config/default.js  server/config/developer.js
+    # customize developer.js config file as you see fit... then
     $ mysql < docs/db/schema_up_000.sql
-
     $ npm install
     $ npm start
 
