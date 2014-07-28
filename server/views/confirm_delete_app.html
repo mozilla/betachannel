@@ -3,7 +3,7 @@
 {% block template_name %}confirm_delete_app.html{% endblock %}
 {% block content %}
 
-<h2>Confirm Deletion of {{app.name}}</h2>
+<h2>Confirm Deletion of &quot;{{app.name}}&quot;</h2>
 <h3>Please Confirm</h3>
 <p>Type the name of your App, to confirm you really want to delete it and all uploaded versions of it.</p>
 
@@ -11,6 +11,6 @@
 
 <input type="text" id="app-name" name="app-name" value="" />
 <input type="hidden" id="expected-app-name" name="expected-app-name" value="{{ app.name }}" />
-<button class="confirm-delete-app delete" data-app-code="{{ app.code }}">Delete App</button>
+Confirm <button class="confirm-delete-app delete" data-app-code="{{ app.code }}">Delete</button>
 {% endblock %}
 {% block page_js %}{{ cachify_js('/js/delete.js') }}{% endblock %}

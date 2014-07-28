@@ -130,6 +130,54 @@ code {
   font-family: Courier, monospace;
 }
 
+/* Install pages */
+.install-link-block {
+  background-color: #EEE;
+  color: #000;
+  padding: 0.5em auto;
+}
+
+.install-link-block p {
+  margin-bottom: 0.5em;
+}
+.install-link-block .button {
+    color: #FFF;
+  background-color: #42cafe;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 1em 0.5em 0.5em 0em;
+  font-size: 1.125em;
+  line-height: 1.5em;
+}
+
+button.delete {
+  width: 100px;
+  background-color: #f54b3c;
+  color: #FFF;
+  border-radius: 5px;
+}
+
+button.delete:hover {
+  background-color: #b63932;
+  color: #EEE;
+}
+
+button.delete:active {
+  background-color: #ff6c70;
+  color: #333;
+}
+
+.upload-new-version {
+  margin: 0.5em auto;
+  border: solid 1px #333;
+}
+h3 {
+  margin: 0.5em auto;
+}
+
+
+/* end Install */
+
 /* Behavior */
 ol.versions {
   list-style: none;

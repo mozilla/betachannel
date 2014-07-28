@@ -1,23 +1,28 @@
 {% extends "layout.html" %} {% block title %}BetaFox - {{app.name}}{% endblock %} {% block template_name %}app_details.html{% endblock %} {% block content %}
 
 <h2>{{version.manifest.name}}</h2>
-<h3>Install Link</h3>
-<div class="install-link">
-  <a href="{{version.installUrl}}">Install Current</a> Version {{version.version}}  <a href="" class="share">Share</a>
+<div class="install-link-block">
+  <h3>Install Page</h3>
+  <p>This link is the install page for the latest version of your app.</p>
+  <div class="install-link">
+    <a href="{{version.installUrl}}" class="button">Latest (Version {{version.version}})</a>
+  </div>
 </div>
 <h3>Version History</h3>
 <ol class="versions">
   {% for ver in versions %}
   <li id='version-{{ver[0]}}'><a href="/app/v/{{ ver[0] | string | urlencode }}/install/{{ app.code | urlencode }}">Version {{ ver[1] }}</a>
     &mdash;
-    <button class="delete-version delete" data-app-code="{{ app.code }}" data-version-id="{{ ver[0] }}">Delete this Version</button>
+    <button class="delete-version delete" data-app-code="{{ app.code }}" data-version-id="{{ ver[0] }}">Delete</button>
   </li>
   {% endfor %}
 </ol>
-<h3>Upload New Version</h3>
-{% include "includes/_upload_app_form.html" %}
+<div class="upload-new-version">
+  <h3>Upload New Version</h3>
+  {% include "includes/_upload_app_form.html" %}
+</div>
 <h3>Delete App</h3>
-<p>Delete this app and all of it's versions:
-  <button class="delete-app delete" data-app-code="{{ app.code }}">Delete App</button>
+<p>Completely delete this app and all of it's versions:
+  <button class="delete-app delete" data-app-code="{{ app.code }}">Delete</button>
 </p>
 {% endblock %} {% block page_js %}{{ cachify_js('/js/delete.js') }}{% endblock %}
