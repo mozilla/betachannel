@@ -6,12 +6,12 @@ you can do node-dev or nodemon
 ## node-dev
 
     npm install node-dev
-    node-dev server/bin/betafox
+    node-dev server/bin/betachannel
 
 ## nodemon
 
     npm install nodemon
-    nodemon server/bin/betafox --watch server -- --config-files=server/config/default.js,server/config/developer.js
+    nodemon server/bin/betachannel --watch server -- --config-files=server/config/default.js,server/config/developer.js
 
 ## Code Style
 

@@ -1,24 +1,24 @@
 {
-  "name": "betafox",
+  "name": "betachannel",
   "version": "0.0.0",
   "description": "Give beta testing access to your Apps",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "start": "node server/bin/betafox",
+    "start": "node server/bin/betachannel",
     "test": "nodeunit server/tests/test-*.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mozilla/betafox.git"
+    "url": "git://github.com/mozilla/betachannel.git"
   },
   "author": "Mozilla (https://mozilla.org/)",
   "license": "MPL 2.0",
   "bugs": {
-    "url": "https://github.com/mozilla/betafox/issues"
+    "url": "https://github.com/mozilla/betachannel/issues"
   },
-  "homepage": "https://github.com/mozilla/betafox",
+  "homepage": "https://github.com/mozilla/betachannel",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.2",
