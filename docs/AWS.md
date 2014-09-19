@@ -2,7 +2,7 @@
 
     ssh ozten@ec2-54-198-98-151.compute-1.amazonaws.com
 
-# AWS - Easy Deployment of BetaFox
+# AWS - Easy Deployment of BetaChannel
 
 1) Launch medium ec2 instance with Ubuntu 14.10 and not it's Public DNS
 
@@ -13,10 +13,10 @@
 Configure root password for the MySQL server.
 
     $ sudo rm /etc/nginx/sites-enabled/default 
-    $ sudo ln -s /home/ubuntu/betafox/docs/nginx.config /etc/nginx/sites-enabled/
+    $ sudo ln -s /home/ubuntu/betachannel/docs/nginx.config /etc/nginx/sites-enabled/
     $ sudo service nginx restart
-    $ git clone https://github.com/mozilla/betafox.git
-    $ cd betafox
+    $ git clone https://github.com/mozilla/betachannel.git
+    $ cd betachannel
 
 In the next command, obvious MySQL username and password should be changed:
 
@@ -36,4 +36,4 @@ Especially change:
 And optionally:
 * env = 'production';
 
-    $ forever start ./server/bin/betafox --config-files=server/config/default.js,server/config/aws.js
+    $ forever start ./server/bin/betachannel --config-files=server/config/default.js,server/config/aws.js
