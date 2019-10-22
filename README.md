@@ -41,7 +41,7 @@ Client side assets are prepared and built with [GruntJS](http://gruntjs.com/).
 
     grunt
 
-Minified or built assets are commited into `git`.
+Minified or built assets are committed into `git`.
 
 ## Get Involved
 
